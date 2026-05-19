@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>WeDev — Desenvolvimento Web & Software</title>
   <meta name="description" content="Transformamos visão em produto digital. Desenvolvimento web, mobile e sistemas sob medida para empresas que crescem com tecnologia." />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' https://picsum.photos data:; script-src 'self' 'unsafe-inline'; connect-src 'none';" />
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23050505'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-family='system-ui%2C-apple-system%2Csans-serif' font-size='15' font-weight='800' letter-spacing='-1' fill='%23F5F5F7'%3EW%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -247,6 +248,7 @@
     .nav-mobile-menu.open a:nth-child(2) { opacity:1; transform:none; transition-delay:0.14s; }
     .nav-mobile-menu.open a:nth-child(3) { opacity:1; transform:none; transition-delay:0.20s; }
     .nav-mobile-menu.open a:nth-child(4) { opacity:1; transform:none; transition-delay:0.26s; }
+    .nav-mobile-menu.open a:nth-child(5) { opacity:1; transform:none; transition-delay:0.32s; }
     .nav-mobile-menu a:hover { color: var(--text-2); }
 
     @media (max-width: 820px) {
@@ -993,7 +995,7 @@
           </div>
 
           <!-- Floating stat card -->
-          <div class="float-card float-stat r d4" aria-label="120 projetos entregues">
+          <div class="float-card float-stat r d4" aria-label="10+ projetos entregues">
             <div class="stat-num">10+</div>
             <div class="stat-lbl">Projetos entregues</div>
           </div>
@@ -1129,7 +1131,7 @@
 
         <div class="gi gi--tall r">
           <div class="gi-media">
-            <img src="https://picsum.photos/seed/wedev1/600/900" alt="WeDev — Plataforma SaaS" loading="lazy"/>
+            <img src="https://picsum.photos/seed/wedev1/600/900" alt="WeDev — Plataforma SaaS" loading="lazy" referrerpolicy="no-referrer"/>
           </div>
           <div class="gi-cap">
             <span class="gi-cap-title">Plataforma SaaS</span>
@@ -1139,7 +1141,7 @@
 
         <div class="gi r d1">
           <div class="gi-media">
-            <img src="https://picsum.photos/seed/wedev2/600/600" alt="WeDev — E-commerce" loading="lazy"/>
+            <img src="https://picsum.photos/seed/wedev2/600/600" alt="WeDev — E-commerce" loading="lazy" referrerpolicy="no-referrer"/>
           </div>
           <div class="gi-cap">
             <span class="gi-cap-title">E-commerce</span>
@@ -1149,7 +1151,7 @@
 
         <div class="gi r d2">
           <div class="gi-media">
-            <img src="https://picsum.photos/seed/wedev3/600/600" alt="WeDev — Aplicativo Mobile" loading="lazy"/>
+            <img src="https://picsum.photos/seed/wedev3/600/600" alt="WeDev — Aplicativo Mobile" loading="lazy" referrerpolicy="no-referrer"/>
           </div>
           <div class="gi-cap">
             <span class="gi-cap-title">App Mobile</span>
@@ -1159,7 +1161,7 @@
 
         <div class="gi r d1">
           <div class="gi-media">
-            <img src="https://picsum.photos/seed/wedev4/600/600" alt="WeDev — Dashboard Analytics" loading="lazy"/>
+            <img src="https://picsum.photos/seed/wedev4/600/600" alt="WeDev — Dashboard Analytics" loading="lazy" referrerpolicy="no-referrer"/>
           </div>
           <div class="gi-cap">
             <span class="gi-cap-title">Dashboard Analytics</span>
@@ -1169,7 +1171,7 @@
 
         <div class="gi r d2">
           <div class="gi-media">
-            <img src="https://picsum.photos/seed/wedev5/600/600" alt="WeDev — Landing Page" loading="lazy"/>
+            <img src="https://picsum.photos/seed/wedev5/600/600" alt="WeDev — Landing Page" loading="lazy" referrerpolicy="no-referrer"/>
           </div>
           <div class="gi-cap">
             <span class="gi-cap-title">Landing Page</span>
@@ -1290,6 +1292,7 @@
       }
 
       function draw() {
+        if (document.hidden) return; // pause when tab is inactive
         // Smooth-lerp scroll value — eases the parallax motion
         scrollSmooth += (scrollRaw - scrollSmooth) * 0.07;
 
@@ -1313,6 +1316,9 @@
       }
 
       window.addEventListener('resize', resize, { passive: true });
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) requestAnimationFrame(draw);
+      });
       resize();
       requestAnimationFrame(draw);
     })();
