@@ -1934,7 +1934,9 @@
        JAVASCRIPT
   ============================================================ -->
   <script>
-    // ------ Starfield canvas ------
+    // Scroll to top on page load/refresh
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    window.scrollTo(0, 0);
     (function () {
       const canvas = document.getElementById('starfield');
       const ctx = canvas.getContext('2d');
