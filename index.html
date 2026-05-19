@@ -890,6 +890,426 @@
       border-radius: 100px;
       color: var(--text-1) !important;
     }
+
+    /* Nav active state */
+    .nav-links a.active { color: var(--text-1); background: rgba(255,255,255,0.06); }
+
+    /* ============================================================
+       TECH STACK STRIP
+    ============================================================ */
+    .techstack {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border-faint);
+      overflow: hidden;
+    }
+    .techstack-label {
+      text-align: center;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      margin-bottom: 28px;
+    }
+    .techstack-track-wrap {
+      position: relative;
+      overflow: hidden;
+    }
+    .techstack-track-wrap::before,
+    .techstack-track-wrap::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 120px;
+      z-index: 1;
+      pointer-events: none;
+    }
+    .techstack-track-wrap::before { left: 0;  background: linear-gradient(to right,  var(--bg), transparent); }
+    .techstack-track-wrap::after  { right: 0; background: linear-gradient(to left, var(--bg), transparent); }
+
+    .techstack-track {
+      display: flex;
+      gap: 12px;
+      width: max-content;
+      animation: scrollTrack 28s linear infinite;
+    }
+    .techstack-track:hover { animation-play-state: paused; }
+
+    @keyframes scrollTrack {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    .tech-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 18px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-faint);
+      border-radius: 100px;
+      white-space: nowrap;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-2);
+      transition: border-color 0.2s, color 0.2s;
+      flex-shrink: 0;
+    }
+    .tech-chip:hover { border-color: var(--border-mid); color: var(--text-1); }
+    .tech-chip svg {
+      width: 16px; height: 16px;
+      opacity: 0.6;
+      flex-shrink: 0;
+    }
+
+    /* ============================================================
+       PROCESSO — Numbered steps zigzag
+    ============================================================ */
+    .process-hd { margin-bottom: 72px; }
+
+    .process-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      position: relative;
+    }
+    /* Vertical connecting line */
+    .process-steps::before {
+      content: '';
+      position: absolute;
+      left: 36px;
+      top: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, var(--border-faint) 10%, var(--border-faint) 90%, transparent);
+      pointer-events: none;
+    }
+    @media (max-width: 768px) {
+      .process-steps::before { left: 24px; }
+    }
+
+    .process-step {
+      display: grid;
+      grid-template-columns: 72px 1fr;
+      gap: 32px;
+      align-items: flex-start;
+      padding: 40px 0;
+      border-bottom: 1px solid var(--border-faint);
+      position: relative;
+    }
+    .process-step:last-child { border-bottom: none; }
+
+    @media (max-width: 768px) {
+      .process-step { grid-template-columns: 48px 1fr; gap: 20px; padding: 32px 0; }
+    }
+
+    .step-num-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      padding-top: 4px;
+    }
+    .step-num {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-faint);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-d);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-3);
+      letter-spacing: -0.02em;
+      flex-shrink: 0;
+      transition: border-color 0.3s, color 0.3s;
+    }
+    .process-step:hover .step-num {
+      border-color: var(--border-mid);
+      color: var(--text-1);
+    }
+    @media (max-width: 768px) { .step-num { width: 36px; height: 36px; font-size: 13px; } }
+
+    .step-body { padding-top: 8px; }
+    .step-tag {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent-green);
+      margin-bottom: 8px;
+    }
+    .step-title {
+      font-family: var(--font-d);
+      font-size: clamp(22px, 2.8vw, 32px);
+      font-weight: 800;
+      letter-spacing: -0.035em;
+      color: var(--text-1);
+      margin-bottom: 12px;
+      line-height: 1.1;
+    }
+    .step-desc {
+      font-size: 15px;
+      color: var(--text-2);
+      line-height: 1.72;
+      max-width: 560px;
+    }
+
+    /* ============================================================
+       SOBRE NÓS
+    ============================================================ */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    @media (max-width: 900px) {
+      .about-grid { grid-template-columns: 1fr; gap: 48px; }
+    }
+
+    .about-visual {
+      position: relative;
+    }
+    .about-img-frame {
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      border: 1px solid var(--border-faint);
+      aspect-ratio: 4 / 5;
+      background: var(--bg-surface);
+      position: relative;
+    }
+    .about-img-frame img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      opacity: 0.6;
+      display: block;
+    }
+    .about-img-frame::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 50%, rgba(5,5,5,0.7) 100%);
+    }
+    .about-pill {
+      position: absolute;
+      bottom: -20px; right: -20px;
+      background: rgba(12,12,12,0.9);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border-faint);
+      border-radius: var(--r-md);
+      padding: 18px 22px;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+    .about-pill-n {
+      font-family: var(--font-d);
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: -0.05em;
+      color: var(--text-1);
+    }
+    .about-pill-l { font-size: 11px; color: var(--text-3); margin-top: 2px; }
+
+    @media (max-width: 640px) {
+      .about-pill { bottom: -12px; right: -8px; padding: 14px 16px; }
+      .about-pill-n { font-size: 22px; }
+    }
+
+    .about-values {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin-top: 40px;
+    }
+    .about-value {
+      display: flex;
+      gap: 18px;
+      padding: 20px 0;
+      border-top: 1px solid var(--border-faint);
+    }
+    .about-value:last-child { border-bottom: 1px solid var(--border-faint); }
+    .av-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent-green);
+      margin-top: 8px;
+      flex-shrink: 0;
+    }
+    .av-title {
+      font-family: var(--font-d);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-1);
+      margin-bottom: 4px;
+      letter-spacing: -0.02em;
+    }
+    .av-desc { font-size: 13.5px; color: var(--text-2); line-height: 1.65; }
+
+    /* ============================================================
+       DEPOIMENTOS / TESTIMONIALS
+    ============================================================ */
+    .testimonials-hd { margin-bottom: 56px; }
+
+    .testi-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      grid-template-rows: auto auto;
+      gap: 10px;
+    }
+    @media (max-width: 900px) {
+      .testi-grid { grid-template-columns: 1fr; }
+    }
+
+    .tc {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-faint);
+      border-radius: var(--r-lg);
+      padding: 40px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s, transform 0.4s var(--ease-spring);
+    }
+    .tc:hover { border-color: var(--border-mid); transform: translateY(-3px); }
+    .tc::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(135deg, rgba(255,255,255,0.016) 0%, transparent 55%);
+      pointer-events: none;
+    }
+
+    .tc--feat { grid-row: span 2; display: flex; flex-direction: column; justify-content: space-between; }
+
+    .tc-quote {
+      font-family: var(--font-d);
+      font-size: clamp(18px, 2vw, 24px);
+      font-weight: 600;
+      line-height: 1.45;
+      letter-spacing: -0.025em;
+      color: var(--text-1);
+      margin-bottom: 32px;
+      flex-grow: 1;
+    }
+    .tc--feat .tc-quote { font-size: clamp(22px, 2.4vw, 30px); }
+
+    .tc-stars {
+      display: flex;
+      gap: 3px;
+      margin-bottom: 20px;
+    }
+    .tc-stars svg {
+      width: 13px; height: 13px;
+      fill: rgba(255,210,63,0.9);
+      stroke: none;
+    }
+
+    .tc-author {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-top: auto;
+    }
+    .tc-avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 1px solid var(--border-faint);
+      background: var(--bg-elevated);
+      flex-shrink: 0;
+    }
+    .tc-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0.85; }
+    .tc-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-1);
+      letter-spacing: -0.01em;
+    }
+    .tc-role { font-size: 12px; color: var(--text-3); margin-top: 2px; }
+
+    @media (max-width: 640px) {
+      .tc { padding: 28px 24px; }
+      .tc--feat .tc-quote { font-size: clamp(18px, 5vw, 22px); }
+    }
+
+    /* ============================================================
+       CONTACT FORM — inline no CTA
+    ============================================================ */
+    .contact-form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      max-width: 600px;
+      margin: 0 auto 32px;
+      position: relative;
+    }
+    @media (max-width: 600px) {
+      .contact-form { grid-template-columns: 1fr; }
+    }
+
+    .cf-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      text-align: left;
+    }
+    .cf-field--full { grid-column: span 2; }
+    @media (max-width: 600px) { .cf-field--full { grid-column: span 1; } }
+
+    .cf-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-3);
+    }
+    .cf-input,
+    .cf-textarea {
+      background: rgba(255,255,255,0.035);
+      border: 1px solid var(--border-faint);
+      border-radius: var(--r-sm);
+      padding: 12px 16px;
+      font-family: var(--font-b);
+      font-size: 14px;
+      color: var(--text-1);
+      outline: none;
+      resize: none;
+      transition: border-color 0.2s, background 0.2s;
+      width: 100%;
+    }
+    .cf-input::placeholder,
+    .cf-textarea::placeholder { color: var(--text-3); }
+    .cf-input:focus,
+    .cf-textarea:focus {
+      border-color: var(--border-mid);
+      background: rgba(255,255,255,0.05);
+    }
+    .cf-input.error,
+    .cf-textarea.error { border-color: rgba(255,80,80,0.55); }
+
+    .cf-error {
+      font-size: 11px;
+      color: rgba(255,100,100,0.85);
+      min-height: 14px;
+    }
+
+    .cf-textarea { min-height: 100px; }
+
+    .cf-submit-wrap {
+      grid-column: span 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    @media (max-width: 600px) { .cf-submit-wrap { grid-column: span 1; } }
+
+    .cf-feedback {
+      font-size: 13px;
+      color: var(--accent-green);
+      min-height: 18px;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -900,11 +1320,11 @@
        MOBILE MENU OVERLAY
   ============================================================ -->
   <div class="nav-mobile-menu" id="mobileMenu" role="dialog" aria-modal="true" aria-label="Menu de navegação">
-    <a href="#features" onclick="closeMobileMenu()">Serviços</a>
-    <a href="#gallery"  onclick="closeMobileMenu()">Portfólio</a>
-    <a href="#about"    onclick="closeMobileMenu()">Sobre</a>
-    <a href="#pricing"  onclick="closeMobileMenu()">Contato</a>
-    <a href="#pricing"  onclick="closeMobileMenu()" class="mob-cta">Fale conosco</a>
+    <a href="#features"    onclick="closeMobileMenu()">Serviços</a>
+    <a href="#process"     onclick="closeMobileMenu()">Processo</a>
+    <a href="#gallery"     onclick="closeMobileMenu()">Portfólio</a>
+    <a href="#about-sec"   onclick="closeMobileMenu()">Sobre</a>
+    <a href="#contact"     onclick="closeMobileMenu()" class="mob-cta">Fale conosco</a>
   </div>
 
   <!-- ============================================================
@@ -916,14 +1336,14 @@
 
       <ul class="nav-links">
         <li><a href="#features">Serviços</a></li>
+        <li><a href="#process">Processo</a></li>
         <li><a href="#gallery">Portfólio</a></li>
-        <li><a href="#about">Sobre</a></li>
-        <li><a href="#pricing">Contato</a></li>
+        <li><a href="#about-sec">Sobre</a></li>
       </ul>
 
       <div class="nav-end">
-        <a href="#about" class="btn-nav-ghost">Sobre nós</a>
-        <a href="#pricing" class="btn-pill">
+        <a href="#about-sec" class="btn-nav-ghost">Sobre nós</a>
+        <a href="#contact" class="btn-pill">
           Fale conosco
           <span class="pill-icon" aria-hidden="true">
             <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -1045,6 +1465,43 @@
   </div>
 
   <!-- ============================================================
+       TECH STACK STRIP
+  ============================================================ -->
+  <div class="techstack" aria-label="Tecnologias que dominamos">
+    <div class="techstack-label">Stack tecnológico</div>
+    <div class="techstack-track-wrap">
+      <div class="techstack-track" aria-hidden="true">
+        <!-- set 1 -->
+        <span class="tech-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10A15.3 15.3 0 0 1 12 2z"/></svg>React</span>
+        <span class="tech-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Next.js</span>
+        <span class="tech-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>TypeScript</span>
+        <span class="tech-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>Node.js</span>
+        <span class="tech-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>PostgreSQL</span>
+        <span class="tech-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>Flutter</span>
+        <span class="tech-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Docker</span>
+        <span class="tech-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>GraphQL</span>
+        <span class="tech-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2a9 9 0 0 1 9 9c0 4.97-4 9-9 9s-9-4.03-9-9a9 9 0 0 1 9-9z"/><path d="M12 8v4l3 3"/></svg>Redis</span>
+        <span class="tech-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>Tailwind CSS</span>
+        <span class="tech-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5"/></svg>AWS</span>
+        <span class="tech-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="2" width="14" height="20" rx="3"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>React Native</span>
+        <!-- set 2 — clone for seamless loop -->
+        <span class="tech-chip" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10A15.3 15.3 0 0 1 12 2z"/></svg>React</span>
+        <span class="tech-chip" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Next.js</span>
+        <span class="tech-chip" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>TypeScript</span>
+        <span class="tech-chip" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>Node.js</span>
+        <span class="tech-chip" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>PostgreSQL</span>
+        <span class="tech-chip" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>Flutter</span>
+        <span class="tech-chip" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Docker</span>
+        <span class="tech-chip" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>GraphQL</span>
+        <span class="tech-chip" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2a9 9 0 0 1 9 9c0 4.97-4 9-9 9s-9-4.03-9-9a9 9 0 0 1 9-9z"/><path d="M12 8v4l3 3"/></svg>Redis</span>
+        <span class="tech-chip" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>Tailwind CSS</span>
+        <span class="tech-chip" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5"/></svg>AWS</span>
+        <span class="tech-chip" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="2" width="14" height="20" rx="3"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>React Native</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
        FEATURES — Bento Grid
   ============================================================ -->
   <section class="section" id="features" aria-labelledby="feat-heading">
@@ -1108,6 +1565,68 @@
           <h3 class="bc-title">Consultoria Tech</h3>
           <p class="bc-body">Estratégia de produto, arquitetura de software e acompanhamento técnico para times que precisam escalar rápido.</p>
         </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       PROCESSO — Como trabalhamos
+  ============================================================ -->
+  <section class="section" id="process" aria-labelledby="proc-heading">
+    <div class="wrap">
+
+      <div class="process-hd">
+        <div class="sec-label r">Como trabalhamos</div>
+        <h2 class="sec-h r d1" id="proc-heading">Do briefing ao<br>deploy em 4 etapas.</h2>
+        <p class="sec-p r d2">Um processo estruturado que elimina retrabalho, mantém todos alinhados e garante entregas no prazo.</p>
+      </div>
+
+      <div class="process-steps">
+
+        <div class="process-step r">
+          <div class="step-num-wrap">
+            <div class="step-num">01</div>
+          </div>
+          <div class="step-body">
+            <div class="step-tag">Discovery</div>
+            <h3 class="step-title">Entendemos seu negócio a fundo</h3>
+            <p class="step-desc">Workshop de alinhamento com stakeholders, mapeamento de dores reais, definição de KPIs e escopo técnico. Saímos com um documento de requisitos que elimina ambiguidade antes da primeira linha de código.</p>
+          </div>
+        </div>
+
+        <div class="process-step r d1">
+          <div class="step-num-wrap">
+            <div class="step-num">02</div>
+          </div>
+          <div class="step-body">
+            <div class="step-tag">Design & Arquitetura</div>
+            <h3 class="step-title">Prototipamos antes de construir</h3>
+            <p class="step-desc">Wireframes de baixa fidelidade → design system → protótipo navegável. Você valida cada tela antes do dev começar. Arquitetura técnica documentada: banco de dados, APIs, infraestrutura e plano de escalabilidade.</p>
+          </div>
+        </div>
+
+        <div class="process-step r d2">
+          <div class="step-num-wrap">
+            <div class="step-num">03</div>
+          </div>
+          <div class="step-body">
+            <div class="step-tag">Desenvolvimento</div>
+            <h3 class="step-title">Sprints de 2 semanas com entregas reais</h3>
+            <p class="step-desc">Ciclos ágeis com demo ao final de cada sprint. Code reviews, testes automatizados e CI/CD desde o dia 1. Você acompanha o progresso em tempo real — sem surpresas no final.</p>
+          </div>
+        </div>
+
+        <div class="process-step r d3">
+          <div class="step-num-wrap">
+            <div class="step-num">04</div>
+          </div>
+          <div class="step-body">
+            <div class="step-tag">Lançamento & Suporte</div>
+            <h3 class="step-title">Deploy com monitoramento e handoff completo</h3>
+            <p class="step-desc">Go-live gerenciado, monitoramento de performance pós-lançamento e documentação técnica completa. Suporte pós-entrega incluso por 60 dias para garantir estabilidade em produção.</p>
+          </div>
+        </div>
 
       </div>
     </div>
@@ -1184,23 +1703,179 @@
   </section>
 
   <!-- ============================================================
-       CTA BANNER
+       TESTIMONIALS — Depoimentos
   ============================================================ -->
-  <section class="cta-sec" id="pricing">
+  <section class="section" id="testimonials" aria-labelledby="testi-heading">
+    <div class="wrap">
+
+      <div class="testimonials-hd">
+        <div class="sec-label r">Depoimentos</div>
+        <h2 class="sec-h r d1" id="testi-heading">Quem trabalhou<br>com a gente fala.</h2>
+      </div>
+
+      <div class="testi-grid">
+
+        <!-- Featured large -->
+        <article class="tc tc--feat r" aria-label="Depoimento de Renata Moura">
+          <div>
+            <div class="tc-stars" aria-label="5 estrelas">
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+            <p class="tc-quote">"A WeDev entregou em 7 semanas o que outras agências estimavam em 6 meses. O processo deles é diferente — comunicação diária, demos reais a cada sprint e zero surpresas no final. Voltei para um segundo projeto sem pensar duas vezes."</p>
+          </div>
+          <div class="tc-author">
+            <div class="tc-avatar">
+              <img src="https://picsum.photos/seed/testi1/88/88" alt="Renata Moura" loading="lazy" referrerpolicy="no-referrer"/>
+            </div>
+            <div>
+              <div class="tc-name">Renata Moura</div>
+              <div class="tc-role">CEO · Fornax Logística</div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Stack right -->
+        <article class="tc r d1" aria-label="Depoimento de Thiago Cavalcante">
+          <div class="tc-stars" aria-label="5 estrelas">
+            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
+          <p class="tc-quote">"Migração completa do nosso legado PHP para Next.js. Código limpo, bem documentado e a plataforma ficou 3× mais rápida na produção."</p>
+          <div class="tc-author">
+            <div class="tc-avatar">
+              <img src="https://picsum.photos/seed/testi2/88/88" alt="Thiago Cavalcante" loading="lazy" referrerpolicy="no-referrer"/>
+            </div>
+            <div>
+              <div class="tc-name">Thiago Cavalcante</div>
+              <div class="tc-role">CTO · Praxis Fintech</div>
+            </div>
+          </div>
+        </article>
+
+        <article class="tc r d2" aria-label="Depoimento de Camila Ferreira">
+          <div class="tc-stars" aria-label="5 estrelas">
+            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
+          <p class="tc-quote">"O app mobile ficou exatamente como o protótipo. Mais de 4.8 estrelas na App Store desde o lançamento. Equipe extremamente competente e honesta com prazos."</p>
+          <div class="tc-author">
+            <div class="tc-avatar">
+              <img src="https://picsum.photos/seed/testi3/88/88" alt="Camila Ferreira" loading="lazy" referrerpolicy="no-referrer"/>
+            </div>
+            <div>
+              <div class="tc-name">Camila Ferreira</div>
+              <div class="tc-role">Fundadora · Orbita Health</div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SOBRE NÓS
+  ============================================================ -->
+  <section class="section" id="about-sec" aria-labelledby="about-heading">
+    <div class="wrap">
+      <div class="about-grid">
+
+        <!-- Visual -->
+        <div class="about-visual r">
+          <div class="about-img-frame">
+            <img src="https://picsum.photos/seed/wedevteam/800/1000" alt="Equipe WeDev trabalhando" loading="lazy" referrerpolicy="no-referrer"/>
+          </div>
+          <div class="about-pill">
+            <div class="about-pill-n">2025</div>
+            <div class="about-pill-l">Fundada em São Paulo</div>
+          </div>
+        </div>
+
+        <!-- Text -->
+        <div class="about-text">
+          <div class="sec-label r">Sobre nós</div>
+          <h2 class="sec-h r d1" id="about-heading">Somos engenheiros<br>obsessivos com<br>resultado.</h2>
+          <p class="sec-p r d2" style="margin-top:16px;">A WeDev nasceu da frustração com agências que entregam layout bonito mas código frágil. Construímos software que escala, que resiste ao tempo e que os engenheiros do cliente têm orgulho de manter.</p>
+
+          <div class="about-values r d3">
+            <div class="about-value">
+              <div class="av-dot" aria-hidden="true"></div>
+              <div>
+                <div class="av-title">Qualidade não é opcional</div>
+                <div class="av-desc">Code review em tudo. Testes automatizados desde o início. Nada vai para produção sem passar por revisão humana e pipeline de CI.</div>
+              </div>
+            </div>
+            <div class="about-value">
+              <div class="av-dot" aria-hidden="true"></div>
+              <div>
+                <div class="av-title">Transparência total</div>
+                <div class="av-desc">Você vê o código, os commits e os deploys. Sem black-box. Se tiver um problema, somos os primeiros a falar — não os últimos.</div>
+              </div>
+            </div>
+            <div class="about-value">
+              <div class="av-dot" aria-hidden="true"></div>
+              <div>
+                <div class="av-title">Parceria de longo prazo</div>
+                <div class="av-desc">Não somos um fornecedor de projeto único. Crescemos junto com o seu produto — com o mesmo time, o mesmo contexto e o mesmo compromisso.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       CTA BANNER — com formulário
+  ============================================================ -->
+  <section class="cta-sec" id="contact">
     <div class="wrap">
       <div class="cta-inner r">
         <h2 class="cta-h">Tem um projeto?<br>Vamos conversar.</h2>
         <p class="cta-p">Conte-nos sobre o seu desafio. Em 24h temos uma proposta inicial e um caminho claro para a solução.</p>
+
+        <form class="contact-form" id="contactForm" novalidate aria-label="Formulário de contato">
+          <div class="cf-field">
+            <label class="cf-label" for="cf-name">Nome</label>
+            <input class="cf-input" id="cf-name" name="name" type="text" placeholder="Seu nome completo" autocomplete="name" />
+            <span class="cf-error" id="cf-name-err" role="alert"></span>
+          </div>
+          <div class="cf-field">
+            <label class="cf-label" for="cf-email">E-mail</label>
+            <input class="cf-input" id="cf-email" name="email" type="email" placeholder="voce@empresa.com" autocomplete="email" />
+            <span class="cf-error" id="cf-email-err" role="alert"></span>
+          </div>
+          <div class="cf-field cf-field--full">
+            <label class="cf-label" for="cf-msg">Mensagem</label>
+            <textarea class="cf-textarea" id="cf-msg" name="message" placeholder="Fale sobre seu projeto, prazo e orçamento aproximado…"></textarea>
+            <span class="cf-error" id="cf-msg-err" role="alert"></span>
+          </div>
+          <div class="cf-submit-wrap">
+            <button type="submit" class="btn-lg" id="cfSubmitBtn">
+              Enviar mensagem
+              <span class="li" aria-hidden="true">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M2.5 9.5L9.5 2.5M9.5 2.5H4M9.5 2.5V8"/>
+                </svg>
+              </span>
+            </button>
+            <span class="cf-feedback" id="cfFeedback" aria-live="polite"></span>
+          </div>
+        </form>
+
         <div class="cta-actions">
-          <a href="mailto:contato@wedev.com.br" class="btn-lg">
-            Falar com a equipe
-            <span class="li" aria-hidden="true">
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M2.5 9.5L9.5 2.5M9.5 2.5H4M9.5 2.5V8"/>
-              </svg>
-            </span>
-          </a>
-          <a href="#gallery" class="btn-text-link">Ver portfólio</a>
+          <a href="#gallery" class="btn-text-link">Ver portfólio antes</a>
         </div>
       </div>
     </div>
@@ -1228,9 +1903,9 @@
         <div class="footer-col">
           <h4>Empresa</h4>
           <ul>
-            <li><a href="#about">Sobre nós</a></li>
-            <li><a href="#">Blog</a></li>
-            <li><a href="#">Carreiras</a></li>
+            <li><a href="#about-sec">Sobre nós</a></li>
+            <li><a href="#process">Como trabalhamos</a></li>
+            <li><a href="#testimonials">Depoimentos</a></li>
             <li><a href="#gallery">Portfólio</a></li>
           </ul>
         </div>
@@ -1372,6 +2047,136 @@
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape') closeMobileMenu();
     });
+
+    // ------ Active nav link on scroll ------
+    (function () {
+      const sections = Array.from(document.querySelectorAll('section[id], div[id]')).filter(el =>
+        ['home','features','process','gallery','testimonials','about-sec','contact'].includes(el.id)
+      );
+      const navLinks = document.querySelectorAll('.nav-links a');
+
+      const sectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            navLinks.forEach(a => a.classList.remove('active'));
+            const active = document.querySelector(`.nav-links a[href="#${entry.target.id}"]`);
+            if (active) active.classList.add('active');
+          }
+        });
+      }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
+
+      sections.forEach(s => sectionObserver.observe(s));
+    })();
+
+    // ------ Counter animation para métricas ------
+    (function () {
+      const metrics = document.querySelectorAll('.metric-n');
+
+      function parseTarget(text) {
+        const num = parseFloat(text.replace(/[^0-9.]/g, ''));
+        const suffix = text.replace(/[0-9.]/g, '').trim();
+        return { num, suffix };
+      }
+
+      function animateCounter(el) {
+        const raw = el.textContent.trim();
+        const { num, suffix } = parseTarget(raw);
+        const duration = 1600;
+        const start = performance.now();
+
+        function step(now) {
+          const elapsed = now - start;
+          const progress = Math.min(elapsed / duration, 1);
+          // ease-out cubic
+          const eased = 1 - Math.pow(1 - progress, 3);
+          const current = eased * num;
+          const display = Number.isInteger(num) ? Math.round(current) : current.toFixed(1);
+          el.textContent = display + suffix;
+          if (progress < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      }
+
+      const counterObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            animateCounter(entry.target);
+            counterObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.5 });
+
+      metrics.forEach(m => counterObserver.observe(m));
+    })();
+
+    // ------ Contact form validation ------
+    (function () {
+      const form      = document.getElementById('contactForm');
+      const nameEl    = document.getElementById('cf-name');
+      const emailEl   = document.getElementById('cf-email');
+      const msgEl     = document.getElementById('cf-msg');
+      const nameErr   = document.getElementById('cf-name-err');
+      const emailErr  = document.getElementById('cf-email-err');
+      const msgErr    = document.getElementById('cf-msg-err');
+      const feedback  = document.getElementById('cfFeedback');
+      const submitBtn = document.getElementById('cfSubmitBtn');
+
+      function validate() {
+        let ok = true;
+
+        if (!nameEl.value.trim()) {
+          nameEl.classList.add('error');
+          nameErr.textContent = 'Por favor informe seu nome.';
+          ok = false;
+        } else {
+          nameEl.classList.remove('error');
+          nameErr.textContent = '';
+        }
+
+        const emailRx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailEl.value.trim() || !emailRx.test(emailEl.value.trim())) {
+          emailEl.classList.add('error');
+          emailErr.textContent = 'Informe um e-mail válido.';
+          ok = false;
+        } else {
+          emailEl.classList.remove('error');
+          emailErr.textContent = '';
+        }
+
+        if (msgEl.value.trim().length < 10) {
+          msgEl.classList.add('error');
+          msgErr.textContent = 'Mensagem muito curta (mínimo 10 caracteres).';
+          ok = false;
+        } else {
+          msgEl.classList.remove('error');
+          msgErr.textContent = '';
+        }
+
+        return ok;
+      }
+
+      [nameEl, emailEl, msgEl].forEach(el => {
+        el.addEventListener('blur', validate, { passive: true });
+      });
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (!validate()) return;
+
+        submitBtn.disabled = true;
+        submitBtn.style.opacity = '0.6';
+        submitBtn.style.transform = 'scale(0.97)';
+
+        setTimeout(() => {
+          feedback.textContent = 'Mensagem enviada! Retornaremos em até 24h.';
+          form.reset();
+          submitBtn.disabled = false;
+          submitBtn.style.opacity = '';
+          submitBtn.style.transform = '';
+          setTimeout(() => { feedback.textContent = ''; }, 6000);
+        }, 900);
+      });
+    })();
   </script>
 </body>
 </html>
