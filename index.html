@@ -651,7 +651,7 @@
 
     .gallery-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 3fr 2fr;
       gap: 20px;
       align-items: start;
     }
@@ -673,7 +673,7 @@
       position: relative;
     }
     .gi--ecommerce .gi-media { aspect-ratio: 16 / 10; }
-    .gi--mobile .gi-media   { aspect-ratio: 16 / 10; }
+    .gi--mobile .gi-media   { aspect-ratio: 9 / 16; }
 
     .gi-media img,
     .gi-media video {
@@ -684,7 +684,7 @@
       opacity: 0.9;
       transition: transform 0.6s var(--ease-spring), opacity 0.4s;
     }
-    .gi--mobile .gi-media video { object-fit: contain; object-position: center; background: #0d0d0d; }
+    .gi--mobile .gi-media video { object-fit: cover; object-position: center top; }
     .gi:hover .gi-media img,
     .gi:hover .gi-media video  { transform: scale(1.04); opacity: 1; }
 
