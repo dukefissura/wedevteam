@@ -1374,9 +1374,8 @@
 
     .testi-grid {
       display: grid;
-      grid-template-columns: 2fr 1fr;
-      grid-template-rows: auto auto;
-      gap: 10px;
+      grid-template-columns: 3fr 2fr;
+      gap: 16px;
     }
     @media (max-width: 900px) {
       .testi-grid { grid-template-columns: 1fr; }
@@ -1385,23 +1384,27 @@
     .tc {
       background: var(--bg-surface);
       border: 1px solid var(--border-faint);
+      border-top: 1px solid rgba(255,255,255,0.09);
       border-radius: var(--r-lg);
-      padding: 40px;
+      padding: 48px;
       position: relative;
       overflow: hidden;
-      transition: border-color 0.3s, transform 0.4s var(--ease-spring);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: border-color 0.3s, transform 0.4s var(--ease-spring), box-shadow 0.3s;
     }
-    .tc:hover { border-color: var(--border-mid); transform: translateY(-3px); }
+    .tc:hover { border-color: var(--border-mid); transform: translateY(-4px); box-shadow: 0 24px 60px rgba(0,0,0,0.4); }
     .tc::before {
       content: '';
       position: absolute;
       inset: 0;
       border-radius: inherit;
-      background: linear-gradient(135deg, rgba(255,255,255,0.016) 0%, transparent 55%);
+      background: linear-gradient(135deg, rgba(255,255,255,0.02) 0%, transparent 60%);
       pointer-events: none;
     }
 
-    .tc--feat { grid-row: span 2; display: flex; flex-direction: column; justify-content: space-between; }
+    .tc--feat { display: flex; flex-direction: column; justify-content: space-between; }
 
     .tc-quote {
       font-family: var(--font-d);
@@ -1431,16 +1434,10 @@
       align-items: center;
       gap: 14px;
       margin-top: auto;
+      padding-top: 28px;
+      border-top: 1px solid var(--border-faint);
     }
-    .tc-avatar {
-      width: 44px; height: 44px;
-      border-radius: 50%;
-      overflow: hidden;
-      border: 1px solid var(--border-faint);
-      background: var(--bg-elevated);
-      flex-shrink: 0;
-    }
-    .tc-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0.85; }
+    .tc-avatar { display: none; }
     .tc-name {
       font-size: 14px;
       font-weight: 600;
@@ -1967,26 +1964,6 @@
             <div>
               <div class="tc-name">Thiago Cavalcante</div>
               <div class="tc-role">CTO · Praxis Fintech</div>
-            </div>
-          </div>
-        </article>
-
-        <article class="tc r d2" aria-label="Depoimento de Camila Ferreira">
-          <div class="tc-stars" aria-label="5 estrelas">
-            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          </div>
-          <p class="tc-quote">"O app mobile ficou exatamente como o protótipo. Mais de 4.8 estrelas na App Store desde o lançamento. Equipe extremamente competente e honesta com prazos."</p>
-          <div class="tc-author">
-            <div class="tc-avatar">
-              <img src="https://picsum.photos/seed/testi3/88/88" alt="Camila Ferreira" loading="lazy" referrerpolicy="no-referrer"/>
-            </div>
-            <div>
-              <div class="tc-name">Camila Ferreira</div>
-              <div class="tc-role">Fundadora · Orbita Health</div>
             </div>
           </div>
         </article>
