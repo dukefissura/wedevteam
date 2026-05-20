@@ -651,10 +651,11 @@
 
     .gallery-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      grid-template-rows: auto auto;
-      gap: 10px;
+      grid-template-columns: 3fr 2fr;
+      gap: 16px;
+      align-items: start;
     }
+    @media (max-width: 768px) { .gallery-grid { grid-template-columns: 1fr; } }
 
     .gi {
       border-radius: var(--r-md);
@@ -665,25 +666,26 @@
       transition: transform 0.4s var(--ease-spring), border-color 0.3s;
     }
     .gi:hover { transform: scale(1.014); border-color: var(--border-mid); }
-    .gi--tall { grid-row: span 2; }
 
     .gi-media {
       width: 100%;
-      aspect-ratio: 1;
       overflow: hidden;
       background: var(--bg-elevated);
       position: relative;
     }
-    .gi--tall .gi-media { aspect-ratio: unset; height: 100%; min-height: 380px; }
+    .gi--ecommerce .gi-media { aspect-ratio: 16 / 10; }
+    .gi--mobile .gi-media   { aspect-ratio: 9 / 16; }
 
     .gi-media img {
       width: 100%; height: 100%;
       object-fit: cover;
+      object-position: top center;
       display: block;
-      opacity: 0.65;
+      opacity: 0.85;
       transition: transform 0.6s var(--ease-spring), opacity 0.4s;
     }
-    .gi:hover .gi-media img { transform: scale(1.05); opacity: 0.78; }
+    .gi--mobile .gi-media img { object-position: center; }
+    .gi:hover .gi-media img { transform: scale(1.04); opacity: 1; }
 
     .gi-cap {
       padding: 14px 18px;
@@ -701,9 +703,7 @@
     }
 
     @media (max-width: 768px) {
-      .gallery-grid { grid-template-columns: 1fr 1fr; }
-      .gi--tall { grid-row: span 1; }
-      .gi--tall .gi-media { min-height: auto; }
+      .gallery-grid { grid-template-columns: 1fr; }
     }
     @media (max-width: 480px) {
       .gallery-grid { grid-template-columns: 1fr; }
@@ -1857,8 +1857,8 @@
 
       <div class="gallery-grid">
 
-        <!-- Ferragem Schneider — tall featured -->
-        <div class="gi gi--tall r">
+        <!-- Ferragem Schneider -->
+        <div class="gi gi--ecommerce r">
           <div class="gi-media">
             <img src="ecommerce.png" alt="Ferragem Schneider — E-commerce" loading="lazy"/>
           </div>
@@ -1869,43 +1869,13 @@
         </div>
 
         <!-- App Fitness Mobile -->
-        <div class="gi r d1">
+        <div class="gi gi--mobile r d1">
           <div class="gi-media">
             <img src="fitapp.png" alt="App Fitness Mobile" loading="lazy"/>
           </div>
           <div class="gi-cap">
             <span class="gi-cap-title">App Fitness</span>
-            <span class="gi-cap-tag">iOS & Android</span>
-          </div>
-        </div>
-
-        <div class="gi r d2">
-          <div class="gi-media">
-            <img src="fitapp.png" alt="App Fitness — Tela de treino" loading="lazy"/>
-          </div>
-          <div class="gi-cap">
-            <span class="gi-cap-title">App Fitness — Treinos</span>
-            <span class="gi-cap-tag">Mobile UI</span>
-          </div>
-        </div>
-
-        <div class="gi r d1">
-          <div class="gi-media">
-            <img src="ecommerce.png" alt="Ferragem Schneider — Produto" loading="lazy"/>
-          </div>
-          <div class="gi-cap">
-            <span class="gi-cap-title">Schneider — Produto</span>
-            <span class="gi-cap-tag">Web</span>
-          </div>
-        </div>
-
-        <div class="gi r d2">
-          <div class="gi-media">
-            <img src="fitapp.png" alt="App Fitness — Dashboard" loading="lazy"/>
-          </div>
-          <div class="gi-cap">
-            <span class="gi-cap-title">App Fitness — Dashboard</span>
-            <span class="gi-cap-tag">iOS & Android</span>
+            <span class="gi-cap-tag">iOS &amp; Android</span>
           </div>
         </div>
 
