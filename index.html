@@ -1298,11 +1298,11 @@
     }
     /* Sticky wrapper — stays pinned while track scrolls */
     .about-sticky-wrap {
-      position: sticky;
-      top: 0;
+      position: relative;
       height: 100vh;
       display: flex;
       align-items: center;
+      will-change: transform;
     }
     .about-grid {
       display: grid;

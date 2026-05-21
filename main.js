@@ -279,10 +279,12 @@ document.addEventListener('keydown', e => {
 })();
 
 // ------ Scroll-driven video — Sobre Nós ------
+// Uses JS translateY pinning (avoids CSS sticky browser quirks)
 (function () {
   var video = document.getElementById('about-video');
   var track = document.querySelector('.about-scroll-track');
-  if (!video || !track) return;
+  var wrap  = document.querySelector('.about-sticky-wrap');
+  if (!video || !track || !wrap) return;
 
   if (window.matchMedia('(max-width: 900px)').matches) {
     video.autoplay = true;
@@ -291,30 +293,39 @@ document.addEventListener('keydown', e => {
     return;
   }
 
-  // Force the browser to start buffering all frames
   video.load();
 
+  // Measure track position (document-relative, recomputed on resize)
+  var trackTop = 0;
+  var scrollable = 0;
+  function measure() {
+    var r = track.getBoundingClientRect();
+    trackTop   = r.top + window.scrollY;
+    scrollable = track.offsetHeight - window.innerHeight;
+  }
+  measure();
+  window.addEventListener('resize', measure, { passive: true });
+
   var raf = null;
-  function scrub() {
+  function update() {
     raf = null;
-    var rect = track.getBoundingClientRect();
-    var scrollable = track.offsetHeight - window.innerHeight;
-    if (scrollable <= 0 || !video.duration || !isFinite(video.duration)) return;
-    var scrolled = Math.max(0, Math.min(scrollable, -rect.top));
-    video.currentTime = (scrolled / scrollable) * video.duration;
+    if (scrollable <= 0) return;
+    var clamped = Math.max(0, Math.min(scrollable, window.scrollY - trackTop));
+    // Translate the sticky wrapper to keep it pinned in view
+    wrap.style.transform = 'translateY(' + clamped + 'px)';
+    // Scrub video
+    if (video.duration && isFinite(video.duration)) {
+      video.currentTime = (clamped / scrollable) * video.duration;
+    }
   }
 
   function onScroll() {
-    if (!raf) raf = requestAnimationFrame(scrub);
+    if (!raf) raf = requestAnimationFrame(update);
   }
 
   window.addEventListener('scroll', onScroll, { passive: true });
-  // Call immediately if metadata already available, else wait
-  if (video.readyState >= 1) {
-    scrub();
-  } else {
-    video.addEventListener('loadedmetadata', scrub);
-  }
+  video.addEventListener('loadedmetadata', update);
+  update();
 })();
 
 // ------ Contact form validation ------
