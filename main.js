@@ -2,22 +2,31 @@
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 window.scrollTo(0, 0);
 
-// ------ Reading progress bar ------
+// ------ Reading progress bar, back-to-top & navbar (single rAF-throttled scroll handler) ------
 (function () {
-  const bar = document.getElementById('progress-bar');
-  window.addEventListener('scroll', () => {
-    const scrollTop = window.scrollY;
-    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-    bar.style.width = docHeight > 0 ? (scrollTop / docHeight * 100).toFixed(2) + '%' : '0%';
-  }, { passive: true });
-})();
+  const bar      = document.getElementById('progress-bar');
+  const btn      = document.getElementById('back-to-top');
+  const navInner = document.getElementById('navInner');
+  let ticking    = false;
 
-// ------ Back to top button ------
-(function () {
-  const btn = document.getElementById('back-to-top');
+  function onScroll() {
+    const scrollY   = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = docHeight > 0 ? (scrollY / docHeight * 100).toFixed(2) + '%' : '0%';
+    btn.classList.toggle('visible', scrollY > 400);
+    navInner.style.background = scrollY > 48
+      ? 'rgba(5, 5, 5, 0.90)'
+      : 'rgba(8, 8, 8, 0.72)';
+    ticking = false;
+  }
+
   window.addEventListener('scroll', () => {
-    btn.classList.toggle('visible', window.scrollY > 400);
+    if (!ticking) {
+      requestAnimationFrame(onScroll);
+      ticking = true;
+    }
   }, { passive: true });
+
   btn.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
@@ -111,8 +120,9 @@ window.scrollTo(0, 0);
   const COUNT = 220;
   let scrollRaw = 0;
   let scrollSmooth = 0;
+  let lastDraw = 0;
+  const FRAME_MS = 1000 / 30; // cap at 30 fps
 
-  // Capture raw scroll without triggering layout
   window.addEventListener('scroll', () => {
     scrollRaw = window.scrollY;
   }, { passive: true });
@@ -129,34 +139,31 @@ window.scrollTo(0, 0);
         baseOpacity: Math.random() * 0.55 + 0.15,
         phase:       Math.random() * Math.PI * 2,
         speed:       0.0004 + Math.random() * 0.0007,
-        // Depth layer: 0.04–0.22. Larger = closer = faster parallax
         parallax:    0.04 + Math.random() * 0.18,
       });
     }
   }
 
-  function draw() {
-    if (document.hidden) return; // pause when tab is inactive
-    // Smooth-lerp scroll value — eases the parallax motion
-    scrollSmooth += (scrollRaw - scrollSmooth) * 0.07;
+  function draw(ts) {
+    if (document.hidden) return;
+    requestAnimationFrame(draw);
+    if (ts - lastDraw < FRAME_MS) return;
+    const dt = Math.min(ts - lastDraw, 100); // clamp to avoid jumps after tab restore
+    lastDraw = ts;
 
+    scrollSmooth += (scrollRaw - scrollSmooth) * 0.07;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     for (const s of stars) {
-      s.phase += s.speed * 16;
+      s.phase += s.speed * dt; // delta-time based — frame-rate independent
       const op = Math.max(0.05, s.baseOpacity + Math.sin(s.phase) * 0.22);
-
-      // Parallax offset — different depth per star
       const rawOffset = scrollSmooth * s.parallax;
-      // Wrap vertically so stars loop seamlessly as you scroll
-      let drawY = ((s.y - rawOffset) % canvas.height + canvas.height) % canvas.height;
-
+      const drawY = ((s.y - rawOffset) % canvas.height + canvas.height) % canvas.height;
       ctx.beginPath();
       ctx.arc(s.x, drawY, s.r, 0, Math.PI * 2);
       ctx.fillStyle = `rgba(255,255,255,${op.toFixed(3)})`;
       ctx.fill();
     }
-    requestAnimationFrame(draw);
   }
 
   window.addEventListener('resize', resize, { passive: true });
@@ -179,20 +186,7 @@ const observer = new IntersectionObserver((entries) => {
 
 document.querySelectorAll('.r').forEach(el => observer.observe(el));
 
-// ------ Navbar scroll opacity ------
-const navInner = document.getElementById('navInner');
-let ticking = false;
-window.addEventListener('scroll', () => {
-  if (!ticking) {
-    requestAnimationFrame(() => {
-      navInner.style.background = window.scrollY > 48
-        ? 'rgba(5, 5, 5, 0.90)'
-        : 'rgba(8, 8, 8, 0.72)';
-      ticking = false;
-    });
-    ticking = true;
-  }
-}, { passive: true });
+
 
 // ------ Mobile hamburger + menu ------
 const hamburger = document.getElementById('hamburger');
@@ -215,6 +209,11 @@ function closeMobileMenu() {
 // Close menu on Escape
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closeMobileMenu();
+});
+
+// Close mobile menu when any nav link is clicked
+document.querySelectorAll('#mobileMenu a').forEach(a => {
+  a.addEventListener('click', closeMobileMenu);
 });
 
 // ------ Active nav link on scroll ------
@@ -347,10 +346,14 @@ document.addEventListener('keydown', e => {
 
     try {
       const data = new FormData(form);
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000);
       const res = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
-        body: data
+        body: data,
+        signal: controller.signal
       });
+      clearTimeout(timeoutId);
       const json = await res.json();
 
       if (json.success) {
@@ -363,9 +366,11 @@ document.addEventListener('keydown', e => {
         feedback.style.color = '#ff453a';
         feedback.textContent = 'Erro ao enviar. Tente novamente.';
       }
-    } catch {
+    } catch (err) {
       feedback.style.color = '#ff453a';
-      feedback.textContent = 'Erro de conexão. Tente novamente.';
+      feedback.textContent = err.name === 'AbortError'
+        ? 'Tempo esgotado. Verifique sua conexão.'
+        : 'Erro de conexão. Tente novamente.';
     } finally {
       submitBtn.disabled = false;
       submitBtn.style.opacity = '';

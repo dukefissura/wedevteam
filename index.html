@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#050505" />
   <title>WeDev — Desenvolvimento Web & Software</title>
   <meta name="description" content="Transformamos visão em produto digital. Desenvolvimento web, mobile e sistemas sob medida para empresas que crescem com tecnologia." />
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; media-src 'self'; script-src 'self'; connect-src https://api.web3forms.com;" />
@@ -575,6 +576,7 @@
       position: relative;
       overflow: hidden;
       transition: border-color 0.3s ease, transform 0.4s var(--ease-spring);
+      will-change: transform;
     }
     .bc:hover { border-color: var(--border-mid); transform: translateY(-3px); }
 
@@ -675,6 +677,7 @@
       background: var(--bg-surface);
       cursor: pointer;
       transition: transform 0.4s var(--ease-spring), border-color 0.3s;
+      will-change: transform;
     }
     .gi:hover { transform: scale(1.014); border-color: var(--border-mid); }
 
@@ -1588,11 +1591,11 @@
        MOBILE MENU OVERLAY
   ============================================================ -->
   <div class="nav-mobile-menu" id="mobileMenu" role="dialog" aria-modal="true" aria-label="Menu de navegação">
-    <a href="#features"    onclick="closeMobileMenu()">Serviços</a>
-    <a href="#process"     onclick="closeMobileMenu()">Processo</a>
-    <a href="#gallery"     onclick="closeMobileMenu()">Portfólio</a>
-    <a href="#about-sec"   onclick="closeMobileMenu()">Sobre</a>
-    <a href="#contact"     onclick="closeMobileMenu()" class="mob-cta">Fale conosco</a>
+    <a href="#features">Serviços</a>
+    <a href="#process">Processo</a>
+    <a href="#gallery">Portfólio</a>
+    <a href="#about-sec">Sobre</a>
+    <a href="#contact" class="mob-cta">Fale conosco</a>
   </div>
 
   <!-- ============================================================
@@ -2040,20 +2043,20 @@
           <input type="hidden" name="subject" value="Novo contato pelo site WeDev" />
           <input type="hidden" name="from_name" value="Site WeDev" />
           <!-- Honeypot: bots fill this, humans don't — Web3Forms rejects if checked -->
-          <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" aria-hidden="true" />
+          <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" aria-hidden="true" autocomplete="off" />
           <div class="cf-field">
             <label class="cf-label" for="cf-name">Nome</label>
-            <input class="cf-input" id="cf-name" name="name" type="text" placeholder="Seu nome completo" autocomplete="name" />
+            <input class="cf-input" id="cf-name" name="name" type="text" placeholder="Seu nome completo" autocomplete="name" maxlength="100" />
             <span class="cf-error" id="cf-name-err" role="alert"></span>
           </div>
           <div class="cf-field">
             <label class="cf-label" for="cf-email">E-mail</label>
-            <input class="cf-input" id="cf-email" name="email" type="email" placeholder="voce@empresa.com" autocomplete="email" />
+            <input class="cf-input" id="cf-email" name="email" type="email" placeholder="voce@empresa.com" autocomplete="email" maxlength="254" />
             <span class="cf-error" id="cf-email-err" role="alert"></span>
           </div>
           <div class="cf-field cf-field--full">
             <label class="cf-label" for="cf-msg">Mensagem</label>
-            <textarea class="cf-textarea" id="cf-msg" name="message" placeholder="Fale sobre seu projeto, prazo e orçamento aproximado…"></textarea>
+            <textarea class="cf-textarea" id="cf-msg" name="message" placeholder="Fale sobre seu projeto, prazo e orçamento aproximado…" maxlength="2000"></textarea>
             <span class="cf-error" id="cf-msg-err" role="alert"></span>
           </div>
           <div class="cf-submit-wrap">
@@ -2116,7 +2119,7 @@
       <div class="footer-bottom">
         <span class="footer-legal">&copy; 2026 WeDev. Todos os direitos reservados.</span>
         <div class="footer-socials">
-          <a href="https://instagram.com/wedevteam" target="_blank" rel="noopener" aria-label="Instagram">Instagram</a>
+          <a href="https://instagram.com/wedevteam" target="_blank" rel="noopener noreferrer" aria-label="Instagram">Instagram</a>
         </div>
       </div>
     </div>
