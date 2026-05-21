@@ -1,11 +1,12 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>WeDev — Desenvolvimento Web & Software</title>
-  <meta name="description" content="Transformamos visão em produto digital. Desenvolvimento web, mobile e sistemas sob medida para empresas que crescem com tecnologia." />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; script-src 'self' 'unsafe-inline'; connect-src https://api.web3forms.com;" />
+  <title>WeDev â€” Desenvolvimento Web & Software</title>
+  <meta name="description" content="Transformamos visÃ£o em produto digital. Desenvolvimento web, mobile e sistemas sob medida para empresas que crescem com tecnologia." />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; media-src 'self'; script-src 'self'; connect-src https://api.web3forms.com;" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23050505'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-family='system-ui%2C-apple-system%2Csans-serif' font-size='15' font-weight='800' letter-spacing='-1' fill='%23F5F5F7'%3EW%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -50,7 +51,7 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* Starfield canvas — fixed, behind everything */
+    /* Starfield canvas â€” fixed, behind everything */
     #starfield {
       position: fixed;
       inset: 0;
@@ -58,7 +59,7 @@
       pointer-events: none;
     }
 
-    /* Grain overlay — fixed, GPU-safe, pointer-none */
+    /* Grain overlay â€” fixed, GPU-safe, pointer-none */
     body::after {
       content: '';
       position: fixed;
@@ -80,7 +81,7 @@
     @media (max-width: 768px) { .wrap { padding: 0 20px; } }
 
     /* ============================================================
-       SCROLL REVEAL — IntersectionObserver driven
+       SCROLL REVEAL â€” IntersectionObserver driven
     ============================================================ */
     .r {
       opacity: 0;
@@ -98,7 +99,7 @@
     .r.d4  { transition-delay: 0.42s; }
 
     /* ============================================================
-       NAVBAR — Floating glass pill
+       NAVBAR â€” Floating glass pill
     ============================================================ */
     .nav-wrap {
       position: fixed;
@@ -382,7 +383,7 @@
     }
     .btn-text-link:hover { color: var(--text-1); border-color: var(--border-mid); }
 
-    /* HERO — Visual (Double-Bezel product) */
+    /* HERO â€” Visual (Double-Bezel product) */
     .hero-visual { position: relative; }
 
     .bezel-outer {
@@ -505,7 +506,7 @@
     }
 
     /* ============================================================
-       SECTION — Shared
+       SECTION â€” Shared
     ============================================================ */
     .section { padding: 128px 0; }
 
@@ -544,7 +545,7 @@
     }
 
     /* ============================================================
-       FEATURES — Asymmetric Bento Grid
+       FEATURES â€” Asymmetric Bento Grid
     ============================================================ */
     .features-hd { margin-bottom: 56px; }
 
@@ -828,7 +829,7 @@
     }
 
     /* ============================================================
-       MOBILE — Consolidated improvements
+       MOBILE â€” Consolidated improvements
     ============================================================ */
 
     /* Remove tap flash on touch devices */
@@ -845,7 +846,7 @@
       .footer-top   { gap: 32px; margin-bottom: 40px; }
     }
 
-    /* Hero & cards — small screens */
+    /* Hero & cards â€” small screens */
     @media (max-width: 640px) {
       .hero         { padding: 92px 0 56px; }
       .hero-h1      { font-size: clamp(42px, 12vw, 64px); }
@@ -859,14 +860,14 @@
       .sec-h        { max-width: 100%; }
     }
 
-    /* Hero actions — stack full-width on very small screens */
+    /* Hero actions â€” stack full-width on very small screens */
     @media (max-width: 460px) {
       .hero-actions       { flex-direction: column; align-items: stretch; gap: 12px; }
       .btn-lg             { justify-content: center; min-height: 52px; }
       .btn-text-link      { align-self: center; padding-top: 4px; }
     }
 
-    /* Metrics — tighter on very small screens */
+    /* Metrics â€” tighter on very small screens */
     @media (max-width: 460px) {
       .metrics-grid       { gap: 36px 0; }
       .metric             { padding: 0 14px; }
@@ -874,13 +875,13 @@
       .metric-n           { font-size: clamp(32px, 10vw, 46px); }
     }
 
-    /* Gallery — single column on very small screens */
+    /* Gallery â€” single column on very small screens */
     @media (max-width: 460px) {
       .gallery-grid       { grid-template-columns: 1fr; gap: 8px; }
       .gi-cap             { padding: 12px 14px; gap: 4px; }
     }
 
-    /* CTA — compact on small screens */
+    /* CTA â€” compact on small screens */
     @media (max-width: 460px) {
       .cta-inner          { padding: 48px 20px; border-radius: var(--r-lg); }
       .cta-h              { font-size: clamp(28px, 9vw, 48px); }
@@ -889,7 +890,7 @@
       .cta-actions .btn-text-link { text-align: center; }
     }
 
-    /* Mobile menu — add CTA style to last link */
+    /* Mobile menu â€” add CTA style to last link */
     .nav-mobile-menu .mob-cta {
       margin-top: 16px;
       font-size: 15px !important;
@@ -1076,7 +1077,7 @@
     /* ============================================================
        MOBILE IMPROVEMENTS
     ============================================================ */
-    /* Process steps — tighter on mobile */
+    /* Process steps â€” tighter on mobile */
     @media (max-width: 480px) {
       .process-steps::before { display: none; }
       .step-num-wrap { display: none; }
@@ -1085,13 +1086,13 @@
       .step-tag { margin-bottom: 6px; }
     }
 
-    /* Testimonials — single column on mobile */
+    /* Testimonials â€” single column on mobile */
     @media (max-width: 640px) {
       .testi-grid { grid-template-columns: 1fr; }
       .tc--feat { grid-row: span 1; }
     }
 
-    /* About grid — visual hidden on very small screens, text first */
+    /* About grid â€” visual hidden on very small screens, text first */
     @media (max-width: 480px) {
       .about-grid { gap: 32px; }
       .about-img-frame { aspect-ratio: 3 / 2; }
@@ -1099,7 +1100,7 @@
       .av-desc { font-size: 13px; }
     }
 
-    /* Contact form — always single col on mobile */
+    /* Contact form â€” always single col on mobile */
     @media (max-width: 480px) {
       .contact-form { gap: 10px; }
       .cf-field--full { grid-column: span 1; }
@@ -1111,7 +1112,7 @@
       .tech-chip { font-size: 12px; padding: 6px 14px; }
     }
 
-    /* Footer bottom stacked on mobile — already handled; ensure social links wrap */
+    /* Footer bottom stacked on mobile â€” already handled; ensure social links wrap */
     @media (max-width: 480px) {
       .footer-socials { flex-wrap: wrap; gap: 14px; justify-content: center; }
     }
@@ -1197,7 +1198,7 @@
     }
 
     /* ============================================================
-       PROCESSO — Numbered steps zigzag
+       PROCESSO â€” Numbered steps zigzag
     ============================================================ */
     .process-hd { margin-bottom: 72px; }
 
@@ -1289,7 +1290,7 @@
     }
 
     /* ============================================================
-       SOBRE NÓS
+       SOBRE NÃ“S
     ============================================================ */
     .about-grid {
       display: grid;
@@ -1471,7 +1472,7 @@
     }
 
     /* ============================================================
-       CONTACT FORM — inline no CTA
+       CONTACT FORM â€” inline no CTA
     ============================================================ */
     .contact-form {
       display: grid;
@@ -1574,7 +1575,7 @@
       <button class="lb-btn" id="lb-prev" aria-label="Projeto anterior">
         <svg viewBox="0 0 16 16"><path d="M10 3L5 8l5 5"/></svg>
       </button>
-      <button class="lb-btn" id="lb-next" aria-label="Próximo projeto">
+      <button class="lb-btn" id="lb-next" aria-label="PrÃ³ximo projeto">
         <svg viewBox="0 0 16 16"><path d="M6 3l5 5-5 5"/></svg>
       </button>
     </div>
@@ -1586,10 +1587,10 @@
   <!-- ============================================================
        MOBILE MENU OVERLAY
   ============================================================ -->
-  <div class="nav-mobile-menu" id="mobileMenu" role="dialog" aria-modal="true" aria-label="Menu de navegação">
-    <a href="#features"    onclick="closeMobileMenu()">Serviços</a>
+  <div class="nav-mobile-menu" id="mobileMenu" role="dialog" aria-modal="true" aria-label="Menu de navegaÃ§Ã£o">
+    <a href="#features"    onclick="closeMobileMenu()">ServiÃ§os</a>
     <a href="#process"     onclick="closeMobileMenu()">Processo</a>
-    <a href="#gallery"     onclick="closeMobileMenu()">Portfólio</a>
+    <a href="#gallery"     onclick="closeMobileMenu()">PortfÃ³lio</a>
     <a href="#about-sec"   onclick="closeMobileMenu()">Sobre</a>
     <a href="#contact"     onclick="closeMobileMenu()" class="mob-cta">Fale conosco</a>
   </div>
@@ -1597,19 +1598,19 @@
   <!-- ============================================================
        NAVBAR
   ============================================================ -->
-  <nav class="nav-wrap" role="navigation" aria-label="Navegação principal">
+  <nav class="nav-wrap" role="navigation" aria-label="NavegaÃ§Ã£o principal">
     <div class="nav-inner" id="navInner">
-      <a href="#" class="nav-logo" aria-label="WeDev — Página inicial">WeDev</a>
+      <a href="#" class="nav-logo" aria-label="WeDev â€” PÃ¡gina inicial">WeDev</a>
 
       <ul class="nav-links">
-        <li><a href="#features">Serviços</a></li>
+        <li><a href="#features">ServiÃ§os</a></li>
         <li><a href="#process">Processo</a></li>
-        <li><a href="#gallery">Portfólio</a></li>
+        <li><a href="#gallery">PortfÃ³lio</a></li>
         <li><a href="#about-sec">Sobre</a></li>
       </ul>
 
       <div class="nav-end">
-        <a href="#about-sec" class="btn-nav-ghost">Sobre nós</a>
+        <a href="#about-sec" class="btn-nav-ghost">Sobre nÃ³s</a>
         <a href="#contact" class="btn-pill">
           Fale conosco
           <span class="pill-icon" aria-hidden="true">
@@ -1641,22 +1642,22 @@
             Desenvolvendo Softwares Desde 2025
           </div>
           <h1 class="hero-h1 r d1">
-            Código que
+            CÃ³digo que
             <em><span id="tw-text"></span><span class="tw-cursor" aria-hidden="true"></span></em>
           </h1>
           <p class="hero-p r d2">
-            Da landing page ao sistema complexo, construímos o digital que move negócios. Parceiros de empresas que crescem com tecnologia.
+            Da landing page ao sistema complexo, construÃ­mos o digital que move negÃ³cios. Parceiros de empresas que crescem com tecnologia.
           </p>
           <div class="hero-actions r d3">
             <a href="#gallery" class="btn-lg">
-              Ver Portfólio
+              Ver PortfÃ³lio
               <span class="li" aria-hidden="true">
                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M2.5 9.5L9.5 2.5M9.5 2.5H4M9.5 2.5V8"/>
                 </svg>
               </span>
             </a>
-            <a href="#features" class="btn-text-link">Nossos serviços</a>
+            <a href="#features" class="btn-text-link">Nossos serviÃ§os</a>
           </div>
         </div>
 
@@ -1669,7 +1670,7 @@
   <!-- ============================================================
        METRICS STRIP
   ============================================================ -->
-  <div class="metrics" aria-label="Números da WeDev">
+  <div class="metrics" aria-label="NÃºmeros da WeDev">
     <div class="wrap">
       <div class="metrics-grid">
         <div class="metric r">
@@ -1696,7 +1697,7 @@
        TECH STACK STRIP
   ============================================================ -->
   <div class="techstack" aria-label="Tecnologias que dominamos">
-    <div class="techstack-label">Stack tecnológico</div>
+    <div class="techstack-label">Stack tecnolÃ³gico</div>
     <div class="techstack-track-wrap">
       <div class="techstack-track" aria-hidden="true">
         <!-- set 1 -->
@@ -1712,7 +1713,7 @@
         <span class="tech-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>Tailwind CSS</span>
         <span class="tech-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5"/></svg>AWS</span>
         <span class="tech-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="2" width="14" height="20" rx="3"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>React Native</span>
-        <!-- set 2 — clone for seamless loop -->
+        <!-- set 2 â€” clone for seamless loop -->
         <span class="tech-chip" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10A15.3 15.3 0 0 1 12 2z"/></svg>React</span>
         <span class="tech-chip" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Next.js</span>
         <span class="tech-chip" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>TypeScript</span>
@@ -1730,35 +1731,35 @@
   </div>
 
   <!-- ============================================================
-       FEATURES — Bento Grid
+       FEATURES â€” Bento Grid
   ============================================================ -->
   <section class="section" id="features" aria-labelledby="feat-heading">
     <div class="wrap">
 
       <div class="features-hd">
-        <div class="sec-label r">Serviços</div>
-        <h2 class="sec-h r d1" id="feat-heading">Tudo que seu<br>negócio precisa.</h2>
-        <p class="sec-p r d2">Do design ao deploy, entregamos soluções digitais completas — web, mobile e sistemas robustos para escalar com segurança.</p>
+        <div class="sec-label r">ServiÃ§os</div>
+        <h2 class="sec-h r d1" id="feat-heading">Tudo que seu<br>negÃ³cio precisa.</h2>
+        <p class="sec-p r d2">Do design ao deploy, entregamos soluÃ§Ãµes digitais completas â€” web, mobile e sistemas robustos para escalar com seguranÃ§a.</p>
       </div>
 
       <div class="bento" role="list">
 
-        <!-- Card 1 — narrow left -->
+        <!-- Card 1 â€” narrow left -->
         <article class="bc bc-1 r" role="listitem">
           <div class="bc-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 21V9"/></svg>
           </div>
           <h3 class="bc-title">Desenvolvimento Web</h3>
-          <p class="bc-body">Sites institucionais, landing pages e aplicações web de alta performance com foco em conversão e experiência do usuário.</p>
+          <p class="bc-body">Sites institucionais, landing pages e aplicaÃ§Ãµes web de alta performance com foco em conversÃ£o e experiÃªncia do usuÃ¡rio.</p>
         </article>
 
-        <!-- Card 2 — wide right with inner visual -->
+        <!-- Card 2 â€” wide right with inner visual -->
         <article class="bc bc-2 r d1" role="listitem">
           <div class="bc-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="3"/><path d="M12 18h.01"/></svg>
           </div>
           <h3 class="bc-title">Aplicativos Mobile</h3>
-          <p class="bc-body">iOS e Android nativos ou multiplataforma com React Native e Flutter. Interfaces fluidas que os usuários adoram usar.</p>
+          <p class="bc-body">iOS e Android nativos ou multiplataforma com React Native e Flutter. Interfaces fluidas que os usuÃ¡rios adoram usar.</p>
           <div class="bc-vis" aria-hidden="true">
             <svg width="78%" height="48" viewBox="0 0 400 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="opacity:0.45;">
               <path d="M0 24 Q50 4 100 24 Q150 44 200 24 Q250 4 300 24 Q350 44 400 24" stroke="rgba(255,255,255,0.3)" stroke-width="1.4" fill="none"/>
@@ -1773,7 +1774,7 @@
             <svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
           </div>
           <h3 class="bc-title">Sistemas & APIs</h3>
-          <p class="bc-body">Back-end robusto, microsserviços escaláveis e integrações via REST e GraphQL para operações críticas.</p>
+          <p class="bc-body">Back-end robusto, microsserviÃ§os escalÃ¡veis e integraÃ§Ãµes via REST e GraphQL para operaÃ§Ãµes crÃ­ticas.</p>
         </article>
 
         <!-- Card 4 -->
@@ -1782,7 +1783,7 @@
             <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></svg>
           </div>
           <h3 class="bc-title">UI/UX Design</h3>
-          <p class="bc-body">Interfaces que convertem e encantam. Pesquisa de usuário, prototipagem e design systems prontos para produção.</p>
+          <p class="bc-body">Interfaces que convertem e encantam. Pesquisa de usuÃ¡rio, prototipagem e design systems prontos para produÃ§Ã£o.</p>
         </article>
 
         <!-- Card 5 -->
@@ -1791,7 +1792,7 @@
             <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
           </div>
           <h3 class="bc-title">Consultoria Tech</h3>
-          <p class="bc-body">Estratégia de produto, arquitetura de software e acompanhamento técnico para times que precisam escalar rápido.</p>
+          <p class="bc-body">EstratÃ©gia de produto, arquitetura de software e acompanhamento tÃ©cnico para times que precisam escalar rÃ¡pido.</p>
         </article>
 
       </div>
@@ -1799,7 +1800,7 @@
   </section>
 
   <!-- ============================================================
-       PROCESSO — Como trabalhamos
+       PROCESSO â€” Como trabalhamos
   ============================================================ -->
   <section class="section" id="process" aria-labelledby="proc-heading">
     <div class="wrap">
@@ -1807,7 +1808,7 @@
       <div class="process-hd">
         <div class="sec-label r">Como trabalhamos</div>
         <h2 class="sec-h r d1" id="proc-heading">Do briefing ao<br>deploy em 4 etapas.</h2>
-        <p class="sec-p r d2">Um processo estruturado que elimina retrabalho, mantém todos alinhados e garante entregas no prazo.</p>
+        <p class="sec-p r d2">Um processo estruturado que elimina retrabalho, mantÃ©m todos alinhados e garante entregas no prazo.</p>
       </div>
 
       <div class="process-steps">
@@ -1818,8 +1819,8 @@
           </div>
           <div class="step-body">
             <div class="step-tag">Discovery</div>
-            <h3 class="step-title">Entendemos seu negócio a fundo</h3>
-            <p class="step-desc">Workshop de alinhamento com stakeholders, mapeamento de dores reais, definição de KPIs e escopo técnico. Saímos com um documento de requisitos que elimina ambiguidade antes da primeira linha de código.</p>
+            <h3 class="step-title">Entendemos seu negÃ³cio a fundo</h3>
+            <p class="step-desc">Workshop de alinhamento com stakeholders, mapeamento de dores reais, definiÃ§Ã£o de KPIs e escopo tÃ©cnico. SaÃ­mos com um documento de requisitos que elimina ambiguidade antes da primeira linha de cÃ³digo.</p>
           </div>
         </div>
 
@@ -1830,7 +1831,7 @@
           <div class="step-body">
             <div class="step-tag">Design & Arquitetura</div>
             <h3 class="step-title">Prototipamos antes de construir</h3>
-            <p class="step-desc">Wireframes de baixa fidelidade → design system → protótipo navegável. Você valida cada tela antes do dev começar. Arquitetura técnica documentada: banco de dados, APIs, infraestrutura e plano de escalabilidade.</p>
+            <p class="step-desc">Wireframes de baixa fidelidade â†’ design system â†’ protÃ³tipo navegÃ¡vel. VocÃª valida cada tela antes do dev comeÃ§ar. Arquitetura tÃ©cnica documentada: banco de dados, APIs, infraestrutura e plano de escalabilidade.</p>
           </div>
         </div>
 
@@ -1841,7 +1842,7 @@
           <div class="step-body">
             <div class="step-tag">Desenvolvimento</div>
             <h3 class="step-title">Sprints de 2 semanas com entregas reais</h3>
-            <p class="step-desc">Ciclos ágeis com demo ao final de cada sprint. Code reviews, testes automatizados e CI/CD desde o dia 1. Você acompanha o progresso em tempo real — sem surpresas no final.</p>
+            <p class="step-desc">Ciclos Ã¡geis com demo ao final de cada sprint. Code reviews, testes automatizados e CI/CD desde o dia 1. VocÃª acompanha o progresso em tempo real â€” sem surpresas no final.</p>
           </div>
         </div>
 
@@ -1850,9 +1851,9 @@
             <div class="step-num">04</div>
           </div>
           <div class="step-body">
-            <div class="step-tag">Lançamento & Suporte</div>
+            <div class="step-tag">LanÃ§amento & Suporte</div>
             <h3 class="step-title">Deploy com monitoramento e handoff completo</h3>
-            <p class="step-desc">Go-live gerenciado, monitoramento de performance pós-lançamento e documentação técnica completa. Suporte pós-entrega incluso por 60 dias para garantir estabilidade em produção.</p>
+            <p class="step-desc">Go-live gerenciado, monitoramento de performance pÃ³s-lanÃ§amento e documentaÃ§Ã£o tÃ©cnica completa. Suporte pÃ³s-entrega incluso por 60 dias para garantir estabilidade em produÃ§Ã£o.</p>
           </div>
         </div>
 
@@ -1868,10 +1869,10 @@
 
       <div class="gallery-hd">
         <div>
-          <div class="sec-label r">Portfólio</div>
-          <h2 class="sec-h r d1" id="gal-heading">Projetos que<br>falam por nós.</h2>
+          <div class="sec-label r">PortfÃ³lio</div>
+          <h2 class="sec-h r d1" id="gal-heading">Projetos que<br>falam por nÃ³s.</h2>
         </div>
-        <p class="sec-p r d2">Cada entrega carrega nossa obsessão por qualidade — código limpo, design preciso e resultados mensuráveis para o cliente.</p>
+        <p class="sec-p r d2">Cada entrega carrega nossa obsessÃ£o por qualidade â€” cÃ³digo limpo, design preciso e resultados mensurÃ¡veis para o cliente.</p>
       </div>
 
       <div class="gallery-grid">
@@ -1879,21 +1880,21 @@
         <!-- Ferragem Schneider -->
         <div class="gi gi--ecommerce r">
           <div class="gi-media">
-            <video src="ecommerce%20gravacao.mp4" autoplay muted loop playsinline preload="auto" style="width:100%;height:100%;object-fit:cover;object-position:top;display:block;"></video>
+            <video src="ecommerce%20gravacao.mp4" autoplay muted loop playsinline preload="metadata" style="width:100%;height:100%;object-fit:cover;object-position:top;display:block;"></video>
           </div>
           <div class="gi-cap">
             <div class="gi-cap-top">
               <span class="gi-cap-title">Ferragem Schneider</span>
               <span class="gi-cap-tag">E-commerce</span>
             </div>
-            <span class="gi-cap-desc">Loja virtual completa com catálogo, carrinho e checkout integrado.</span>
+            <span class="gi-cap-desc">Loja virtual completa com catÃ¡logo, carrinho e checkout integrado.</span>
           </div>
         </div>
 
         <!-- App Fitness Mobile -->
         <div class="gi gi--mobile r d1">
           <div class="gi-media">
-            <video src="fitapp.mp4" autoplay muted loop playsinline preload="auto"></video>
+            <video src="fitapp.mp4" autoplay muted loop playsinline preload="metadata"></video>
           </div>
           <div class="gi-cap">
             <div class="gi-cap-top">
@@ -1909,7 +1910,7 @@
   </section>
 
   <!-- ============================================================
-       TESTIMONIALS — Depoimentos
+       TESTIMONIALS â€” Depoimentos
   ============================================================ -->
   <section class="section" id="testimonials" aria-labelledby="testi-heading">
     <div class="wrap">
@@ -1931,11 +1932,11 @@
               <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
               <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
             </div>
-            <p class="tc-quote">"A WeDev construiu nosso e-commerce do zero — do design ao checkout. Em menos de três meses tínhamos uma loja rápida, bonita e integrada com nosso ERP."</p>
+            <p class="tc-quote">"A WeDev construiu nosso e-commerce do zero â€” do design ao checkout. Em menos de trÃªs meses tÃ­nhamos uma loja rÃ¡pida, bonita e integrada com nosso ERP."</p>
           </div>
           <div class="tc-author">
             <div class="tc-avatar">
-              <img src="https://picsum.photos/seed/testi1/88/88" alt="Vinicius Schneider" loading="lazy" referrerpolicy="no-referrer"/>
+              <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='88' height='88'%3E%3Crect width='88' height='88' rx='44' fill='%23161616'/%3E%3Ctext x='44' y='44' dominant-baseline='central' text-anchor='middle' font-family='system-ui,sans-serif' font-size='28' font-weight='600' fill='%2330d158'%3EVS%3C/text%3E%3C/svg%3E" alt="Vinicius Schneider" />
             </div>
             <div>
               <div class="tc-name">Vinicius Schneider</div>
@@ -1953,14 +1954,14 @@
             <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
             <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
           </div>
-          <p class="tc-quote">"Migração completa do nosso legado PHP para Next.js. Código limpo, bem documentado e a plataforma ficou 3× mais rápida na produção."</p>
+          <p class="tc-quote">"MigraÃ§Ã£o completa do nosso legado PHP para Next.js. CÃ³digo limpo, bem documentado e a plataforma ficou 3Ã— mais rÃ¡pida na produÃ§Ã£o."</p>
           <div class="tc-author">
             <div class="tc-avatar">
-              <img src="https://picsum.photos/seed/testi2/88/88" alt="Thiago Cavalcante" loading="lazy" referrerpolicy="no-referrer"/>
+              <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='88' height='88'%3E%3Crect width='88' height='88' rx='44' fill='%23161616'/%3E%3Ctext x='44' y='44' dominant-baseline='central' text-anchor='middle' font-family='system-ui,sans-serif' font-size='28' font-weight='600' fill='%2330d158'%3ETC%3C/text%3E%3C/svg%3E" alt="Thiago Cavalcante" />
             </div>
             <div>
               <div class="tc-name">Thiago Cavalcante</div>
-              <div class="tc-role">CTO · Praxis Fintech</div>
+              <div class="tc-role">CTO Â· Praxis Fintech</div>
             </div>
           </div>
         </article>
@@ -1970,7 +1971,7 @@
   </section>
 
   <!-- ============================================================
-       SOBRE NÓS
+       SOBRE NÃ“S
   ============================================================ -->
   <section class="section" id="about-sec" aria-labelledby="about-heading">
     <div class="wrap">
@@ -1979,7 +1980,7 @@
         <!-- Visual -->
         <div class="about-visual r" style="display:none">
           <div class="about-img-frame">
-            <img src="https://picsum.photos/seed/wedevteam/800/1000" alt="Equipe WeDev trabalhando" loading="lazy" referrerpolicy="no-referrer"/>
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='1000'%3E%3Crect width='800' height='1000' fill='%230d0d0d'/%3E%3C/svg%3E" alt="Equipe WeDev trabalhando" />
           </div>
           <div class="about-pill">
             <div class="about-pill-n">2025</div>
@@ -1990,31 +1991,31 @@
         <!-- Text -->
         <div class="about-text">
           <div>
-            <div class="sec-label r">Sobre nós</div>
+            <div class="sec-label r">Sobre nÃ³s</div>
             <h2 class="sec-h r d1" id="about-heading">Somos engenheiros<br>obsessivos com<br>resultado.</h2>
-            <p class="sec-p r d2" style="margin-top:16px;">A WeDev nasceu da frustração com agências que entregam layout bonito mas código frágil. Construímos software que escala, que resiste ao tempo e que os engenheiros do cliente têm orgulho de manter.</p>
+            <p class="sec-p r d2" style="margin-top:16px;">A WeDev nasceu da frustraÃ§Ã£o com agÃªncias que entregam layout bonito mas cÃ³digo frÃ¡gil. ConstruÃ­mos software que escala, que resiste ao tempo e que os engenheiros do cliente tÃªm orgulho de manter.</p>
           </div>
 
           <div class="about-values r d3">
             <div class="about-value">
               <div class="av-dot" aria-hidden="true"></div>
               <div>
-                <div class="av-title">Qualidade não é opcional</div>
-                <div class="av-desc">Code review em tudo. Testes automatizados desde o início. Nada vai para produção sem passar por revisão humana e pipeline de CI.</div>
+                <div class="av-title">Qualidade nÃ£o Ã© opcional</div>
+                <div class="av-desc">Code review em tudo. Testes automatizados desde o inÃ­cio. Nada vai para produÃ§Ã£o sem passar por revisÃ£o humana e pipeline de CI.</div>
               </div>
             </div>
             <div class="about-value">
               <div class="av-dot" aria-hidden="true"></div>
               <div>
-                <div class="av-title">Transparência total</div>
-                <div class="av-desc">Você vê o código, os commits e os deploys. Sem black-box. Se tiver um problema, somos os primeiros a falar — não os últimos.</div>
+                <div class="av-title">TransparÃªncia total</div>
+                <div class="av-desc">VocÃª vÃª o cÃ³digo, os commits e os deploys. Sem black-box. Se tiver um problema, somos os primeiros a falar â€” nÃ£o os Ãºltimos.</div>
               </div>
             </div>
             <div class="about-value">
               <div class="av-dot" aria-hidden="true"></div>
               <div>
                 <div class="av-title">Parceria de longo prazo</div>
-                <div class="av-desc">Não somos um fornecedor de projeto único. Crescemos junto com o seu produto — com o mesmo time, o mesmo contexto e o mesmo compromisso.</div>
+                <div class="av-desc">NÃ£o somos um fornecedor de projeto Ãºnico. Crescemos junto com o seu produto â€” com o mesmo time, o mesmo contexto e o mesmo compromisso.</div>
               </div>
             </div>
           </div><!-- end about-values -->
@@ -2025,18 +2026,20 @@
   </section>
 
   <!-- ============================================================
-       CTA BANNER — com formulário
+       CTA BANNER â€” com formulÃ¡rio
   ============================================================ -->
   <section class="cta-sec" id="contact">
     <div class="wrap">
       <div class="cta-inner r">
         <h2 class="cta-h">Tem um projeto?<br>Vamos conversar.</h2>
-        <p class="cta-p">Conte-nos sobre o seu desafio. Em 24h temos uma proposta inicial e um caminho claro para a solução.</p>
+        <p class="cta-p">Conte-nos sobre o seu desafio. Em 24h temos uma proposta inicial e um caminho claro para a soluÃ§Ã£o.</p>
 
-        <form class="contact-form" id="contactForm" novalidate aria-label="Formulário de contato">
+        <form class="contact-form" id="contactForm" novalidate aria-label="FormulÃ¡rio de contato">
           <input type="hidden" name="access_key" value="b4c9d78a-f1c8-438a-950d-99eba80489f5" />
           <input type="hidden" name="subject" value="Novo contato pelo site WeDev" />
           <input type="hidden" name="from_name" value="Site WeDev" />
+          <!-- Honeypot: bots fill this, humans don't â€” Web3Forms rejects if checked -->
+          <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" aria-hidden="true" />
           <div class="cf-field">
             <label class="cf-label" for="cf-name">Nome</label>
             <input class="cf-input" id="cf-name" name="name" type="text" placeholder="Seu nome completo" autocomplete="name" />
@@ -2049,7 +2052,7 @@
           </div>
           <div class="cf-field cf-field--full">
             <label class="cf-label" for="cf-msg">Mensagem</label>
-            <textarea class="cf-textarea" id="cf-msg" name="message" placeholder="Fale sobre seu projeto, prazo e orçamento aproximado…"></textarea>
+            <textarea class="cf-textarea" id="cf-msg" name="message" placeholder="Fale sobre seu projeto, prazo e orÃ§amento aproximadoâ€¦"></textarea>
             <span class="cf-error" id="cf-msg-err" role="alert"></span>
           </div>
           <div class="cf-submit-wrap">
@@ -2066,8 +2069,8 @@
         </form>
 
         <div class="cta-actions">
-          <a href="#gallery" class="btn-text-link">Ver portfólio antes</a>
-        </div>e
+          <a href="#gallery" class="btn-text-link">Ver portfÃ³lio antes</a>
+        </div>
       </div>
     </div>
   </section>
@@ -2080,10 +2083,10 @@
       <div class="footer-top">
         <div>
           <a href="#" class="nav-logo" aria-label="WeDev">WeDev</a>
-          <p class="footer-brand-desc">Transformamos visão em produto digital. Desenvolvimento web, mobile e sistemas para empresas que crescem com tecnologia.</p>
+          <p class="footer-brand-desc">Transformamos visÃ£o em produto digital. Desenvolvimento web, mobile e sistemas para empresas que crescem com tecnologia.</p>
         </div>
         <div class="footer-col">
-          <h4>Serviços</h4>
+          <h4>ServiÃ§os</h4>
           <ul>
             <li><a href="#features">Desenvolvimento Web</a></li>
             <li><a href="#features">Apps Mobile</a></li>
@@ -2094,17 +2097,17 @@
         <div class="footer-col">
           <h4>Empresa</h4>
           <ul>
-            <li><a href="#about-sec">Sobre nós</a></li>
+            <li><a href="#about-sec">Sobre nÃ³s</a></li>
             <li><a href="#process">Como trabalhamos</a></li>
             <li><a href="#testimonials">Depoimentos</a></li>
-            <li><a href="#gallery">Portfólio</a></li>
+            <li><a href="#gallery">PortfÃ³lio</a></li>
           </ul>
         </div>
         <div class="footer-col">
           <h4>Contato</h4>
           <ul>
             <li><a href="mailto:contatowedev@gmail.com">contatowedev@gmail.com</a></li>
-            <li><a href="#">Política de Privacidade</a></li>
+            <li><a href="#">PolÃ­tica de Privacidade</a></li>
             <li><a href="#">Termos de Uso</a></li>
           </ul>
         </div>
@@ -2121,368 +2124,6 @@
   <!-- ============================================================
        JAVASCRIPT
   ============================================================ -->
-  <script>
-    // Scroll to top on page load/refresh
-    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-    window.scrollTo(0, 0);
-
-    // ------ Reading progress bar ------
-    (function () {
-      const bar = document.getElementById('progress-bar');
-      window.addEventListener('scroll', () => {
-        const scrollTop = window.scrollY;
-        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-        bar.style.width = docHeight > 0 ? (scrollTop / docHeight * 100).toFixed(2) + '%' : '0%';
-      }, { passive: true });
-    })();
-
-    // ------ Back to top button ------
-    (function () {
-      const btn = document.getElementById('back-to-top');
-      window.addEventListener('scroll', () => {
-        btn.classList.toggle('visible', window.scrollY > 400);
-      }, { passive: true });
-      btn.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      });
-    })();
-
-    // ------ Typewriter ------
-    (function () {
-      const el = document.getElementById('tw-text');
-      const words = ['transforma.', 'conecta.', 'escala.', 'converte.', 'impressiona.'];
-      let wi = 0, ci = 0, deleting = false;
-      const PAUSE_END = 2200, PAUSE_START = 420, TYPE_SPEED = 72, DELETE_SPEED = 38;
-      function tick() {
-        const word = words[wi];
-        if (!deleting) {
-          el.textContent = word.slice(0, ++ci);
-          if (ci === word.length) { deleting = true; setTimeout(tick, PAUSE_END); return; }
-        } else {
-          el.textContent = word.slice(0, --ci);
-          if (ci === 0) { deleting = false; wi = (wi + 1) % words.length; setTimeout(tick, PAUSE_START); return; }
-        }
-        setTimeout(tick, deleting ? DELETE_SPEED : TYPE_SPEED);
-      }
-      setTimeout(tick, 900);
-    })();
-
-    // ------ Lightbox ------
-    (function () {
-      const lightbox  = document.getElementById('lightbox');
-      const lbImg     = document.getElementById('lb-img');
-      const lbTitle   = document.getElementById('lb-title');
-      const lbTag     = document.getElementById('lb-tag');
-      const lbCounter = document.getElementById('lb-counter');
-      const lbClose   = document.getElementById('lb-close');
-      const lbPrev    = document.getElementById('lb-prev');
-      const lbNext    = document.getElementById('lb-next');
-
-      const items = Array.from(document.querySelectorAll('.gi')).map(gi => ({
-        src:   gi.querySelector('img')?.src   || '',
-        alt:   gi.querySelector('img')?.alt   || '',
-        title: gi.querySelector('.gi-cap-title')?.textContent || '',
-        tag:   gi.querySelector('.gi-cap-tag')?.textContent   || '',
-      }));
-
-      let current = 0;
-
-      function open(index) {
-        current = index;
-        render();
-        lightbox.classList.add('open');
-        document.body.style.overflow = 'hidden';
-        lbClose.focus();
-      }
-      function close() {
-        lightbox.classList.remove('open');
-        document.body.style.overflow = '';
-      }
-      function render() {
-        const item = items[current];
-        lbImg.src = item.src;
-        lbImg.alt = item.alt;
-        lbTitle.textContent = item.title;
-        lbTag.textContent   = item.tag;
-        lbCounter.textContent = `${current + 1} / ${items.length}`;
-      }
-      function prev() { current = (current - 1 + items.length) % items.length; render(); }
-      function next() { current = (current + 1) % items.length; render(); }
-
-      document.querySelectorAll('.gi').forEach((gi, i) => {
-        gi.addEventListener('click', () => open(i));
-      });
-      lbClose.addEventListener('click', close);
-      lbPrev.addEventListener('click', (e) => { e.stopPropagation(); prev(); });
-      lbNext.addEventListener('click', (e) => { e.stopPropagation(); next(); });
-      lightbox.addEventListener('click', (e) => { if (e.target === lightbox) close(); });
-      document.addEventListener('keydown', (e) => {
-        if (!lightbox.classList.contains('open')) return;
-        if (e.key === 'Escape')     close();
-        if (e.key === 'ArrowLeft')  prev();
-        if (e.key === 'ArrowRight') next();
-      });
-    })();
-
-    (function () {
-      const canvas = document.getElementById('starfield');
-      const ctx = canvas.getContext('2d');
-      let stars = [];
-      const COUNT = 220;
-      let scrollRaw = 0;
-      let scrollSmooth = 0;
-
-      // Capture raw scroll without triggering layout
-      window.addEventListener('scroll', () => {
-        scrollRaw = window.scrollY;
-      }, { passive: true });
-
-      function resize() {
-        canvas.width  = window.innerWidth;
-        canvas.height = window.innerHeight;
-        stars = [];
-        for (let i = 0; i < COUNT; i++) {
-          stars.push({
-            x:           Math.random() * canvas.width,
-            y:           Math.random() * canvas.height,
-            r:           Math.random() * 1.1 + 0.25,
-            baseOpacity: Math.random() * 0.55 + 0.15,
-            phase:       Math.random() * Math.PI * 2,
-            speed:       0.0004 + Math.random() * 0.0007,
-            // Depth layer: 0.04–0.22. Larger = closer = faster parallax
-            parallax:    0.04 + Math.random() * 0.18,
-          });
-        }
-      }
-
-      function draw() {
-        if (document.hidden) return; // pause when tab is inactive
-        // Smooth-lerp scroll value — eases the parallax motion
-        scrollSmooth += (scrollRaw - scrollSmooth) * 0.07;
-
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        for (const s of stars) {
-          s.phase += s.speed * 16;
-          const op = Math.max(0.05, s.baseOpacity + Math.sin(s.phase) * 0.22);
-
-          // Parallax offset — different depth per star
-          const rawOffset = scrollSmooth * s.parallax;
-          // Wrap vertically so stars loop seamlessly as you scroll
-          let drawY = ((s.y - rawOffset) % canvas.height + canvas.height) % canvas.height;
-
-          ctx.beginPath();
-          ctx.arc(s.x, drawY, s.r, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(255,255,255,${op.toFixed(3)})`;
-          ctx.fill();
-        }
-        requestAnimationFrame(draw);
-      }
-
-      window.addEventListener('resize', resize, { passive: true });
-      document.addEventListener('visibilitychange', () => {
-        if (!document.hidden) requestAnimationFrame(draw);
-      });
-      resize();
-      requestAnimationFrame(draw);
-    })();
-
-    // ------ Scroll reveal via IntersectionObserver ------
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.classList.add('in');
-          observer.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0.07, rootMargin: '0px 0px -32px 0px' });
-
-    document.querySelectorAll('.r').forEach(el => observer.observe(el));
-
-    // ------ Navbar scroll opacity ------
-    const navInner = document.getElementById('navInner');
-    let ticking = false;
-    window.addEventListener('scroll', () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          navInner.style.background = window.scrollY > 48
-            ? 'rgba(5, 5, 5, 0.90)'
-            : 'rgba(8, 8, 8, 0.72)';
-          ticking = false;
-        });
-        ticking = true;
-      }
-    }, { passive: true });
-
-    // ------ Mobile hamburger + menu ------
-    const hamburger = document.getElementById('hamburger');
-    const mobileMenu = document.getElementById('mobileMenu');
-
-    hamburger.addEventListener('click', () => {
-      const isOpen = mobileMenu.classList.toggle('open');
-      hamburger.classList.toggle('open', isOpen);
-      hamburger.setAttribute('aria-expanded', String(isOpen));
-      document.body.style.overflow = isOpen ? 'hidden' : '';
-    });
-
-    function closeMobileMenu() {
-      mobileMenu.classList.remove('open');
-      hamburger.classList.remove('open');
-      hamburger.setAttribute('aria-expanded', 'false');
-      document.body.style.overflow = '';
-    }
-
-    // Close menu on Escape
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') closeMobileMenu();
-    });
-
-    // ------ Active nav link on scroll ------
-    (function () {
-      const sections = Array.from(document.querySelectorAll('section[id], div[id]')).filter(el =>
-        ['home','features','process','gallery','testimonials','about-sec','contact'].includes(el.id)
-      );
-      const navLinks = document.querySelectorAll('.nav-links a');
-
-      const sectionObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            navLinks.forEach(a => a.classList.remove('active'));
-            const active = document.querySelector(`.nav-links a[href="#${entry.target.id}"]`);
-            if (active) active.classList.add('active');
-          }
-        });
-      }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
-
-      sections.forEach(s => sectionObserver.observe(s));
-    })();
-
-    // ------ Counter animation para métricas ------
-    (function () {
-      const metrics = document.querySelectorAll('.metric-n');
-
-      function parseTarget(text) {
-        const num = parseFloat(text.replace(/[^0-9.]/g, ''));
-        const suffix = text.replace(/[0-9.]/g, '').trim();
-        return { num, suffix };
-      }
-
-      function animateCounter(el) {
-        const raw = el.textContent.trim();
-        const { num, suffix } = parseTarget(raw);
-        const duration = 1600;
-        const start = performance.now();
-
-        function step(now) {
-          const elapsed = now - start;
-          const progress = Math.min(elapsed / duration, 1);
-          // ease-out cubic
-          const eased = 1 - Math.pow(1 - progress, 3);
-          const current = eased * num;
-          const display = Number.isInteger(num) ? Math.round(current) : current.toFixed(1);
-          el.textContent = display + suffix;
-          if (progress < 1) requestAnimationFrame(step);
-        }
-        requestAnimationFrame(step);
-      }
-
-      const counterObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            animateCounter(entry.target);
-            counterObserver.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.5 });
-
-      metrics.forEach(m => counterObserver.observe(m));
-    })();
-
-    // ------ Contact form validation ------
-    (function () {
-      const form      = document.getElementById('contactForm');
-      const nameEl    = document.getElementById('cf-name');
-      const emailEl   = document.getElementById('cf-email');
-      const msgEl     = document.getElementById('cf-msg');
-      const nameErr   = document.getElementById('cf-name-err');
-      const emailErr  = document.getElementById('cf-email-err');
-      const msgErr    = document.getElementById('cf-msg-err');
-      const feedback  = document.getElementById('cfFeedback');
-      const submitBtn = document.getElementById('cfSubmitBtn');
-
-      function validate() {
-        let ok = true;
-
-        if (!nameEl.value.trim()) {
-          nameEl.classList.add('error');
-          nameErr.textContent = 'Por favor informe seu nome.';
-          ok = false;
-        } else {
-          nameEl.classList.remove('error');
-          nameErr.textContent = '';
-        }
-
-        const emailRx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailEl.value.trim() || !emailRx.test(emailEl.value.trim())) {
-          emailEl.classList.add('error');
-          emailErr.textContent = 'Informe um e-mail válido.';
-          ok = false;
-        } else {
-          emailEl.classList.remove('error');
-          emailErr.textContent = '';
-        }
-
-        if (msgEl.value.trim().length < 10) {
-          msgEl.classList.add('error');
-          msgErr.textContent = 'Mensagem muito curta (mínimo 10 caracteres).';
-          ok = false;
-        } else {
-          msgEl.classList.remove('error');
-          msgErr.textContent = '';
-        }
-
-        return ok;
-      }
-
-      [nameEl, emailEl, msgEl].forEach(el => {
-        el.addEventListener('blur', validate, { passive: true });
-      });
-
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        if (!validate()) return;
-
-        submitBtn.disabled = true;
-        submitBtn.style.opacity = '0.6';
-        submitBtn.style.transform = 'scale(0.97)';
-
-        try {
-          const data = new FormData(form);
-          const res = await fetch('https://api.web3forms.com/submit', {
-            method: 'POST',
-            body: data
-          });
-          const json = await res.json();
-
-          if (json.success) {
-            feedback.style.color = 'var(--accent-green)';
-            feedback.textContent = 'Mensagem enviada! Retornaremos em até 24h.';
-            form.reset();
-            setTimeout(() => { feedback.textContent = ''; }, 6000);
-          } else {
-            feedback.style.color = '#ff453a';
-            feedback.textContent = 'Erro ao enviar. Tente novamente.';
-          }
-        } catch {
-          feedback.style.color = '#ff453a';
-          feedback.textContent = 'Erro de conexão. Tente novamente.';
-        } finally {
-          submitBtn.disabled = false;
-          submitBtn.style.opacity = '';
-          submitBtn.style.transform = '';
-        }
-      });
-    })();
-  </script>
+  <script src="main.js" defer></script>
 </body>
 </html>

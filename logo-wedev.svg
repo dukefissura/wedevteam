@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080" width="1080" height="1080">
+  <!-- Background -->
+  <rect width="1080" height="1080" fill="#050505"/>
+
+  <!-- Rounded square card -->
+  <rect x="190" y="190" width="700" height="700" rx="180" fill="#111111"/>
+
+  <!-- W as stroke path — renders in all converters -->
+  <polyline
+    points="255,310 390,780 540,450 690,780 825,310"
+    fill="none"
+    stroke="#F5F5F7"
+    stroke-width="82"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+</svg>
