@@ -653,7 +653,7 @@
       display: grid;
       grid-template-columns: 3fr 1.5fr;
       gap: 20px;
-      align-items: start;
+      align-items: stretch;
     }
 
     .gi {
@@ -673,7 +673,8 @@
       position: relative;
     }
     .gi--ecommerce .gi-media { aspect-ratio: 16 / 10; }
-    .gi--mobile .gi-media   { aspect-ratio: 4 / 5; padding: 20px 16px 0; background: #0d0d0d; }
+    .gi--mobile            { display: flex; flex-direction: column; }
+    .gi--mobile .gi-media   { flex: 1; aspect-ratio: unset; padding: 20px 16px 0; background: #0d0d0d; }
 
     .gi-media img,
     .gi-media video {
