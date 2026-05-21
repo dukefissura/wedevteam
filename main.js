@@ -280,11 +280,10 @@ document.addEventListener('keydown', e => {
 
 // ------ Scroll-driven video — Sobre Nós ------
 (function () {
-  const video = document.getElementById('about-video');
-  const track = document.querySelector('.about-scroll-track');
+  var video = document.getElementById('about-video');
+  var track = document.querySelector('.about-scroll-track');
   if (!video || !track) return;
 
-  // Mobile: autoplay + loop instead of scroll-driven
   if (window.matchMedia('(max-width: 900px)').matches) {
     video.autoplay = true;
     video.loop = true;
@@ -292,19 +291,30 @@ document.addEventListener('keydown', e => {
     return;
   }
 
-  function update() {
+  // Force the browser to start buffering all frames
+  video.load();
+
+  var raf = null;
+  function scrub() {
+    raf = null;
     var rect = track.getBoundingClientRect();
     var scrollable = track.offsetHeight - window.innerHeight;
-    if (scrollable <= 0) return;
+    if (scrollable <= 0 || !video.duration || !isFinite(video.duration)) return;
     var scrolled = Math.max(0, Math.min(scrollable, -rect.top));
-    var progress = scrolled / scrollable;
-    if (video.readyState >= 1 && video.duration) {
-      video.currentTime = progress * video.duration;
-    }
+    video.currentTime = (scrolled / scrollable) * video.duration;
   }
 
-  video.addEventListener('loadedmetadata', update);
-  window.addEventListener('scroll', update, { passive: true });
+  function onScroll() {
+    if (!raf) raf = requestAnimationFrame(scrub);
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  // Call immediately if metadata already available, else wait
+  if (video.readyState >= 1) {
+    scrub();
+  } else {
+    video.addEventListener('loadedmetadata', scrub);
+  }
 })();
 
 // ------ Contact form validation ------
