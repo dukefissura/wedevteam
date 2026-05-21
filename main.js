@@ -279,53 +279,40 @@ document.addEventListener('keydown', e => {
 })();
 
 // ------ Scroll-driven video — Sobre Nós ------
-// Uses JS translateY pinning (avoids CSS sticky browser quirks)
 (function () {
   var video = document.getElementById('about-video');
   var track = document.querySelector('.about-scroll-track');
   var wrap  = document.querySelector('.about-sticky-wrap');
   if (!video || !track || !wrap) return;
 
+  // Mobile: let the video play normally
   if (window.matchMedia('(max-width: 900px)').matches) {
-    video.autoplay = true;
-    video.loop = true;
+    video.muted  = true;
+    video.loop   = true;
     video.play().catch(function () {});
     return;
   }
 
-  video.load();
-
-  // Measure track position (document-relative, recomputed on resize)
-  var trackTop = 0;
-  var scrollable = 0;
-  function measure() {
-    var r = track.getBoundingClientRect();
-    trackTop   = r.top + window.scrollY;
-    scrollable = track.offsetHeight - window.innerHeight;
-  }
-  measure();
-  window.addEventListener('resize', measure, { passive: true });
-
-  var raf = null;
-  function update() {
-    raf = null;
-    if (scrollable <= 0) return;
-    var clamped = Math.max(0, Math.min(scrollable, window.scrollY - trackTop));
-    // Translate the sticky wrapper to keep it pinned in view
-    wrap.style.transform = 'translateY(' + clamped + 'px)';
-    // Scrub video
-    if (video.duration && isFinite(video.duration)) {
-      video.currentTime = (clamped / scrollable) * video.duration;
+  // Desktop: continuous rAF loop — reads BoundingClientRect fresh every frame
+  // so there are zero stale-measurement or missed-scroll-event issues.
+  function tick() {
+    var rect = track.getBoundingClientRect();
+    var scrollable = track.offsetHeight - window.innerHeight;
+    if (scrollable > 0) {
+      // clamped: 0 (before section) → scrollable (after section)
+      var clamped = Math.max(0, Math.min(scrollable, -rect.top));
+      // translateY keeps the wrapper pinned to the viewport top while the
+      // 240vh track scrolls underneath it.
+      wrap.style.transform = 'translateY(' + clamped + 'px)';
+      // Scrub video only when duration is known
+      if (video.duration > 0 && isFinite(video.duration)) {
+        video.currentTime = (clamped / scrollable) * video.duration;
+      }
     }
+    requestAnimationFrame(tick);
   }
 
-  function onScroll() {
-    if (!raf) raf = requestAnimationFrame(update);
-  }
-
-  window.addEventListener('scroll', onScroll, { passive: true });
-  video.addEventListener('loadedmetadata', update);
-  update();
+  requestAnimationFrame(tick);
 })();
 
 // ------ Contact form validation ------
