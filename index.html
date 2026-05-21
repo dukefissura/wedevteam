@@ -673,7 +673,7 @@
       position: relative;
     }
     .gi--ecommerce .gi-media { aspect-ratio: 16 / 10; }
-    .gi--mobile .gi-media   { aspect-ratio: 4 / 5; }
+    .gi--mobile .gi-media   { aspect-ratio: 4 / 5; padding: 20px 16px 0; background: #0d0d0d; }
 
     .gi-media img,
     .gi-media video {
@@ -684,7 +684,7 @@
       opacity: 0.9;
       transition: transform 0.6s var(--ease-spring), opacity 0.4s;
     }
-    .gi--mobile .gi-media video { object-fit: cover; object-position: center top; transform: scale(0.82); transform-origin: center top; }
+    .gi--mobile .gi-media video { object-fit: contain; object-position: center top; }
     .gi:hover .gi-media img,
     .gi:hover .gi-media video  { transform: scale(1.04); opacity: 1; }
 
