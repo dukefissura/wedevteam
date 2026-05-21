@@ -278,43 +278,6 @@ document.addEventListener('keydown', e => {
   metrics.forEach(m => counterObserver.observe(m));
 })();
 
-// ------ Scroll-driven video — Sobre Nós ------
-(function () {
-  var video = document.getElementById('about-video');
-  var track = document.querySelector('.about-scroll-track');
-  var wrap  = document.querySelector('.about-sticky-wrap');
-  if (!video || !track || !wrap) return;
-
-  // Mobile: let the video play normally
-  if (window.matchMedia('(max-width: 900px)').matches) {
-    video.muted  = true;
-    video.loop   = true;
-    video.play().catch(function () {});
-    return;
-  }
-
-  // Desktop: continuous rAF loop — reads BoundingClientRect fresh every frame
-  // so there are zero stale-measurement or missed-scroll-event issues.
-  function tick() {
-    var rect = track.getBoundingClientRect();
-    var scrollable = track.offsetHeight - window.innerHeight;
-    if (scrollable > 0) {
-      // clamped: 0 (before section) → scrollable (after section)
-      var clamped = Math.max(0, Math.min(scrollable, -rect.top));
-      // translateY keeps the wrapper pinned to the viewport top while the
-      // 240vh track scrolls underneath it.
-      wrap.style.transform = 'translateY(' + clamped + 'px)';
-      // Scrub video only when duration is known
-      if (video.duration > 0 && isFinite(video.duration)) {
-        video.currentTime = (clamped / scrollable) * video.duration;
-      }
-    }
-    requestAnimationFrame(tick);
-  }
-
-  requestAnimationFrame(tick);
-})();
-
 // ------ Contact form validation ------
 (function () {
   const form      = document.getElementById('contactForm');

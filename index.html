@@ -1291,15 +1291,11 @@
     /* ============================================================
        SOBRE NÓS
     ============================================================ */
-    /* Scroll track — tall container gives room to scrub the video */
     .about-scroll-track {
       position: relative;
-      height: 240vh;
     }
-    /* Sticky wrapper — stays pinned while track scrolls */
     .about-sticky-wrap {
-      position: relative;
-      height: 100vh;
+      padding: 100px 0;
       display: flex;
       align-items: center;
     }
@@ -1346,14 +1342,7 @@
       object-fit: cover;
       display: block;
     }
-    .about-scroll-hint {
-      margin-top: 16px;
-      font-size: 10px;
-      color: var(--text-3);
-      letter-spacing: 0.09em;
-      text-transform: uppercase;
-      text-align: center;
-    }
+
     .about-text {
       display: grid;
       grid-template-columns: 1fr;
@@ -1364,12 +1353,10 @@
       .about-grid { grid-template-columns: 210px 1fr; gap: 56px; }
     }
     @media (max-width: 900px) {
-      .about-scroll-track { height: auto; }
-      .about-sticky-wrap  { position: relative; height: auto; padding: 72px 0; }
+      .about-sticky-wrap  { padding: 72px 0; }
       .about-grid         { grid-template-columns: 1fr; gap: 40px; }
       .about-phone        { max-width: 180px; }
       .about-text         { gap: 32px; }
-      .about-scroll-hint  { display: none; }
     }
     .about-values {
       display: flex;
@@ -1995,9 +1982,9 @@
             <!-- Phone video — scroll-driven on desktop, autoplay on mobile -->
             <div class="about-visual r">
               <div class="about-phone">
-                <video id="about-video" src="iphone.mp4" muted playsinline preload="auto"></video>
+                <video id="about-video" src="iphone.mp4" autoplay loop muted playsinline preload="auto"></video>
               </div>
-              <p class="about-scroll-hint">role para assistir</p>
+
             </div>
 
             <!-- Text -->
