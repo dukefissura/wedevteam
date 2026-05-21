@@ -1297,8 +1297,15 @@
       gap: 80px;
       align-items: center;
     }
+    .about-text {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: start;
+    }
     @media (max-width: 900px) {
       .about-grid { grid-template-columns: 1fr; gap: 48px; }
+      .about-text { grid-template-columns: 1fr; gap: 32px; }
     }
 
     .about-visual {
@@ -1981,7 +1988,7 @@
         </div>
 
         <!-- Text -->
-        <div class="about-text" style="display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;">
+        <div class="about-text">
           <div>
             <div class="sec-label r">Sobre nós</div>
             <h2 class="sec-h r d1" id="about-heading">Somos engenheiros<br>obsessivos com<br>resultado.</h2>
