@@ -395,6 +395,62 @@
     }
     .btn-text-link:hover { color: var(--text-1); border-color: var(--border-mid); }
 
+    /* ============================================================
+       INTERACTIVE HOVER BUTTON — vanilla port (no framework needed)
+    ============================================================ */
+    .ihb {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      width: 236px;
+      padding: 14px 12px;
+      border-radius: 100px;
+      border: 1px solid var(--border-mid);
+      background: transparent;
+      cursor: pointer;
+      text-decoration: none;
+      white-space: nowrap;
+      font-family: var(--font-b);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-1);
+      flex-shrink: 0;
+    }
+    .ihb-label {
+      display: inline-block;
+      white-space: nowrap;
+      transform: translateX(6%);
+      transition: transform 0.3s var(--ease-spring), opacity 0.3s ease;
+    }
+    .ihb-fill {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      white-space: nowrap;
+      color: #060606;
+      opacity: 0;
+      transform: translateX(140%);
+      transition: transform 0.3s var(--ease-spring), opacity 0.3s ease;
+    }
+    .ihb-fill svg { width: 14px; height: 14px; }
+    .ihb-dot {
+      position: absolute;
+      left: 20%; top: 40%;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--accent-green);
+      transition: all 0.35s var(--ease-spring);
+    }
+    .ihb:hover .ihb-label { transform: translateX(140%); opacity: 0; }
+    .ihb:hover .ihb-fill  { transform: translateX(0); opacity: 1; }
+    .ihb:hover .ihb-dot   { left: 0; top: 0; width: 100%; height: 100%; border-radius: 100px; }
+
     /* HERO — Visual (Double-Bezel product) */
     .hero-visual { position: relative; }
 
@@ -1660,7 +1716,16 @@
                 </svg>
               </span>
             </a>
-            <a href="#features" class="btn-text-link">Nossos serviços</a>
+            <a href="#features" class="ihb" aria-label="Ver nossos serviços">
+              <span class="ihb-label">Nossos serviços</span>
+              <span class="ihb-fill" aria-hidden="true">
+                Nossos serviços
+                <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M2.5 9.5L9.5 2.5M9.5 2.5H4M9.5 2.5V8"/>
+                </svg>
+              </span>
+              <span class="ihb-dot" aria-hidden="true"></span>
+            </a>
           </div>
         </div>
 
