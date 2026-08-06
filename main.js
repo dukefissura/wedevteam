@@ -221,13 +221,17 @@ document.querySelectorAll('#mobileMenu a').forEach(a => {
   const sections = Array.from(document.querySelectorAll('section[id], div[id]')).filter(el =>
     ['home','features','process','gallery','testimonials','about-sec','contact'].includes(el.id)
   );
-  const navLinks = document.querySelectorAll('.nav-links a');
+  // Serviços e Portfólio viraram <button> (dropdown), então não casam mais por
+  // href — eles declaram a seção que representam em data-section.
+  const navItems = document.querySelectorAll('.nav-links a, .nav-links .nm-trigger');
 
   const sectionObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        navLinks.forEach(a => a.classList.remove('active'));
-        const active = document.querySelector(`.nav-links a[href="#${entry.target.id}"]`);
+        navItems.forEach(el => el.classList.remove('active'));
+        const active = document.querySelector(
+          `.nav-links a[href="#${entry.target.id}"], .nav-links .nm-trigger[data-section="${entry.target.id}"]`
+        );
         if (active) active.classList.add('active');
       }
     });
@@ -376,5 +380,209 @@ document.querySelectorAll('#mobileMenu a').forEach(a => {
       submitBtn.style.opacity = '';
       submitBtn.style.transform = '';
     }
+  });
+})();
+
+// ------ Nav dropdown — Base UI NavigationMenu portado para JS nativo ------
+(function () {
+  const portal   = document.getElementById('navMenuPortal');
+  const popup    = document.getElementById('navMenuPopup');
+  const arrow    = document.getElementById('navMenuArrow');
+  const navInner = document.getElementById('navInner');
+  if (!portal || !popup || !arrow || !navInner) return;
+
+  const triggers = Array.from(document.querySelectorAll('.nm-trigger'));
+  if (!triggers.length) return;
+
+  const panels = new Map();
+  document.querySelectorAll('.nm-panel').forEach(p => panels.set(p.dataset.panel, p));
+
+  const SIDE_OFFSET   = 10;   // vão entre nav e popup; o ::before do popup faz a ponte
+  const COLLISION_PAD = 20;
+  const ARROW_W       = 20;
+  const DURATION      = 350;  // precisa bater com --duration no CSS
+  const EXIT_DURATION = 150;
+
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const coarse  = window.matchMedia('(hover: none)');
+
+  let current = null;
+  let openTimer = null, closeTimer = null, exitTimer = null;
+
+  const indexOf = key => triggers.findIndex(t => t.dataset.panel === key);
+
+  // Painéis são position:absolute com width:max-content, então offsetWidth e
+  // offsetHeight devolvem o tamanho natural mesmo recortados pelo viewport.
+  function measure(panel) {
+    return { w: panel.offsetWidth, h: panel.offsetHeight };
+  }
+
+  function place(trigger, w) {
+    const t   = trigger.getBoundingClientRect();
+    const top = navInner.getBoundingClientRect().bottom + SIDE_OFFSET;
+    const maxLeft = Math.max(COLLISION_PAD, window.innerWidth - w - COLLISION_PAD);
+    const left    = Math.max(COLLISION_PAD, Math.min(t.left + t.width / 2 - w / 2, maxLeft));
+
+    portal.style.transform = 'translate(' + Math.round(left) + 'px, ' + Math.round(top) + 'px)';
+
+    const rawArrow = t.left + t.width / 2 - left - ARROW_W / 2;
+    arrow.style.left = Math.round(Math.max(14, Math.min(rawArrow, w - ARROW_W - 14))) + 'px';
+
+    // A escala nasce sob a seta, para o popup parecer sair do trigger.
+    popup.style.setProperty('--transform-origin', 'top ' + Math.round(rawArrow + ARROW_W / 2) + 'px');
+  }
+
+  function activate(key, trigger) {
+    const panel = panels.get(key);
+    if (!panel || current === key) return;
+
+    clearTimeout(exitTimer);
+    const prevKey = current;
+
+    // Precisa sair do hidden ANTES de medir: em display:none o offsetWidth do
+    // painel é 0, e o popup nasceria com tamanho zero.
+    if (prevKey === null) {
+      portal.setAttribute('data-instant', '');
+      portal.setAttribute('data-starting-style', '');  // invisível enquanto mede
+      portal.hidden = false;
+    }
+
+    const size = measure(panel);
+
+    if (prevKey === null) {
+      popup.style.width  = size.w + 'px';
+      popup.style.height = size.h + 'px';
+      place(trigger, size.w);
+      panel.setAttribute('data-active', '');
+      void popup.offsetWidth;
+      portal.removeAttribute('data-starting-style');
+      requestAnimationFrame(() => portal.removeAttribute('data-instant'));
+    } else {
+      // Morphing: o popup redimensiona e desliza enquanto os painéis se cruzam.
+      const prev = panels.get(prevKey);
+      const dir  = indexOf(key) > indexOf(prevKey) ? 'right' : 'left';
+
+      popup.style.width  = size.w + 'px';
+      popup.style.height = size.h + 'px';
+      place(trigger, size.w);
+
+      prev.setAttribute('data-activation-direction', dir);
+      prev.setAttribute('data-ending-style', '');
+      prev.removeAttribute('data-active');
+
+      panel.setAttribute('data-activation-direction', dir);
+      panel.setAttribute('data-starting-style', '');
+      void panel.offsetWidth;
+      panel.setAttribute('data-active', '');
+      panel.removeAttribute('data-starting-style');
+
+      setTimeout(() => {
+        prev.removeAttribute('data-ending-style');
+        prev.removeAttribute('data-activation-direction');
+      }, reduced ? 0 : DURATION);
+    }
+
+    current = key;
+    triggers.forEach(t => t.setAttribute('aria-expanded', String(t.dataset.panel === key)));
+  }
+
+  function close() {
+    if (current === null) return;
+    const panel = panels.get(current);
+    current = null;
+
+    portal.setAttribute('data-ending-style', '');
+    triggers.forEach(t => t.setAttribute('aria-expanded', 'false'));
+
+    exitTimer = setTimeout(() => {
+      if (current !== null) return;   // reabriu no meio da saída
+      portal.hidden = true;
+      portal.removeAttribute('data-ending-style');
+      panel.removeAttribute('data-active');
+      popup.style.width  = '';
+      popup.style.height = '';
+    }, reduced ? 0 : EXIT_DURATION);
+  }
+
+  const cancelClose = () => clearTimeout(closeTimer);
+  const scheduleClose = () => {
+    clearTimeout(closeTimer);
+    closeTimer = setTimeout(close, 140);
+  };
+
+  triggers.forEach(trigger => {
+    const key = trigger.dataset.panel;
+
+    trigger.addEventListener('pointerenter', () => {
+      if (coarse.matches) return;      // touch abre no clique, não no hover
+      cancelClose();
+      clearTimeout(openTimer);
+      // Já aberto: troca na hora. Fechado: espera curta contra hover de passagem.
+      openTimer = setTimeout(() => activate(key, trigger), current === null ? 110 : 0);
+    });
+
+    trigger.addEventListener('pointerleave', () => {
+      clearTimeout(openTimer);
+      if (!coarse.matches) scheduleClose();
+    });
+
+    trigger.addEventListener('click', () => {
+      clearTimeout(openTimer);
+      if (current === key) close();
+      else activate(key, trigger);
+    });
+
+    trigger.addEventListener('keydown', e => {
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        activate(key, trigger);
+        const first = panels.get(key).querySelector('.nm-card');
+        if (first) requestAnimationFrame(() => first.focus());
+      }
+    });
+  });
+
+  popup.addEventListener('pointerenter', cancelClose);
+  popup.addEventListener('pointerleave', () => { if (!coarse.matches) scheduleClose(); });
+
+  // Clicar num card fecha o menu e deixa a âncora rolar
+  popup.addEventListener('click', e => {
+    if (e.target.closest('.nm-card')) close();
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape' || current === null) return;
+    const active = triggers.find(t => t.dataset.panel === current);
+    close();
+    if (active) active.focus();
+  });
+
+  document.addEventListener('pointerdown', e => {
+    if (current === null) return;
+    if (portal.contains(e.target) || e.target.closest('.nm-trigger')) return;
+    close();
+  });
+
+  // Tab para fora do conjunto trigger + popup fecha
+  document.addEventListener('focusin', e => {
+    if (current === null) return;
+    if (portal.contains(e.target) || e.target.closest('.nm-trigger')) return;
+    close();
+  });
+
+  // Medidas e posições ficam obsoletas ao redimensionar
+  window.addEventListener('resize', close);
+})();
+
+// ------ Acordeão do menu mobile ------
+(function () {
+  const triggers = document.querySelectorAll('.mob-acc-trigger');
+  triggers.forEach(trigger => {
+    trigger.addEventListener('click', () => {
+      const isOpen = trigger.getAttribute('aria-expanded') === 'true';
+      // Um aberto por vez, senão o overlay estoura a altura da tela.
+      triggers.forEach(t => t.setAttribute('aria-expanded', 'false'));
+      trigger.setAttribute('aria-expanded', String(!isOpen));
+    });
   });
 })();

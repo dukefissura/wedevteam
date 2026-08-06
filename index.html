@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+﻿                                                                                                                                                                                                                                                                                    <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
@@ -118,15 +118,16 @@
       top: 18px;
       left: 50%;
       transform: translateX(-50%);
-      width: calc(100% - 40px);
-      max-width: 1100px;
+      /* Encolhe para o conteúdo em vez de esticar até 1100px */
+      width: max-content;
+      max-width: calc(100% - 40px);
       z-index: 200;
     }
 
     .nav-inner {
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      gap: 32px;
       padding: 11px 20px;
       background: rgba(8, 8, 8, 0.72);
       backdrop-filter: blur(24px) saturate(200%);
@@ -166,45 +167,6 @@
     .nav-links a:hover { color: var(--text-1); background: rgba(255,255,255,0.06); }
 
     .nav-end { display: flex; align-items: center; gap: 8px; }
-
-    .btn-nav-ghost {
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text-2);
-      text-decoration: none;
-      padding: 7px 14px;
-      border-radius: 100px;
-      transition: color 0.2s;
-    }
-    .btn-nav-ghost:hover { color: var(--text-1); }
-
-    .btn-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 9px;
-      font-family: var(--font-b);
-      font-size: 13px;
-      font-weight: 600;
-      color: #060606;
-      background: var(--text-1);
-      text-decoration: none;
-      padding: 8px 16px;
-      border-radius: 100px;
-      border: none;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.15s var(--ease-spring);
-    }
-    .btn-pill:hover { background: #dedee0; }
-    .btn-pill:active { transform: scale(0.97); }
-
-    .btn-pill .pill-icon {
-      width: 20px; height: 20px;
-      border-radius: 50%;
-      background: rgba(6,6,6,0.14);
-      display: flex; align-items: center; justify-content: center;
-      transition: transform 0.2s var(--ease-spring);
-    }
-    .btn-pill:hover .pill-icon { transform: translate(2px, -1px); }
 
     .nav-hamburger {
       display: none;
@@ -246,31 +208,248 @@
       transition: opacity 0.35s var(--ease-out);
     }
     .nav-mobile-menu.open { opacity: 1; pointer-events: all; }
-    .nav-mobile-menu a {
+    .nav-mobile-menu > a,
+    .nav-mobile-menu .mob-acc-trigger {
       font-family: var(--font-d);
       font-size: 32px;
       font-weight: 700;
       letter-spacing: -0.03em;
       color: var(--text-1);
       text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-mobile-menu > a:hover,
+    .nav-mobile-menu .mob-acc-trigger:hover { color: var(--text-2); }
+
+    /* Stagger por --i. Era nth-child, mas os wrappers do acordeão mudam a
+       contagem de filhos e desalinhavam os atrasos. */
+    .nav-mobile-menu > a,
+    .nav-mobile-menu > .mob-item {
       opacity: 0;
       transform: translateY(16px);
-      transition: opacity 0.4s var(--ease-out), transform 0.4s var(--ease-out), color 0.2s;
+      transition: opacity 0.4s var(--ease-out), transform 0.4s var(--ease-out);
     }
-    .nav-mobile-menu.open a:nth-child(1) { opacity:1; transform:none; transition-delay:0.08s; }
-    .nav-mobile-menu.open a:nth-child(2) { opacity:1; transform:none; transition-delay:0.14s; }
-    .nav-mobile-menu.open a:nth-child(3) { opacity:1; transform:none; transition-delay:0.20s; }
-    .nav-mobile-menu.open a:nth-child(4) { opacity:1; transform:none; transition-delay:0.26s; }
-    .nav-mobile-menu.open a:nth-child(5) { opacity:1; transform:none; transition-delay:0.32s; }
-    .nav-mobile-menu a:hover { color: var(--text-2); }
+    .nav-mobile-menu.open > a,
+    .nav-mobile-menu.open > .mob-item {
+      opacity: 1;
+      transform: none;
+      transition-delay: calc(0.08s + var(--i, 0) * 0.06s);
+    }
+
+    /* Acordeão do mobile */
+    .mob-item { width: 100%; text-align: center; }
+    .mob-acc-trigger {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      font: inherit;
+    }
+    .mob-acc-trigger svg {
+      width: 14px; height: 14px;
+      transition: transform 0.3s var(--ease-spring);
+    }
+    .mob-acc-trigger[aria-expanded="true"] svg { transform: rotate(180deg); }
+    .mob-acc-panel {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.35s var(--ease-out);
+    }
+    .mob-acc-panel > div { overflow: hidden; }
+    .mob-acc-trigger[aria-expanded="true"] + .mob-acc-panel { grid-template-rows: 1fr; }
+    .mob-acc-panel a {
+      display: block;
+      font-family: var(--font-b);
+      font-size: 15px;
+      font-weight: 400;
+      letter-spacing: 0;
+      color: var(--text-2);
+      text-decoration: none;
+      padding: 7px 0;
+      transition: color 0.2s;
+    }
+    .mob-acc-panel a:first-child { padding-top: 14px; }
+    .mob-acc-panel a:hover { color: var(--text-1); }
 
     @media (max-width: 820px) {
       .nav-links { display: none; }
-      .btn-nav-ghost, .btn-pill { display: none; }
       .nav-hamburger { display: flex; }
+      /* Sem os links, a pílula encolheria até virar só "WeDev ☰" */
+      .nav-wrap { width: calc(100% - 40px); }
+      .nav-inner { justify-content: space-between; }
     }
 
-   
+    /* ============================================================
+       NAV DROPDOWN — Base UI NavigationMenu portado para CSS/JS nativo
+    ============================================================ */
+    .nm-trigger {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-family: var(--font-b);
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--text-2);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 6px 14px;
+      border-radius: 100px;
+      transition: color 0.2s, background 0.2s;
+    }
+    .nm-trigger:hover,
+    .nm-trigger[aria-expanded="true"] {
+      color: var(--text-1);
+      background: rgba(255,255,255,0.06);
+    }
+    .nm-trigger.active { color: var(--text-1); }
+    .nm-trigger .nm-chevron {
+      transition: transform 0.2s ease-in-out;
+      opacity: 0.7;
+    }
+    .nm-trigger[aria-expanded="true"] .nm-chevron { transform: rotate(180deg); }
+
+    /* Portal: irmão da <nav>, fora do backdrop-filter da .nav-inner —
+       senão o popup herdaria o blur e o clipping do containing block. */
+    .nm-portal {
+      --duration: 0.35s;
+      --easing: cubic-bezier(0.22, 1, 0.36, 1);
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 201;
+      pointer-events: none;
+      transition: transform var(--duration) var(--easing);
+    }
+    .nm-portal[data-instant] { transition: none; }
+    .nm-portal[hidden] { display: none; }
+
+    .nm-popup {
+      position: relative;
+      overflow: hidden;
+      transform-origin: var(--transform-origin, top center);
+      background: var(--bg-elevated);
+      border-radius: var(--r-sm);
+      outline: 1px solid var(--border-mid);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.6);
+      pointer-events: auto;
+      transition:
+        opacity var(--duration) var(--easing),
+        transform var(--duration) var(--easing),
+        width var(--duration) var(--easing),
+        height var(--duration) var(--easing);
+    }
+    /* Ponte invisível sobre o gap de 10px: sem ela o mouse "cai" no vão
+       entre o trigger e o popup e o menu fecha no meio do movimento. */
+    .nm-popup::before {
+      content: '';
+      position: absolute;
+      top: -10px; left: 0; right: 0;
+      height: 10px;
+    }
+    .nm-portal[data-starting-style] .nm-popup,
+    .nm-portal[data-ending-style] .nm-popup {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    .nm-portal[data-ending-style] .nm-popup { transition-duration: 0.15s; }
+
+    .nm-arrow {
+      position: absolute;
+      top: -8px;
+      width: 20px;
+      height: 10px;
+      pointer-events: none;
+      transition: left var(--duration) var(--easing);
+    }
+    .nm-portal[data-instant] .nm-arrow { transition: none; }
+
+    .nm-viewport {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .nm-panel {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: max-content;
+      max-width: min(560px, calc(100vw - 40px));
+      padding: 10px;
+      opacity: 0;
+      pointer-events: none;
+      transition:
+        opacity var(--duration) var(--easing),
+        transform var(--duration) var(--easing);
+    }
+    .nm-panel[data-active] {
+      opacity: 1;
+      pointer-events: auto;
+      transform: none;
+    }
+    .nm-panel[data-starting-style][data-activation-direction="left"]  { transform: translateX(-50%); }
+    .nm-panel[data-starting-style][data-activation-direction="right"] { transform: translateX(50%); }
+    .nm-panel[data-ending-style][data-activation-direction="left"]    { transform: translateX(50%); }
+    .nm-panel[data-ending-style][data-activation-direction="right"]   { transform: translateX(-50%); }
+
+    .nm-list {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2px;
+      list-style: none;
+    }
+    .nm-list.nm-list--2col { grid-template-columns: 15rem 15rem; }
+
+    .nm-card {
+      display: block;
+      padding: 12px;
+      border-radius: var(--r-xs);
+      text-decoration: none;
+      color: var(--text-1);
+      transition: background 0.2s;
+    }
+    .nm-card:hover { background: rgba(255,255,255,0.055); }
+    .nm-card:focus-visible {
+      position: relative;
+      outline: 2px solid var(--accent-green);
+      outline-offset: -1px;
+    }
+    .nm-card h3 {
+      font-family: var(--font-b);
+      margin: 0 0 3px;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.35;
+      letter-spacing: -0.01em;
+    }
+    .nm-card p {
+      margin: 0;
+      font-size: 12.5px;
+      line-height: 1.5;
+      color: var(--text-2);
+    }
+
+    /* A nav é fixa (top 18px + ~52px de altura). Sem isso a âncora do
+       dropdown para o card exatamente atrás dela. */
+    .bc[id], .gi[id] { scroll-margin-top: 110px; }
+
+    @media (max-width: 900px) {
+      .nm-list.nm-list--2col { grid-template-columns: 1fr; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .nm-portal, .nm-popup, .nm-panel, .nm-arrow, .mob-acc-panel {
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+
     .hero {
       min-height: 100dvh;
       display: flex;
@@ -278,6 +457,20 @@
       padding: 140px 0 100px;
       position: relative;
       overflow: hidden;
+    }
+
+    /* Gradiente do hero — z-index negativo o coloca acima do fundo do body
+       e abaixo do #starfield (z-index 0), então as estrelas continuam visíveis.
+       A máscara desbota a base para emendar sem costura na seção seguinte. */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background: radial-gradient(125% 125% at 50% 10%, #000 40%, #63e 100%);
+      -webkit-mask-image: linear-gradient(to bottom, #000 82%, transparent 100%);
+      mask-image: linear-gradient(to bottom, #000 82%, transparent 100%);
     }
 
     .hero-glow {
@@ -289,11 +482,6 @@
       top: -180px; right: -80px;
       width: 640px; height: 640px;
       background: radial-gradient(circle, rgba(255,255,255,0.025) 0%, transparent 65%);
-    }
-    .hero-glow-2 {
-      bottom: -100px; left: -120px;
-      width: 480px; height: 480px;
-      background: radial-gradient(circle, rgba(48,209,88,0.04) 0%, transparent 65%);
     }
 
     .hero-grid {
@@ -1647,11 +1835,44 @@
        MOBILE MENU OVERLAY
   ============================================================ -->
   <div class="nav-mobile-menu" id="mobileMenu" role="dialog" aria-modal="true" aria-label="Menu de navegação">
-    <a href="#features">Serviços</a>
-    <a href="#process">Processo</a>
-    <a href="#gallery">Portfólio</a>
-    <a href="#about-sec">Sobre</a>
-    <a href="#contact" class="mob-cta">Fale conosco</a>
+    <div class="mob-item" style="--i:0">
+      <button type="button" class="mob-acc-trigger" aria-expanded="false" aria-controls="mob-acc-services">
+        Serviços
+        <svg viewBox="0 0 10 10" fill="none" aria-hidden="true">
+          <path d="M1 3.5L5 7.5L9 3.5" stroke="currentColor" stroke-width="1.5"/>
+        </svg>
+      </button>
+      <div class="mob-acc-panel" id="mob-acc-services">
+        <div>
+          <a href="#svc-web">Desenvolvimento Web</a>
+          <a href="#svc-mobile">Aplicativos Mobile</a>
+          <a href="#svc-api">Sistemas &amp; APIs</a>
+          <a href="#svc-design">UI/UX Design</a>
+          <a href="#svc-consult">Consultoria Tech</a>
+        </div>
+      </div>
+    </div>
+
+    <a href="#process" style="--i:1">Processo</a>
+
+    <div class="mob-item" style="--i:2">
+      <button type="button" class="mob-acc-trigger" aria-expanded="false" aria-controls="mob-acc-portfolio">
+        Portfólio
+        <svg viewBox="0 0 10 10" fill="none" aria-hidden="true">
+          <path d="M1 3.5L5 7.5L9 3.5" stroke="currentColor" stroke-width="1.5"/>
+        </svg>
+      </button>
+      <div class="mob-acc-panel" id="mob-acc-portfolio">
+        <div>
+          <a href="#proj-schneider">Ferragem Schneider</a>
+          <a href="#proj-fitapp">App Fitness</a>
+          <a href="#gallery">Ver todos os projetos</a>
+        </div>
+      </div>
+    </div>
+
+    <a href="#about-sec" style="--i:3">Sobre</a>
+    <a href="#contact" class="mob-cta" style="--i:4">Fale conosco</a>
   </div>
 
   <!-- ============================================================
@@ -1661,23 +1882,34 @@
     <div class="nav-inner" id="navInner">
       <a href="#" class="nav-logo" aria-label="WeDev — Página inicial">WeDev</a>
 
-      <ul class="nav-links">
-        <li><a href="#features">Serviços</a></li>
+      <ul class="nav-links" id="navLinks">
+        <li>
+          <button type="button" class="nm-trigger" id="nm-trigger-services"
+                  aria-expanded="false" aria-haspopup="true"
+                  aria-controls="nm-panel-services"
+                  data-panel="services" data-section="features">
+            Serviços
+            <svg class="nm-chevron" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+              <path d="M1 3.5L5 7.5L9 3.5" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+          </button>
+        </li>
         <li><a href="#process">Processo</a></li>
-        <li><a href="#gallery">Portfólio</a></li>
+        <li>
+          <button type="button" class="nm-trigger" id="nm-trigger-portfolio"
+                  aria-expanded="false" aria-haspopup="true"
+                  aria-controls="nm-panel-portfolio"
+                  data-panel="portfolio" data-section="gallery">
+            Portfólio
+            <svg class="nm-chevron" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+              <path d="M1 3.5L5 7.5L9 3.5" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+          </button>
+        </li>
         <li><a href="#about-sec">Sobre</a></li>
       </ul>
 
       <div class="nav-end">
-        <a href="#about-sec" class="btn-nav-ghost">Sobre nós</a>
-        <a href="#contact" class="btn-pill">
-          Fale conosco
-          <span class="pill-icon" aria-hidden="true">
-            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M2 8L8 2M8 2H3.5M8 2V6.5"/>
-            </svg>
-          </span>
-        </a>
         <button class="nav-hamburger" id="hamburger" aria-label="Abrir menu" aria-expanded="false">
           <span></span><span></span><span></span>
         </button>
@@ -1686,11 +1918,72 @@
   </nav>
 
   <!-- ============================================================
+       NAV DROPDOWN — portal (irmão da nav, fora do backdrop-filter)
+  ============================================================ -->
+  <div class="nm-portal" id="navMenuPortal" hidden>
+    <div class="nm-popup" id="navMenuPopup">
+      <div class="nm-arrow" id="navMenuArrow" aria-hidden="true">
+        <svg width="20" height="10" viewBox="0 0 20 10" fill="none">
+          <path d="M9.66437 2.60207L4.80758 6.97318C4.07308 7.63423 3.11989 8 2.13172 8H0V10H20V8H18.5349C17.5468 8 16.5936 7.63423 15.8591 6.97318L11.0023 2.60207C10.622 2.2598 10.0447 2.25979 9.66437 2.60207Z" fill="var(--bg-elevated)"/>
+          <path d="M10.3333 3.34539L5.47654 7.71648C4.55842 8.54279 3.36693 9 2.13172 9H0V8H2.13172C3.11989 8 4.07308 7.63423 4.80758 6.97318L9.66437 2.60207C10.0447 2.25979 10.622 2.2598 11.0023 2.60207L15.8591 6.97318C16.5936 7.63423 17.5468 8 18.5349 8H20V9H18.5349C17.2998 9 16.1083 8.54278 15.1901 7.71648L10.3333 3.34539Z" fill="rgba(255,255,255,0.10)"/>
+        </svg>
+      </div>
+
+      <div class="nm-viewport" id="navMenuViewport">
+
+        <div class="nm-panel" id="nm-panel-services" data-panel="services"
+             role="region" aria-labelledby="nm-trigger-services">
+          <ul class="nm-list nm-list--2col">
+            <li><a class="nm-card" href="#svc-web">
+              <h3>Desenvolvimento Web</h3>
+              <p>Sites institucionais, landing pages e aplicações de alta performance.</p>
+            </a></li>
+            <li><a class="nm-card" href="#svc-mobile">
+              <h3>Aplicativos Mobile</h3>
+              <p>iOS e Android nativos ou multiplataforma com React Native e Flutter.</p>
+            </a></li>
+            <li><a class="nm-card" href="#svc-api">
+              <h3>Sistemas &amp; APIs</h3>
+              <p>Back-end robusto, microsserviços escaláveis e integrações REST e GraphQL.</p>
+            </a></li>
+            <li><a class="nm-card" href="#svc-design">
+              <h3>UI/UX Design</h3>
+              <p>Pesquisa de usuário, prototipagem e design systems prontos para produção.</p>
+            </a></li>
+            <li><a class="nm-card" href="#svc-consult">
+              <h3>Consultoria Tech</h3>
+              <p>Estratégia de produto, arquitetura e acompanhamento técnico para escalar.</p>
+            </a></li>
+          </ul>
+        </div>
+
+        <div class="nm-panel" id="nm-panel-portfolio" data-panel="portfolio"
+             role="region" aria-labelledby="nm-trigger-portfolio">
+          <ul class="nm-list">
+            <li><a class="nm-card" href="#proj-schneider">
+              <h3>Ferragem Schneider</h3>
+              <p>Loja virtual completa com catálogo, carrinho e checkout integrado.</p>
+            </a></li>
+            <li><a class="nm-card" href="#proj-fitapp">
+              <h3>App Fitness</h3>
+              <p>Aplicativo de treino com acompanhamento de progresso e planos personalizados.</p>
+            </a></li>
+            <li><a class="nm-card" href="#gallery">
+              <h3>Ver todos os projetos</h3>
+              <p>A galeria completa com cada entrega em detalhe.</p>
+            </a></li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
        HERO
   ============================================================ -->
   <section class="hero" id="home">
     <div class="hero-glow hero-glow-1" aria-hidden="true"></div>
-    <div class="hero-glow hero-glow-2" aria-hidden="true"></div>
     <div class="wrap">
       <div class="hero-grid">
 
@@ -1813,7 +2106,7 @@
       <div class="bento" role="list">
 
         <!-- Card 1 — narrow left -->
-        <article class="bc bc-1 r" role="listitem">
+        <article class="bc bc-1 r" role="listitem" id="svc-web">
           <div class="bc-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 21V9"/></svg>
           </div>
@@ -1822,7 +2115,7 @@
         </article>
 
         <!-- Card 2 — wide right with inner visual -->
-        <article class="bc bc-2 r d1" role="listitem">
+        <article class="bc bc-2 r d1" role="listitem" id="svc-mobile">
           <div class="bc-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="3"/><path d="M12 18h.01"/></svg>
           </div>
@@ -1837,7 +2130,7 @@
         </article>
 
         <!-- Card 3 -->
-        <article class="bc bc-3 r" role="listitem">
+        <article class="bc bc-3 r" role="listitem" id="svc-api">
           <div class="bc-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
           </div>
@@ -1846,7 +2139,7 @@
         </article>
 
         <!-- Card 4 -->
-        <article class="bc bc-4 r d1" role="listitem">
+        <article class="bc bc-4 r d1" role="listitem" id="svc-design">
           <div class="bc-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></svg>
           </div>
@@ -1855,7 +2148,7 @@
         </article>
 
         <!-- Card 5 -->
-        <article class="bc bc-5 r d2" role="listitem">
+        <article class="bc bc-5 r d2" role="listitem" id="svc-consult">
           <div class="bc-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
           </div>
@@ -1946,7 +2239,7 @@
       <div class="gallery-grid">
 
         <!-- Ferragem Schneider -->
-        <div class="gi gi--ecommerce r">
+        <div class="gi gi--ecommerce r" id="proj-schneider">
           <div class="gi-media">
             <video src="ecommerce%20gravacao.mp4" autoplay muted loop playsinline preload="metadata" style="width:100%;height:100%;object-fit:cover;object-position:top;display:block;"></video>
           </div>
@@ -1960,7 +2253,7 @@
         </div>
 
         <!-- App Fitness Mobile -->
-        <div class="gi gi--mobile r d1">
+        <div class="gi gi--mobile r d1" id="proj-fitapp">
           <div class="gi-media">
             <video src="fitapp.mp4" autoplay muted loop playsinline preload="metadata"></video>
           </div>
