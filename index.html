@@ -63,7 +63,10 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* Starfield canvas — fixed, behind everything */
+    /* Starfield canvas — fixed, behind everything.
+       Sem filter: um blur CSS aqui recompõe a tela inteira a cada frame do
+       canvas e atrasa o reveal do hero. O desfoque vem do sprite de estrela
+       desenhado no JS, que já sai com borda difusa e custa nada. */
     #starfield {
       position: fixed;
       inset: 0;
@@ -461,17 +464,35 @@
 
     /* Gradiente do hero — z-index negativo o coloca acima do fundo do body
        e abaixo do #starfield (z-index 0), então as estrelas continuam visíveis.
-       A máscara desbota a base para emendar sem costura na seção seguinte. */
+       A máscara desbota a base para emendar sem costura na seção seguinte.
+       Serve de fallback: fica visível se o canvas de ondas não subir (sem JS,
+       sem canvas 2D ou prefers-reduced-motion). */
     .hero::before {
       content: '';
       position: absolute;
       inset: 0;
-      z-index: -1;
+      z-index: -2;
       pointer-events: none;
       background: radial-gradient(125% 125% at 50% 10%, #000 40%, #63e 100%);
       -webkit-mask-image: linear-gradient(to bottom, #000 82%, transparent 100%);
       mask-image: linear-gradient(to bottom, #000 82%, transparent 100%);
     }
+
+    /* Ondas animadas (simplex noise em canvas). Mesma máscara do gradiente para
+       emendar na seção seguinte. Só aparece depois que o JS pinta o 1º frame. */
+    #hero-waves {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 600ms var(--ease-out);
+      -webkit-mask-image: linear-gradient(to bottom, #000 82%, transparent 100%);
+      mask-image: linear-gradient(to bottom, #000 82%, transparent 100%);
+    }
+    #hero-waves.ready { opacity: 1; }
 
     .hero-glow {
       position: absolute;
@@ -491,6 +512,42 @@
       align-items: center;
       position: relative;
       z-index: 2;
+    }
+
+    /* Véu escuro atrás do texto do hero. Com a banda de ondas mais alta, o
+       parágrafo (cinza --text-2) cai sobre o roxo saturado e perde contraste.
+       O gradiente escurece só o miolo e some antes das bordas, então as ondas
+       continuam à mostra dos lados. */
+    .hero-content { position: relative; }
+    .hero-content::before {
+      content: '';
+      position: absolute;
+      /* Caixa bem folgada e elipse pequena: o gradiente precisa chegar a
+         transparent antes das bordas, senão a borda reta da caixa aparece como
+         um degrau escuro em cima da onda. */
+      inset: -100px -260px -140px -260px;
+      z-index: -1;
+      pointer-events: none;
+      background: radial-gradient(
+        ellipse 46% 44% at 48% 52%,
+        rgba(5, 5, 5, 0.94) 0%,
+        rgba(5, 5, 5, 0.76) 46%,
+        transparent 80%
+      );
+    }
+
+    /* No mobile o hero é uma coluna só e a caixa do texto é estreita: manter a
+       folga de 260px lateral escureceria a tela toda. */
+    @media (max-width: 768px) {
+      .hero-content::before {
+        inset: -60px -60px -80px -60px;
+        background: radial-gradient(
+          ellipse 60% 46% at 50% 50%,
+          rgba(5, 5, 5, 0.90) 0%,
+          rgba(5, 5, 5, 0.66) 46%,
+          transparent 80%
+        );
+      }
     }
 
     .eyebrow {
@@ -541,7 +598,13 @@
       line-height: 1.7;
       max-width: 440px;
       margin-bottom: 40px;
+      /* O parágrafo é cinza médio e cai em cima da faixa clara das ondas. A
+         sombra dá contraste local sem precisar escurecer a onda inteira. */
+      text-shadow: 0 1px 2px rgba(5, 5, 5, 0.95), 0 2px 16px rgba(5, 5, 5, 0.85);
     }
+
+    /* Mesmo motivo: o texto do typewriter é #3a3a3a, quase da cor da onda. */
+    .hero-h1 em { text-shadow: 0 2px 20px rgba(5, 5, 5, 0.9); }
 
     .hero-actions { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
 
@@ -1983,6 +2046,7 @@
        HERO
   ============================================================ -->
   <section class="hero" id="home">
+    <canvas id="hero-waves" aria-hidden="true"></canvas>
     <div class="hero-glow hero-glow-1" aria-hidden="true"></div>
     <div class="wrap">
       <div class="hero-grid">

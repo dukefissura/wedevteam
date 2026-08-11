@@ -117,21 +117,46 @@ window.scrollTo(0, 0);
   const canvas = document.getElementById('starfield');
   const ctx = canvas.getContext('2d');
   let stars = [];
-  const COUNT = 220;
+  const COUNT_MAX = 220;
   let scrollRaw = 0;
   let scrollSmooth = 0;
   let lastDraw = 0;
+  let running = false;
   const FRAME_MS = 1000 / 30; // cap at 30 fps
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Sprite de estrela — gradiente radial pré-renderizado uma vez. Sai muito
+  // mais barato que um createRadialGradient por estrela a cada frame, e a borda
+  // difusa dá o mesmo ar desfocado das ondas do hero.
+  const SPRITE_R = 16;
+  const sprite = document.createElement('canvas');
+  sprite.width = sprite.height = SPRITE_R * 2;
+  (function () {
+    const sctx = sprite.getContext('2d');
+    const g = sctx.createRadialGradient(SPRITE_R, SPRITE_R, 0, SPRITE_R, SPRITE_R, SPRITE_R);
+    // Núcleo já entra abaixo de 1 e some cedo: é o que dá o ar desfocado, sem
+    // ponto duro no centro.
+    g.addColorStop(0,    'rgba(255,255,255,0.92)');
+    g.addColorStop(0.10, 'rgba(255,255,255,0.72)');
+    g.addColorStop(0.30, 'rgba(255,255,255,0.30)');
+    g.addColorStop(0.60, 'rgba(255,255,255,0.08)');
+    g.addColorStop(1,    'rgba(255,255,255,0)');
+    sctx.fillStyle = g;
+    sctx.fillRect(0, 0, SPRITE_R * 2, SPRITE_R * 2);
+  })();
 
   window.addEventListener('scroll', () => {
     scrollRaw = window.scrollY;
   }, { passive: true });
 
-  function resize() {
-    canvas.width  = window.innerWidth;
-    canvas.height = window.innerHeight;
+  function populate() {
     stars = [];
-    for (let i = 0; i < COUNT; i++) {
+    // Densidade por área, não contagem fixa: um telefone não precisa das mesmas
+    // 220 estrelas de um monitor, e desenhá-las custa o mesmo por estrela.
+    const target = Math.round(
+      Math.min(COUNT_MAX, Math.max(70, canvas.width * canvas.height / 6200))
+    );
+    for (let i = 0; i < target; i++) {
       stars.push({
         x:           Math.random() * canvas.width,
         y:           Math.random() * canvas.height,
@@ -144,8 +169,22 @@ window.scrollTo(0, 0);
     }
   }
 
+  function resize() {
+    const nw = window.innerWidth, nh = window.innerHeight;
+    if (nw === canvas.width && nh === canvas.height) return;
+
+    // No mobile a barra de URL entra e sai e dispara resize a cada scroll. Só a
+    // altura mudando não justifica sortear tudo de novo — as estrelas saltariam
+    // de lugar durante o scroll. Redistribui só quando a largura muda.
+    const widthChanged = nw !== canvas.width;
+    canvas.width  = nw;
+    canvas.height = nh;
+    if (widthChanged || !stars.length) populate();
+  }
+
   function draw(ts) {
-    if (document.hidden) return;
+    running = true;
+    if (document.hidden) { running = false; return; }
     requestAnimationFrame(draw);
     if (ts - lastDraw < FRAME_MS) return;
     const dt = Math.min(ts - lastDraw, 100); // clamp to avoid jumps after tab restore
@@ -159,19 +198,275 @@ window.scrollTo(0, 0);
       const op = Math.max(0.05, s.baseOpacity + Math.sin(s.phase) * 0.22);
       const rawOffset = scrollSmooth * s.parallax;
       const drawY = ((s.y - rawOffset) % canvas.height + canvas.height) % canvas.height;
-      ctx.beginPath();
-      ctx.arc(s.x, drawY, s.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(255,255,255,${op.toFixed(3)})`;
-      ctx.fill();
+      const size = s.r * 7;   // o sprite é quase todo halo; o núcleo fica ~1/7
+      ctx.globalAlpha = op;
+      ctx.drawImage(sprite, s.x - size / 2, drawY - size / 2, size, size);
     }
+    ctx.globalAlpha = 1;
+  }
+
+  function drawOnce() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (const s of stars) {
+      const size = s.r * 7;
+      ctx.globalAlpha = s.baseOpacity;
+      ctx.drawImage(sprite, s.x - size / 2, s.y - size / 2, size, size);
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  resize();
+
+  if (reduced) {
+    // Sem cintilação nem parallax: um frame e pronto.
+    drawOnce();
+    window.addEventListener('resize', () => { resize(); drawOnce(); }, { passive: true });
+    return;
   }
 
   window.addEventListener('resize', resize, { passive: true });
   document.addEventListener('visibilitychange', () => {
-    if (!document.hidden) requestAnimationFrame(draw);
+    // Sem a trava, cada volta para a aba empilhava mais um loop de rAF em cima
+    // dos anteriores — o canvas ia ficando mais caro a cada troca de aba.
+    if (!document.hidden && !running) requestAnimationFrame(draw);
   });
-  resize();
   requestAnimationFrame(draw);
+})();
+
+// ------ Hero wavy background ------
+// Porte em JS nativo do componente React <WavyBackground> (Aceternity UI).
+// O simplex noise 3D vai inline porque o site é estático, sem bundler — não dá
+// para importar o pacote `simplex-noise` como módulo.
+(function () {
+  const canvas = document.getElementById('hero-waves');
+  const hero   = document.getElementById('home');
+  if (!canvas || !hero) return;
+
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;   // sem canvas 2D o gradiente do ::before continua valendo
+
+  // O componente original usa 5 ondas com a mesma largura, amplitude e
+  // velocidade — só a cor e o eixo Y do noise mudam. Isso funciona lá porque as
+  // 5 cores são de matizes bem distintos; com a paleta roxa do site as faixas
+  // colapsavam num borrão só. Aqui cada onda tem largura, amplitude, offset,
+  // frequência e velocidade próprios, então elas se separam mesmo em matizes
+  // vizinhos. Ordem = ordem de pintura: grave e larga primeiro, aguda e fina
+  // por cima.
+  // `t` é o eixo temporal do noise e `seed` o eixo que separa uma onda da outra.
+  // Ambos vivem no próprio objeto: o perfil mobile usa um subconjunto das ondas,
+  // e um array externo indexado por posição faria as ondas trocarem de fase ao
+  // cruzar o breakpoint.
+  const WAVES = [
+    { color: '#140a33', width: 110, amp: 132, offset:  66, freq: 1 / 940, speed: 0.00160, seed: 0.0, t: 0 },
+    { color: '#2b1c6b', width:  86, amp: 122, offset:  22, freq: 1 / 810, speed: 0.00210, seed: 0.3, t: 0 },
+    { color: '#5324c9', width:  64, amp: 104, offset: -18, freq: 1 / 690, speed: 0.00270, seed: 0.6, t: 0 },
+    { color: '#7b3dff', width:  44, amp:  88, offset: -52, freq: 1 / 590, speed: 0.00340, seed: 0.9, t: 0 },
+    { color: '#a03ddb', width:  26, amp:  70, offset: -14, freq: 1 / 500, speed: 0.00420, seed: 1.2, t: 0 },
+  ];
+
+  // Os números das ondas acima são para 1440px de largura. Num telefone de
+  // 390px eles ocupariam proporcionalmente 3,7x mais tela — a banda virava um
+  // borrão cobrindo o hero inteiro. Tudo que é medida em px escala junto com a
+  // largura, com piso para não sumir.
+  const REF_W = 1440;
+
+  // Perfil mobile: menos ondas, menos blur, menos amostras, menos fps. O
+  // gargalo é o ctx.filter = blur, que roda sobre a área toda a cada frame.
+  const MOBILE_Q = window.matchMedia('(max-width: 768px)');
+
+  const TRAIL_ALPHA  = 0.62;  // repinte translúcido que gera o rastro
+  const STROKE_ALPHA = 0.8;
+
+  const noise3D = createNoise3D();
+  let w = 0, h = 0, rafId = 0, lastDraw = 0, visible = true;
+  let scale = 1, bandY = 0, waves = WAVES, blur = 10, step = 5, pad = 30;
+  let frameMs = 1000 / 45;
+
+  function configure() {
+    const mobile = MOBILE_Q.matches;
+
+    // No desktop o hero tem a altura do viewport, então ancorar a banda na
+    // altura do hero ou na da janela dá no mesmo. No mobile o hero é bem mais
+    // alto que a tela (conteúdo empilha), e uma fração da altura do hero jogaria
+    // a banda para fora da primeira dobra. Ancorar na janela mantém a banda
+    // sempre visível ao abrir a página.
+    const bandH = Math.min(h, window.innerHeight);
+    const centerY = mobile ? 0.88 : 0.66;
+    bandY = h - bandH + bandH * centerY;
+
+    scale = Math.max(mobile ? 0.5 : 0.7, Math.min(1, w / REF_W));
+    waves = mobile ? WAVES.slice(1, 4) : WAVES;   // corta a mais escura e a mais clara
+    blur  = mobile ? 6 : 10;
+    step  = mobile ? 8 : 5;
+    pad   = blur * 3;
+    frameMs = mobile ? 1000 / 30 : 1000 / 45;
+  }
+
+  function resize() {
+    const nw = hero.clientWidth, nh = hero.clientHeight;
+    // A barra de URL do mobile entra e sai durante o scroll e dispara resize a
+    // cada vez. Redimensionar o canvas limpa o rastro e recomeça a animação, o
+    // que pisca. Mudança só de altura, e pequena, não vale o repaint.
+    if (nw === w && Math.abs(nh - h) < 120) return;
+
+    w = canvas.width  = nw;
+    h = canvas.height = nh;
+    configure();
+    // Estado do contexto é zerado junto com o tamanho do canvas.
+    ctx.filter = `blur(${blur}px)`;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+  }
+
+  function drawWaves() {
+    // 'lighter' soma as cores no cruzamento das ondas, então a sobreposição
+    // acende em vez de tapar — é o que dá o brilho e a mistura de matiz.
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.globalAlpha = STROKE_ALPHA;
+
+    for (const wave of waves) {
+      wave.t += wave.speed;
+      ctx.beginPath();
+      ctx.lineWidth = wave.width * scale;
+      ctx.strokeStyle = wave.color;
+      const y0 = bandY + wave.offset * scale;
+      const amp = wave.amp * scale;
+      for (let x = 0; x <= w; x += step) {
+        ctx.lineTo(x, y0 + noise3D(x * wave.freq, wave.seed, wave.t) * amp);
+      }
+      ctx.stroke();
+    }
+
+    ctx.globalCompositeOperation = 'source-over';
+  }
+
+  // O ctx.filter também borra o fillRect do rastro, então as bordas do retângulo
+  // desbotam e nunca limpam de todo. Pintar com folga além do canvas resolve.
+
+  function paint(alpha) {
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.globalAlpha = alpha;
+    ctx.fillStyle = '#050505';        // igual a --bg
+    ctx.fillRect(-pad, -pad, w + pad * 2, h + pad * 2);
+    drawWaves();
+    ctx.globalAlpha = 1;
+  }
+
+  function loop(ts) {
+    rafId = requestAnimationFrame(loop);
+    if (ts - lastDraw < frameMs) return;
+    lastDraw = ts;
+    paint(TRAIL_ALPHA);
+  }
+
+  function start() {
+    if (rafId) return;
+    rafId = requestAnimationFrame(loop);
+  }
+  function stop() {
+    cancelAnimationFrame(rafId);
+    rafId = 0;
+  }
+
+  resize();
+  window.addEventListener('resize', resize, { passive: true });
+
+  // Um frame estático já basta com movimento reduzido — nada de animação.
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    paint(1);
+    canvas.classList.add('ready');
+    return;
+  }
+
+  // Só anima com o hero em tela e a aba em foco.
+  new IntersectionObserver(entries => {
+    visible = entries[0].isIntersecting;
+    if (visible && !document.hidden) start(); else stop();
+  }, { threshold: 0 }).observe(hero);
+
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden && visible) start(); else stop();
+  });
+
+  paint(1);
+  canvas.classList.add('ready');
+  start();
+
+  // Simplex noise 3D — algoritmo de Stefan Gustavson, mesma saída do
+  // createNoise3D() do pacote `simplex-noise`.
+  function createNoise3D() {
+    const grad3 = new Float32Array([
+      1, 1, 0,  -1, 1, 0,  1, -1, 0,  -1, -1, 0,
+      1, 0, 1,  -1, 0, 1,  1, 0, -1,  -1, 0, -1,
+      0, 1, 1,  0, -1, 1,  0, 1, -1,  0, -1, -1,
+    ]);
+
+    const p = new Uint8Array(256);
+    for (let i = 0; i < 256; i++) p[i] = i;
+    for (let i = 255; i > 0; i--) {
+      const n = Math.floor(Math.random() * (i + 1));
+      const tmp = p[i]; p[i] = p[n]; p[n] = tmp;
+    }
+    const perm = new Uint8Array(512), permMod12 = new Uint8Array(512);
+    for (let i = 0; i < 512; i++) {
+      perm[i] = p[i & 255];
+      permMod12[i] = perm[i] % 12;
+    }
+
+    const F3 = 1 / 3, G3 = 1 / 6;
+
+    return function noise3D(x, y, z) {
+      const s = (x + y + z) * F3;
+      const i = Math.floor(x + s), j = Math.floor(y + s), k = Math.floor(z + s);
+      const t = (i + j + k) * G3;
+      const x0 = x - (i - t), y0 = y - (j - t), z0 = z - (k - t);
+
+      let i1, j1, k1, i2, j2, k2;
+      if (x0 >= y0) {
+        if (y0 >= z0)      { i1 = 1; j1 = 0; k1 = 0; i2 = 1; j2 = 1; k2 = 0; }
+        else if (x0 >= z0) { i1 = 1; j1 = 0; k1 = 0; i2 = 1; j2 = 0; k2 = 1; }
+        else               { i1 = 0; j1 = 0; k1 = 1; i2 = 1; j2 = 0; k2 = 1; }
+      } else {
+        if (y0 < z0)       { i1 = 0; j1 = 0; k1 = 1; i2 = 0; j2 = 1; k2 = 1; }
+        else if (x0 < z0)  { i1 = 0; j1 = 1; k1 = 0; i2 = 0; j2 = 1; k2 = 1; }
+        else               { i1 = 0; j1 = 1; k1 = 0; i2 = 1; j2 = 1; k2 = 0; }
+      }
+
+      const x1 = x0 - i1 + G3,         y1 = y0 - j1 + G3,         z1 = z0 - k1 + G3;
+      const x2 = x0 - i2 + 2 * G3,     y2 = y0 - j2 + 2 * G3,     z2 = z0 - k2 + 2 * G3;
+      const x3 = x0 - 1 + 3 * G3,      y3 = y0 - 1 + 3 * G3,      z3 = z0 - 1 + 3 * G3;
+
+      const ii = i & 255, jj = j & 255, kk = k & 255;
+      let n = 0;
+
+      let t0 = 0.6 - x0 * x0 - y0 * y0 - z0 * z0;
+      if (t0 > 0) {
+        const g = permMod12[ii + perm[jj + perm[kk]]] * 3;
+        t0 *= t0;
+        n += t0 * t0 * (grad3[g] * x0 + grad3[g + 1] * y0 + grad3[g + 2] * z0);
+      }
+      let t1 = 0.6 - x1 * x1 - y1 * y1 - z1 * z1;
+      if (t1 > 0) {
+        const g = permMod12[ii + i1 + perm[jj + j1 + perm[kk + k1]]] * 3;
+        t1 *= t1;
+        n += t1 * t1 * (grad3[g] * x1 + grad3[g + 1] * y1 + grad3[g + 2] * z1);
+      }
+      let t2 = 0.6 - x2 * x2 - y2 * y2 - z2 * z2;
+      if (t2 > 0) {
+        const g = permMod12[ii + i2 + perm[jj + j2 + perm[kk + k2]]] * 3;
+        t2 *= t2;
+        n += t2 * t2 * (grad3[g] * x2 + grad3[g + 1] * y2 + grad3[g + 2] * z2);
+      }
+      let t3 = 0.6 - x3 * x3 - y3 * y3 - z3 * z3;
+      if (t3 > 0) {
+        const g = permMod12[ii + 1 + perm[jj + 1 + perm[kk + 1]]] * 3;
+        t3 *= t3;
+        n += t3 * t3 * (grad3[g] * x3 + grad3[g + 1] * y3 + grad3[g + 2] * z3);
+      }
+
+      return 32 * n;
+    };
+  }
 })();
 
 // ------ Scroll reveal via IntersectionObserver ------
