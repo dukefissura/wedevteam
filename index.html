@@ -550,32 +550,6 @@
       }
     }
 
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      padding: 5px 13px;
-      border-radius: 100px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid var(--border-faint);
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--text-2);
-      margin-bottom: 28px;
-    }
-    .eyebrow-dot {
-      width: 5px; height: 5px;
-      border-radius: 50%;
-      background: var(--accent-green);
-      animation: blink 2.4s infinite;
-    }
-    @keyframes blink {
-      0%,100% { opacity:1; transform:scale(1); }
-      50%      { opacity:0.35; transform:scale(0.75); }
-    }
-
     .hero-h1 {
       font-family: var(--font-d);
       font-size: clamp(52px, 7.5vw, 104px);
@@ -591,22 +565,9 @@
       color: #3a3a3a;
     }
 
-    .hero-p {
-      font-size: 17px;
-      font-weight: 400;
-      color: var(--text-2);
-      line-height: 1.7;
-      max-width: 440px;
-      margin-bottom: 40px;
-      /* O parágrafo é cinza médio e cai em cima da faixa clara das ondas. A
-         sombra dá contraste local sem precisar escurecer a onda inteira. */
-      text-shadow: 0 1px 2px rgba(5, 5, 5, 0.95), 0 2px 16px rgba(5, 5, 5, 0.85);
-    }
 
     /* Mesmo motivo: o texto do typewriter é #3a3a3a, quase da cor da onda. */
     .hero-h1 em { text-shadow: 0 2px 20px rgba(5, 5, 5, 0.9); }
-
-    .hero-actions { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
 
     .btn-lg {
       display: inline-flex;
@@ -645,62 +606,6 @@
       transition: color 0.2s, border-color 0.2s;
     }
     .btn-text-link:hover { color: var(--text-1); border-color: var(--border-mid); }
-
-    /* ============================================================
-       INTERACTIVE HOVER BUTTON — vanilla port (no framework needed)
-    ============================================================ */
-    .ihb {
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      width: 236px;
-      padding: 14px 12px;
-      border-radius: 100px;
-      border: 1px solid var(--border-mid);
-      background: transparent;
-      cursor: pointer;
-      text-decoration: none;
-      white-space: nowrap;
-      font-family: var(--font-b);
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--text-1);
-      flex-shrink: 0;
-    }
-    .ihb-label {
-      display: inline-block;
-      white-space: nowrap;
-      transform: translateX(6%);
-      transition: transform 0.3s var(--ease-spring), opacity 0.3s ease;
-    }
-    .ihb-fill {
-      position: absolute;
-      inset: 0;
-      z-index: 2;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      white-space: nowrap;
-      color: #060606;
-      opacity: 0;
-      transform: translateX(140%);
-      transition: transform 0.3s var(--ease-spring), opacity 0.3s ease;
-    }
-    .ihb-fill svg { width: 14px; height: 14px; }
-    .ihb-dot {
-      position: absolute;
-      left: 20%; top: 40%;
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: var(--accent-green);
-      transition: all 0.35s var(--ease-spring);
-    }
-    .ihb:hover .ihb-label { transform: translateX(140%); opacity: 0; }
-    .ihb:hover .ihb-fill  { transform: translateX(0); opacity: 1; }
-    .ihb:hover .ihb-dot   { left: 0; top: 0; width: 100%; height: 100%; border-radius: 100px; }
 
     /* HERO — Visual (Double-Bezel product) */
     .hero-visual { position: relative; }
@@ -781,9 +686,6 @@
     @media (max-width: 960px) {
       .hero            { padding: 116px 0 72px; }
       .hero-grid       { grid-template-columns: 1fr; gap: 48px; text-align: center; }
-      .hero-p          { margin-left: auto; margin-right: auto; max-width: 520px; }
-      .hero-actions    { justify-content: center; }
-      .eyebrow         { margin-left: auto; margin-right: auto; }
       .float-stat      { left: 12px; bottom: -8px; }
       .float-badge     { right: 12px; top: 12px; }
     }
@@ -898,18 +800,15 @@
     }
 
     /* Bento col spans */
-    .bc-1 { grid-column: span 5; }
-    .bc-2 { grid-column: span 7; }
-    .bc-3 { grid-column: span 4; }
+    .bc-1 { grid-column: span 4; }
     .bc-4 { grid-column: span 4; }
     .bc-5 { grid-column: span 4; }
 
     @media (max-width: 1024px) {
-      .bc-1, .bc-2 { grid-column: span 12; }
-      .bc-3, .bc-4, .bc-5 { grid-column: span 6; }
+      .bc-1, .bc-4, .bc-5 { grid-column: span 6; }
     }
     @media (max-width: 640px) {
-      .bc-3, .bc-4, .bc-5 { grid-column: span 12; }
+      .bc-1, .bc-4, .bc-5 { grid-column: span 12; }
     }
 
     .bc-icon {
@@ -937,26 +836,6 @@
       margin-bottom: 10px;
     }
     .bc-body { font-size: 14px; color: var(--text-2); line-height: 1.68; }
-
-    /* Wide card inner visual */
-    .bc-vis {
-      margin-top: 28px;
-      height: 120px;
-      background: var(--bg-elevated);
-      border: 1px solid var(--border-faint);
-      border-radius: var(--r-md);
-      overflow: hidden;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .bc-vis::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(90deg, rgba(255,255,255,0.015), transparent 40%, rgba(255,255,255,0.01));
-    }
 
     /* ============================================================
        GALLERY / DETAILS
@@ -1171,11 +1050,10 @@
     @media (max-width: 640px) {
       .hero         { padding: 92px 0 56px; }
       .hero-h1      { font-size: clamp(42px, 12vw, 64px); }
-      .hero-p       { font-size: 15px; }
       .bezel-outer  { max-width: 280px; }
       .float-card   { display: none; }   /* float cards clip on small viewports */
       .bc           { padding: 22px; border-radius: var(--r-md); }
-      .bc-1, .bc-2  { grid-column: span 12; }
+      .bc-1, .bc-4, .bc-5 { grid-column: span 12; }
       .bc-title     { font-size: 18px; }
       .bento        { gap: 8px; }
       .sec-h        { max-width: 100%; }
@@ -1183,7 +1061,6 @@
 
     /* Hero actions — stack full-width on very small screens */
     @media (max-width: 460px) {
-      .hero-actions       { flex-direction: column; align-items: stretch; gap: 12px; }
       .btn-lg             { justify-content: center; min-height: 52px; }
       .btn-text-link      { align-self: center; padding-top: 4px; }
     }
@@ -1748,17 +1625,6 @@
     }
     .tc--feat .tc-quote { font-size: clamp(22px, 2.4vw, 30px); }
 
-    .tc-stars {
-      display: flex;
-      gap: 3px;
-      margin-bottom: 20px;
-    }
-    .tc-stars svg {
-      width: 13px; height: 13px;
-      fill: rgba(255,210,63,0.9);
-      stroke: none;
-    }
-
     .tc-author {
       display: flex;
       align-items: center;
@@ -1908,8 +1774,6 @@
       <div class="mob-acc-panel" id="mob-acc-services">
         <div>
           <a href="#svc-web">Desenvolvimento Web</a>
-          <a href="#svc-mobile">Aplicativos Mobile</a>
-          <a href="#svc-api">Sistemas &amp; APIs</a>
           <a href="#svc-design">UI/UX Design</a>
           <a href="#svc-consult">Consultoria Tech</a>
         </div>
@@ -2001,14 +1865,6 @@
               <h3>Desenvolvimento Web</h3>
               <p>Sites institucionais, landing pages e aplicações de alta performance.</p>
             </a></li>
-            <li><a class="nm-card" href="#svc-mobile">
-              <h3>Aplicativos Mobile</h3>
-              <p>iOS e Android nativos ou multiplataforma com React Native e Flutter.</p>
-            </a></li>
-            <li><a class="nm-card" href="#svc-api">
-              <h3>Sistemas &amp; APIs</h3>
-              <p>Back-end robusto, microsserviços escaláveis e integrações REST e GraphQL.</p>
-            </a></li>
             <li><a class="nm-card" href="#svc-design">
               <h3>UI/UX Design</h3>
               <p>Pesquisa de usuário, prototipagem e design systems prontos para produção.</p>
@@ -2053,37 +1909,10 @@
 
         <!-- Content -->
         <div class="hero-content">
-          <div class="eyebrow r">
-            <span class="eyebrow-dot" aria-hidden="true"></span>
-            Desenvolvendo Softwares Desde 2025
-          </div>
           <h1 class="hero-h1 r d1">
             Código que
             <em><span id="tw-text"></span><span class="tw-cursor" aria-hidden="true"></span></em>
           </h1>
-          <p class="hero-p r d2">
-            Da landing page ao sistema complexo, construímos o digital que move negócios. Parceiros de empresas que crescem com tecnologia.
-          </p>
-          <div class="hero-actions r d3">
-            <a href="#gallery" class="btn-lg">
-              Ver Portfólio
-              <span class="li" aria-hidden="true">
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M2.5 9.5L9.5 2.5M9.5 2.5H4M9.5 2.5V8"/>
-                </svg>
-              </span>
-            </a>
-            <a href="#features" class="ihb" aria-label="Ver nossos serviços">
-              <span class="ihb-label">Nossos serviços</span>
-              <span class="ihb-fill" aria-hidden="true">
-                Nossos serviços
-                <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M2.5 9.5L9.5 2.5M9.5 2.5H4M9.5 2.5V8"/>
-                </svg>
-              </span>
-              <span class="ihb-dot" aria-hidden="true"></span>
-            </a>
-          </div>
         </div>
 
 
@@ -2176,30 +2005,6 @@
           </div>
           <h3 class="bc-title">Desenvolvimento Web</h3>
           <p class="bc-body">Sites institucionais, landing pages e aplicações web de alta performance com foco em conversão e experiência do usuário.</p>
-        </article>
-
-        <!-- Card 2 — wide right with inner visual -->
-        <article class="bc bc-2 r d1" role="listitem" id="svc-mobile">
-          <div class="bc-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="3"/><path d="M12 18h.01"/></svg>
-          </div>
-          <h3 class="bc-title">Aplicativos Mobile</h3>
-          <p class="bc-body">iOS e Android nativos ou multiplataforma com React Native e Flutter. Interfaces fluidas que os usuários adoram usar.</p>
-          <div class="bc-vis" aria-hidden="true">
-            <svg width="78%" height="48" viewBox="0 0 400 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="opacity:0.45;">
-              <path d="M0 24 Q50 4 100 24 Q150 44 200 24 Q250 4 300 24 Q350 44 400 24" stroke="rgba(255,255,255,0.3)" stroke-width="1.4" fill="none"/>
-              <path d="M0 24 Q30 14 60 24 Q90 34 120 24 Q150 14 180 24 Q210 34 240 24 Q270 14 300 24 Q330 34 360 24 Q390 14 400 24" stroke="rgba(255,255,255,0.1)" stroke-width="1" fill="none"/>
-            </svg>
-          </div>
-        </article>
-
-        <!-- Card 3 -->
-        <article class="bc bc-3 r" role="listitem" id="svc-api">
-          <div class="bc-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-          </div>
-          <h3 class="bc-title">Sistemas & APIs</h3>
-          <p class="bc-body">Back-end robusto, microsserviços escaláveis e integrações via REST e GraphQL para operações críticas.</p>
         </article>
 
         <!-- Card 4 -->
@@ -2350,13 +2155,6 @@
         <!-- Featured large -->
         <article class="tc tc--feat r" aria-label="Depoimento de Renata Moura">
           <div>
-            <div class="tc-stars" aria-label="5 estrelas">
-              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            </div>
             <p class="tc-quote">"A WeDev construiu nosso e-commerce do zero — do design ao checkout. Em menos de três meses tínhamos uma loja rápida, bonita e integrada com nosso ERP."</p>
           </div>
           <div class="tc-author">
@@ -2372,13 +2170,6 @@
 
         <!-- Stack right -->
         <article class="tc r d1" aria-label="Depoimento de Thiago Cavalcante">
-          <div class="tc-stars" aria-label="5 estrelas">
-            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          </div>
           <p class="tc-quote">"Migração completa do nosso legado PHP para Next.js. Código limpo, bem documentado e a plataforma ficou 3× mais rápida na produção."</p>
           <div class="tc-author">
             <div class="tc-avatar">
@@ -2515,8 +2306,6 @@
           <h4>Serviços</h4>
           <ul>
             <li><a href="#features">Desenvolvimento Web</a></li>
-            <li><a href="#features">Apps Mobile</a></li>
-            <li><a href="#features">Sistemas & APIs</a></li>
             <li><a href="#features">UI/UX Design</a></li>
           </ul>
         </div>
