@@ -453,6 +453,11 @@
     }
 
 
+    /* A .hero é flex, então a .wrap entra como item e encolhe para o conteúdo:
+       a coluna do título mudava de largura conforme a palavra digitada e ia
+       parar no meio da tela. Largura cheia devolve a coluna para a esquerda. */
+    .hero .wrap { width: 100%; }
+
     .hero {
       min-height: 100dvh;
       display: flex;
@@ -685,7 +690,7 @@
 
     @media (max-width: 960px) {
       .hero            { padding: 116px 0 72px; }
-      .hero-grid       { grid-template-columns: 1fr; gap: 48px; text-align: center; }
+      .hero-grid       { grid-template-columns: 1fr; gap: 48px; }
       .float-stat      { left: 12px; bottom: -8px; }
       .float-badge     { right: 12px; top: 12px; }
     }
