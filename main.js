@@ -40,10 +40,17 @@ window.scrollTo(0, 0);
   let wi = 0, ci = 0, deleting = false;
   const PAUSE_END = 2200, PAUSE_START = 420, TYPE_SPEED = 72, DELETE_SPEED = 38;
 
-  // A coluna do hero encolhe para o conteúdo, então a largura da palavra sendo
-  // digitada muda a largura do título inteiro e a linha de cima balança junto.
-  // Reservar a largura da palavra mais longa deixa a caixa parada.
-  function reservarLargura() {
+  // O título é centrado, então a largura da linha decide onde ela começa. Se a
+  // caixa acompanhasse a palavra letra a letra, cada letra recentralizaria o
+  // que já está escrito. A caixa recebe a largura final da palavra da vez, e só
+  // troca de largura quando está vazia, entre uma palavra e outra.
+  let larguras = [];
+
+  function aplicarLargura() {
+    if (box && larguras[wi]) box.style.minWidth = larguras[wi] + 'px';
+  }
+
+  function medirPalavras() {
     if (!box) return;
     const cs = getComputedStyle(el);
     const medidor = document.createElement('span');
@@ -54,31 +61,35 @@ window.scrollTo(0, 0);
     medidor.style.fontStyle     = cs.fontStyle;
     medidor.style.letterSpacing = cs.letterSpacing;
     document.body.appendChild(medidor);
-    let maior = 0;
-    for (const w of words) {
-      medidor.textContent = w;
-      maior = Math.max(maior, medidor.getBoundingClientRect().width);
-    }
-    medidor.remove();
 
-    // O cursor mora dentro da caixa e ocupa largura própria. Sem somá-lo, a
-    // palavra mais longa estoura a reserva por ~7px e o título volta a andar.
+    // O cursor mora dentro da caixa e ocupa largura própria: sem somá-lo, a
+    // palavra cheia estoura a reserva por ~7px no fim da digitação.
     const cursor = box.querySelector('.tw-cursor');
     let extra = 0;
     if (cursor) {
       const cc = getComputedStyle(cursor);
       extra = cursor.getBoundingClientRect().width + (parseFloat(cc.marginLeft) || 0) + (parseFloat(cc.marginRight) || 0);
     }
-    box.style.minWidth = Math.ceil(maior + extra + 1) + 'px';
+
+    // O cursor ocupa esses pixels à direita do texto. Repetir a mesma folga à
+    // esquerda deixa a palavra pronta centrada de verdade dentro da caixa.
+    box.style.paddingLeft = Math.round(extra) + 'px';
+
+    larguras = words.map(w => {
+      medidor.textContent = w;
+      return Math.ceil(medidor.getBoundingClientRect().width + extra * 2 + 1);
+    });
+    medidor.remove();
+    aplicarLargura();
   }
 
-  reservarLargura();
+  medirPalavras();
   // A fonte de display chega depois do primeiro layout: remede quando ela cair.
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(reservarLargura);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(medirPalavras);
   let redimensiona;
   window.addEventListener('resize', () => {
     clearTimeout(redimensiona);
-    redimensiona = setTimeout(reservarLargura, 150);
+    redimensiona = setTimeout(medirPalavras, 150);
   }, { passive: true });
   function tick() {
     const word = words[wi];
@@ -87,7 +98,8 @@ window.scrollTo(0, 0);
       if (ci === word.length) { deleting = true; setTimeout(tick, PAUSE_END); return; }
     } else {
       el.textContent = word.slice(0, --ci);
-      if (ci === 0) { deleting = false; wi = (wi + 1) % words.length; setTimeout(tick, PAUSE_START); return; }
+      // Caixa vazia: é a única hora em que trocar a largura não move nada.
+      if (ci === 0) { deleting = false; wi = (wi + 1) % words.length; aplicarLargura(); setTimeout(tick, PAUSE_START); return; }
     }
     setTimeout(tick, deleting ? DELETE_SPEED : TYPE_SPEED);
   }
