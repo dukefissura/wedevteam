@@ -348,6 +348,16 @@ window.scrollTo(0, 0);
     const centerY = mobile ? 0.88 : 0.66;
     bandY = h - bandH + bandH * centerY;
 
+    // No mobile a banda ficava lá embaixo, longe do título. Ancorar no centro
+    // do próprio h1 põe a onda atrás do texto, que é o que o véu escuro do
+    // .hero-content::before já estava preparado para receber.
+    const titulo = hero.querySelector('.hero-h1');
+    if (mobile && titulo) {
+      const hr = hero.getBoundingClientRect();
+      const tr = titulo.getBoundingClientRect();
+      bandY = (tr.top - hr.top) + tr.height / 2;
+    }
+
     scale = Math.max(mobile ? 0.5 : 0.7, Math.min(1, w / REF_W));
     waves = mobile ? WAVES.slice(1, 4) : WAVES;   // corta a mais escura e a mais clara
     blur  = mobile ? 6 : 10;
