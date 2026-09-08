@@ -60,7 +60,16 @@ window.scrollTo(0, 0);
       maior = Math.max(maior, medidor.getBoundingClientRect().width);
     }
     medidor.remove();
-    box.style.minWidth = Math.ceil(maior) + 'px';
+
+    // O cursor mora dentro da caixa e ocupa largura própria. Sem somá-lo, a
+    // palavra mais longa estoura a reserva por ~7px e o título volta a andar.
+    const cursor = box.querySelector('.tw-cursor');
+    let extra = 0;
+    if (cursor) {
+      const cc = getComputedStyle(cursor);
+      extra = cursor.getBoundingClientRect().width + (parseFloat(cc.marginLeft) || 0) + (parseFloat(cc.marginRight) || 0);
+    }
+    box.style.minWidth = Math.ceil(maior + extra + 1) + 'px';
   }
 
   reservarLargura();
