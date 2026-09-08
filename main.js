@@ -14,9 +14,9 @@ window.scrollTo(0, 0);
     const docHeight = document.documentElement.scrollHeight - window.innerHeight;
     bar.style.width = docHeight > 0 ? (scrollY / docHeight * 100).toFixed(2) + '%' : '0%';
     btn.classList.toggle('visible', scrollY > 400);
-    navInner.style.background = scrollY > 48
+    navInner.style.setProperty('--nav-fundo', scrollY > 48
       ? 'rgba(5, 5, 5, 0.90)'
-      : 'rgba(8, 8, 8, 0.72)';
+      : 'rgba(8, 8, 8, 0.72)');
     ticking = false;
   }
 
