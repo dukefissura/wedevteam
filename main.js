@@ -35,9 +35,42 @@ window.scrollTo(0, 0);
 // ------ Typewriter ------
 (function () {
   const el = document.getElementById('tw-text');
+  const box = document.querySelector('.tw-box');
   const words = ['transforma.', 'conecta.', 'escala.', 'converte.', 'impressiona.'];
   let wi = 0, ci = 0, deleting = false;
   const PAUSE_END = 2200, PAUSE_START = 420, TYPE_SPEED = 72, DELETE_SPEED = 38;
+
+  // A coluna do hero encolhe para o conteúdo, então a largura da palavra sendo
+  // digitada muda a largura do título inteiro e a linha de cima balança junto.
+  // Reservar a largura da palavra mais longa deixa a caixa parada.
+  function reservarLargura() {
+    if (!box) return;
+    const cs = getComputedStyle(el);
+    const medidor = document.createElement('span');
+    medidor.style.cssText = 'position:absolute;left:-9999px;top:0;white-space:pre;visibility:hidden;';
+    medidor.style.fontFamily    = cs.fontFamily;
+    medidor.style.fontSize      = cs.fontSize;
+    medidor.style.fontWeight    = cs.fontWeight;
+    medidor.style.fontStyle     = cs.fontStyle;
+    medidor.style.letterSpacing = cs.letterSpacing;
+    document.body.appendChild(medidor);
+    let maior = 0;
+    for (const w of words) {
+      medidor.textContent = w;
+      maior = Math.max(maior, medidor.getBoundingClientRect().width);
+    }
+    medidor.remove();
+    box.style.minWidth = Math.ceil(maior) + 'px';
+  }
+
+  reservarLargura();
+  // A fonte de display chega depois do primeiro layout: remede quando ela cair.
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(reservarLargura);
+  let redimensiona;
+  window.addEventListener('resize', () => {
+    clearTimeout(redimensiona);
+    redimensiona = setTimeout(reservarLargura, 150);
+  }, { passive: true });
   function tick() {
     const word = words[wi];
     if (!deleting) {

@@ -14,11 +14,11 @@
   <meta name="robots" content="index, follow" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://wedevteam.com.br/" />
-  <meta property="og:title" content="WeDev — Desenvolvimento Web & Software" />
+  <meta property="og:title" content="WeDevteam: desenvolvimento web e software" />
   <meta property="og:description" content="Transformamos visão em produto digital. Desenvolvimento web, mobile e sistemas sob medida para empresas que crescem com tecnologia." />
-  <meta property="og:site_name" content="WeDev" />
+  <meta property="og:site_name" content="WeDevteam" />
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="WeDev — Desenvolvimento Web & Software" />
+  <meta name="twitter:title" content="WeDevteam: desenvolvimento web e software" />
   <meta name="twitter:description" content="Transformamos visão em produto digital. Desenvolvimento web, mobile e sistemas sob medida para empresas que crescem com tecnologia." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -281,7 +281,7 @@
     @media (max-width: 820px) {
       .nav-links { display: none; }
       .nav-hamburger { display: flex; }
-      /* Sem os links, a pílula encolheria até virar só "WeDev ☰" */
+      /* Sem os links, a pílula encolheria até virar só "WeDevteam ☰" */
       .nav-wrap { width: calc(100% - 40px); }
       .nav-inner { justify-content: space-between; }
     }
@@ -1154,6 +1154,15 @@
     /* ============================================================
        TYPEWRITER
     ============================================================ */
+    /* Caixa com a largura da palavra mais longa reservada em JS. Sem ela, a
+       linha muda de largura a cada letra e, como a coluna do hero encolhe
+       para o conteúdo, o título inteiro balança na horizontal. */
+    .tw-box {
+      display: inline-block;
+      text-align: left;
+      max-width: 100%;
+      white-space: nowrap;
+    }
     .tw-cursor {
       display: inline-block;
       width: 3px;
@@ -1807,7 +1816,7 @@
   ============================================================ -->
   <nav class="nav-wrap" role="navigation" aria-label="Navegação principal">
     <div class="nav-inner" id="navInner">
-      <a href="#" class="nav-logo" aria-label="WeDev — Página inicial">WeDev</a>
+      <a href="#" class="nav-logo" aria-label="WeDevteam, página inicial">WeDevteam</a>
 
       <ul class="nav-links" id="navLinks">
         <li>
@@ -1911,7 +1920,7 @@
         <div class="hero-content">
           <h1 class="hero-h1 r d1">
             Código que
-            <em><span id="tw-text"></span><span class="tw-cursor" aria-hidden="true"></span></em>
+            <em><span class="tw-box"><span id="tw-text"></span><span class="tw-cursor" aria-hidden="true"></span></span></em>
           </h1>
         </div>
 
@@ -1924,7 +1933,7 @@
   <!-- ============================================================
        METRICS STRIP
   ============================================================ -->
-  <div class="metrics" aria-label="Números da WeDev">
+  <div class="metrics" aria-label="Números da WeDevteam">
     <div class="wrap">
       <div class="metrics-grid">
         <div class="metric r">
@@ -1993,7 +2002,7 @@
       <div class="features-hd">
         <div class="sec-label r">Serviços</div>
         <h2 class="sec-h r d1" id="feat-heading">Tudo que seu<br>negócio precisa.</h2>
-        <p class="sec-p r d2">Do design ao deploy, entregamos soluções digitais completas — web, mobile e sistemas robustos para escalar com segurança.</p>
+        <p class="sec-p r d2">Do design ao deploy, entregamos soluções digitais completas: web, mobile e sistemas robustos para escalar com segurança.</p>
       </div>
 
       <div class="bento" role="list">
@@ -2072,7 +2081,7 @@
           <div class="step-body">
             <div class="step-tag">Desenvolvimento</div>
             <h3 class="step-title">Sprints de 2 semanas com entregas reais</h3>
-            <p class="step-desc">Ciclos ágeis com demo ao final de cada sprint. Code reviews, testes automatizados e CI/CD desde o dia 1. Você acompanha o progresso em tempo real — sem surpresas no final.</p>
+            <p class="step-desc">Ciclos ágeis com demo ao final de cada sprint. Code reviews, testes automatizados e CI/CD desde o dia 1. Você acompanha o progresso em tempo real, sem surpresas no final.</p>
           </div>
         </div>
 
@@ -2102,7 +2111,7 @@
           <div class="sec-label r">Portfólio</div>
           <h2 class="sec-h r d1" id="gal-heading">Projetos que<br>falam por nós.</h2>
         </div>
-        <p class="sec-p r d2">Cada entrega carrega nossa obsessão por qualidade — código limpo, design preciso e resultados mensuráveis para o cliente.</p>
+        <p class="sec-p r d2">Cada entrega carrega nossa obsessão por qualidade: código limpo, design preciso e resultados mensuráveis para o cliente.</p>
       </div>
 
       <div class="gallery-grid">
@@ -2155,7 +2164,7 @@
         <!-- Featured large -->
         <article class="tc tc--feat r" aria-label="Depoimento de Renata Moura">
           <div>
-            <p class="tc-quote">"A WeDev construiu nosso e-commerce do zero — do design ao checkout. Em menos de três meses tínhamos uma loja rápida, bonita e integrada com nosso ERP."</p>
+            <p class="tc-quote">"A WeDevteam construiu nosso e-commerce do zero, do design ao checkout. Em menos de três meses tínhamos uma loja rápida, bonita e integrada com nosso ERP."</p>
           </div>
           <div class="tc-author">
             <div class="tc-avatar">
@@ -2208,7 +2217,7 @@
               <div>
                 <div class="sec-label r">Sobre nós</div>
                 <h2 class="sec-h r d1" id="about-heading">Somos engenheiros<br>obsessivos com<br>resultado.</h2>
-                <p class="sec-p r d2" style="margin-top:16px;">A WeDev nasceu da frustração com agências que entregam layout bonito mas código frágil. Construímos software que escala, que resiste ao tempo e que os engenheiros do cliente têm orgulho de manter.</p>
+                <p class="sec-p r d2" style="margin-top:16px;">A WeDevteam nasceu da frustração com agências que entregam layout bonito mas código frágil. Construímos software que escala, que resiste ao tempo e que os engenheiros do cliente têm orgulho de manter.</p>
               </div>
 
               <div class="about-values r d3">
@@ -2223,14 +2232,14 @@
                   <div class="av-dot" aria-hidden="true"></div>
                   <div>
                     <div class="av-title">Transparência total</div>
-                    <div class="av-desc">Você vê o código, os commits e os deploys. Sem black-box. Se tiver um problema, somos os primeiros a falar — não os últimos.</div>
+                    <div class="av-desc">Você vê o código, os commits e os deploys. Sem black-box. Se tiver um problema, somos os primeiros a falar, não os últimos.</div>
                   </div>
                 </div>
                 <div class="about-value">
                   <div class="av-dot" aria-hidden="true"></div>
                   <div>
                     <div class="av-title">Parceria de longo prazo</div>
-                    <div class="av-desc">Não somos um fornecedor de projeto único. Crescemos junto com o seu produto — com o mesmo time, o mesmo contexto e o mesmo compromisso.</div>
+                    <div class="av-desc">Não somos um fornecedor de projeto único. Crescemos junto com o seu produto, com o mesmo time, o mesmo contexto e o mesmo compromisso.</div>
                   </div>
                 </div>
               </div><!-- end about-values -->
@@ -2253,8 +2262,8 @@
 
         <form class="contact-form" id="contactForm" novalidate aria-label="Formulário de contato">
           <input type="hidden" name="access_key" value="b4c9d78a-f1c8-438a-950d-99eba80489f5" />
-          <input type="hidden" name="subject" value="Novo contato pelo site WeDev" />
-          <input type="hidden" name="from_name" value="Site WeDev" />
+          <input type="hidden" name="subject" value="Novo contato pelo site WeDevteam" />
+          <input type="hidden" name="from_name" value="Site WeDevteam" />
           <!-- Honeypot: bots fill this, humans don't — Web3Forms rejects if checked -->
           <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" aria-hidden="true" autocomplete="off" />
           <div class="cf-field">
@@ -2299,7 +2308,7 @@
     <div class="wrap">
       <div class="footer-top">
         <div>
-          <a href="#" class="nav-logo" aria-label="WeDev">WeDev</a>
+          <a href="#" class="nav-logo" aria-label="WeDevteam">WeDevteam</a>
           <p class="footer-brand-desc">Transformamos visão em produto digital. Desenvolvimento web, mobile e sistemas para empresas que crescem com tecnologia.</p>
         </div>
         <div class="footer-col">
@@ -2328,7 +2337,7 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <span class="footer-legal">&copy; 2026 WeDev. Todos os direitos reservados.</span>
+        <span class="footer-legal">&copy; 2026 WeDevteam. Todos os direitos reservados.</span>
         <div class="footer-socials">
           <a href="https://instagram.com/wedevteam" target="_blank" rel="noopener noreferrer" aria-label="Instagram">Instagram</a>
         </div>
