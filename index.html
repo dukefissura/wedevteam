@@ -287,6 +287,10 @@
       .nav-wrap { width: calc(100% - 40px); }
       /* Só a marca e o botão: a pílula de vidro virava uma caixa larga atrás
          do texto, sem função. */
+      /* Sem a pílula, a marca branca cruza o vídeo claro da galeria ao rolar.
+         Sombra no texto e nas barras resolve sem devolver a caixa. */
+      .nav-logo { text-shadow: 0 1px 10px rgba(0,0,0,0.95), 0 0 2px rgba(0,0,0,0.8); }
+      .nav-hamburger span { box-shadow: 0 0 6px rgba(0,0,0,0.9); }
       .nav-inner {
         justify-content: space-between;
         /* !important porque uma versão antiga do main.js em cache pinta o fundo
@@ -894,8 +898,9 @@
       position: relative;
     }
     .gi--ecommerce .gi-media { aspect-ratio: 16 / 10; }
-    .gi--mobile            { }
-    .gi--mobile .gi-media   { aspect-ratio: 16 / 15; background: #0d0d0d; }
+    /* O vídeo desta vaga é gravação de tela em 16:9, então a moldura segue a
+       mesma proporção e não sobra tarja preta em volta. */
+    .gi--mobile .gi-media   { aspect-ratio: 16 / 9; }
 
     .gi-media img,
     .gi-media video {
@@ -906,7 +911,13 @@
       opacity: 0.9;
       transition: transform 0.6s var(--ease-spring), opacity 0.4s;
     }
-    .gi--mobile .gi-media video { object-fit: contain; object-position: center; }
+    /* A captura tem a barra de rolagem do navegador na direita e o selo do
+       gravador no canto inferior. Um leve transbordo corta os dois. */
+    .gi--mobile .gi-media video {
+      width: 106%;
+      height: 106%;
+      object-position: top left;
+    }
     .gi:hover .gi-media img,
     .gi:hover .gi-media video  { transform: scale(1.04); opacity: 1; }
 
@@ -2238,6 +2249,7 @@
                 <div class="sec-label r">Sobre nós</div>
                 <h2 class="sec-h r d1" id="about-heading">Somos engenheiros<br>obsessivos com<br>resultado.</h2>
                 <p class="sec-p r d2" style="margin-top:16px;">A WeDevteam nasceu da frustração com agências que entregam layout bonito mas código frágil. Construímos software que escala, que resiste ao tempo e que os engenheiros do cliente têm orgulho de manter.</p>
+                <p class="sec-p r d3" style="margin-top:16px;">Atendemos empresas em vários estados: Rio Grande do Sul, Santa Catarina e Rio de Janeiro.</p>
               </div>
 
               <div class="about-values r d3">
