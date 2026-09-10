@@ -47,6 +47,12 @@
       --r-md:  24px;
       --r-lg:  32px;
       --r-xl:  48px;
+      /* Ritmo vertical: seção, faixa (metrics e stack) e cabeçalho de seção.
+         Antes cada bloco tinha um valor solto e o vão entre seções ia de 117px
+         a 425px na mesma página. */
+      --esp-secao:     clamp(72px, 7vw, 96px);
+      --esp-faixa:     clamp(48px, 4.6vw, 64px);
+      --esp-cabecalho: clamp(32px, 3.2vw, 44px);
       --ease-spring: cubic-bezier(0.32, 0.72, 0, 1);
       --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
     }
@@ -720,7 +726,7 @@
     .metrics {
       border-top: 1px solid var(--border-faint);
       border-bottom: 1px solid var(--border-faint);
-      padding: 80px 0;
+      padding: var(--esp-faixa) 0;
     }
     .metrics-grid {
       display: grid;
@@ -753,7 +759,7 @@
     /* ============================================================
        SECTION — Shared
     ============================================================ */
-    .section { padding: 128px 0; }
+    .section { padding: var(--esp-secao) 0; }
 
     .sec-label {
       display: inline-block;
@@ -785,7 +791,7 @@
     /* ============================================================
        FEATURES — Asymmetric Bento Grid
     ============================================================ */
-    .features-hd { margin-bottom: 56px; }
+    .features-hd { margin-bottom: var(--esp-cabecalho); }
 
     .bento {
       display: grid;
@@ -857,14 +863,10 @@
     /* ============================================================
        GALLERY / DETAILS
     ============================================================ */
-    .gallery-hd {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 40px;
-      align-items: end;
-      margin-bottom: 56px;
-    }
-    @media (max-width: 768px) { .gallery-hd { grid-template-columns: 1fr; } }
+    /* O parágrafo ficava solto na coluna da direita, longe do título e sem
+       nada abaixo dele. Empilhado, segue a mesma composição das outras seções. */
+    .gallery-hd { margin-bottom: var(--esp-cabecalho); }
+    .gallery-hd .sec-p { margin-top: 16px; }
 
     .gallery-grid {
       display: grid;
@@ -951,13 +953,13 @@
     /* ============================================================
        CTA BANNER
     ============================================================ */
-    .cta-sec { padding: 64px 0 128px; }
+    .cta-sec { padding: var(--esp-faixa) 0 var(--esp-secao); }
 
     .cta-inner {
       background: var(--bg-surface);
       border: 1px solid var(--border-faint);
       border-radius: var(--r-xl);
-      padding: 96px 64px;
+      padding: clamp(48px, 5.5vw, 76px) clamp(24px, 4vw, 56px);
       text-align: center;
       position: relative;
       overflow: hidden;
@@ -997,7 +999,6 @@
       flex-wrap: wrap;
       position: relative;
     }
-    @media (max-width: 768px) { .cta-inner { padding: 64px 28px; } }
 
     /* ============================================================
        FOOTER
@@ -1063,13 +1064,8 @@
 
     /* Tighter section spacing on mobile */
     @media (max-width: 768px) {
-      .section      { padding: 72px 0; }
-      .metrics      { padding: 56px 0; }
-      .cta-sec      { padding: 40px 0 72px; }
-      footer        { padding: 48px 0 28px; }
-      .features-hd  { margin-bottom: 36px; }
-      .gallery-hd   { margin-bottom: 36px; }
-      .footer-top   { gap: 32px; margin-bottom: 40px; }
+      footer      { padding: 48px 0 28px; }
+      .footer-top { gap: 32px; margin-bottom: 40px; }
     }
 
     /* Hero & cards — small screens */
@@ -1365,7 +1361,7 @@
        TECH STACK STRIP
     ============================================================ */
     .techstack {
-      padding: 56px 0;
+      padding: var(--esp-faixa) 0;
       border-bottom: 1px solid var(--border-faint);
       overflow: hidden;
     }
@@ -1432,7 +1428,7 @@
     /* ============================================================
        PROCESSO — Numbered steps zigzag
     ============================================================ */
-    .process-hd { margin-bottom: 72px; }
+    .process-hd { margin-bottom: var(--esp-cabecalho); }
 
     .process-steps {
       display: flex;
@@ -1528,7 +1524,7 @@
       position: relative;
     }
     .about-sticky-wrap {
-      padding: 100px 0;
+      padding: var(--esp-secao) 0;
       display: flex;
       align-items: center;
     }
@@ -1612,7 +1608,7 @@
     /* ============================================================
        DEPOIMENTOS / TESTIMONIALS
     ============================================================ */
-    .testimonials-hd { margin-bottom: 56px; }
+    .testimonials-hd { margin-bottom: var(--esp-cabecalho); }
 
     .testi-grid {
       display: grid;
