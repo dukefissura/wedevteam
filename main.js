@@ -37,8 +37,19 @@ window.scrollTo(0, 0);
   const el = document.getElementById('tw-text');
   const box = document.querySelector('.tw-box');
   const words = ['transforma.', 'conecta.', 'escala.', 'converte.', 'impressiona.'];
-  let wi = 0, ci = 0, deleting = false;
-  const PAUSE_END = 2200, PAUSE_START = 420, TYPE_SPEED = 72, DELETE_SPEED = 38;
+  let wi = 0;
+  // Decodificação: cada letra aparece como glifo aleatório e resolve da
+  // esquerda para a direita; na saída embaralha da direita para a esquerda.
+  // Tempos em ms dentro do ciclo de uma palavra.
+  const GLIFOS = '!<>-_\\/[]{}=+*^?#01';
+  const SURGE = 700;          // janela em que as letras vão surgindo (glifo)
+  const RESOLVE_INI = 500;    // 1ª letra resolve aqui...
+  const RESOLVE_DUR = 1500;   // ...e a última, RESOLVE_DUR depois
+  const SAIDA_INI = 4600;     // começa a embaralhar de volta
+  const SAIDA_DUR = 800;
+  const SOME = 260;           // glifo fica visível isso antes de sumir
+  const CICLO = 5700;
+  const TROCA_GLIFO = 85;     // ritmo em que os glifos trocam
 
   // O título é centrado, então a largura da linha decide onde ela começa. Se a
   // caixa acompanhasse a palavra letra a letra, cada letra recentralizaria o
@@ -91,19 +102,59 @@ window.scrollTo(0, 0);
     clearTimeout(redimensiona);
     redimensiona = setTimeout(medirPalavras, 150);
   }, { passive: true });
-  function tick() {
-    const word = words[wi];
-    if (!deleting) {
-      el.textContent = word.slice(0, ++ci);
-      if (ci === word.length) { deleting = true; setTimeout(tick, PAUSE_END); return; }
-    } else {
-      el.textContent = word.slice(0, --ci);
-      // Caixa vazia: é a única hora em que trocar a largura não move nada.
-      if (ci === 0) { deleting = false; wi = (wi + 1) % words.length; aplicarLargura(); setTimeout(tick, PAUSE_START); return; }
-    }
-    setTimeout(tick, deleting ? DELETE_SPEED : TYPE_SPEED);
+  // Cada posição guarda a letra real (invisível, só para ocupar a largura
+  // certa) e desenha o glifo por cima via ::after. Assim a linha tem sempre a
+  // largura da palavra final e o título não balança enquanto embaralha.
+  let spans = [];
+  function montar(word) {
+    el.textContent = '';
+    spans = Array.from(word, ch => {
+      const s = document.createElement('span');
+      s.className = 'dc-ch h';
+      s.textContent = ch;
+      el.appendChild(s);
+      return s;
+    });
   }
-  setTimeout(tick, 900);
+  const glifo = () => GLIFOS[Math.floor(Math.random() * GLIFOS.length)];
+
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduced) {
+    // Sem embaralhar: só troca a palavra inteira de tempos em tempos.
+    el.textContent = words[wi];
+    setInterval(() => { wi = (wi + 1) % words.length; aplicarLargura(); el.textContent = words[wi]; }, 3200);
+    return;
+  }
+
+  let inicio = 0, ultimoGlifo = 0;
+  function tick() {
+    const agora = performance.now();
+    let t = agora - inicio;
+    if (t >= CICLO) {
+      // Linha vazia: é a única hora em que trocar a largura não move nada.
+      wi = (wi + 1) % words.length;
+      aplicarLargura();
+      montar(words[wi]);
+      inicio = agora; t = 0;
+    }
+    const trocar = agora - ultimoGlifo >= TROCA_GLIFO;
+    if (trocar) ultimoGlifo = agora;
+    const n = spans.length;
+    spans.forEach((s, i) => {
+      const surge   = (i / n) * SURGE;
+      const resolve = RESOLVE_INI + (i / n) * RESOLVE_DUR;
+      const embaralha = SAIDA_INI + ((n - 1 - i) / n) * SAIDA_DUR;
+      let estado;
+      if (t < surge || t >= embaralha + SOME) estado = 'h';
+      else if (t < resolve || t >= embaralha) estado = 'g';
+      else estado = '';
+      if (s.className !== 'dc-ch' + (estado ? ' ' + estado : '')) s.className = 'dc-ch' + (estado ? ' ' + estado : '');
+      if (estado === 'g' && (trocar || !s.dataset.g)) s.dataset.g = glifo();
+    });
+    setTimeout(tick, 30);
+  }
+  montar(words[wi]);
+  setTimeout(() => { inicio = performance.now(); tick(); }, 900);
 })();
 
 // ------ Lightbox ------
@@ -628,16 +679,23 @@ document.querySelectorAll('#mobileMenu a').forEach(a => {
     requestAnimationFrame(step);
   }
 
+  // A faixa se desenha primeiro (bordas, depois divisórias) e só então os
+  // números contam. Os atrasos casam com o transition-delay do .metric-n no CSS.
+  const strip = document.querySelector('.metrics');
+  if (!strip) return;
   const counterObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        animateCounter(entry.target);
-        counterObserver.unobserve(entry.target);
-      }
+    if (!entries[0].isIntersecting) return;
+    counterObserver.disconnect();
+    metrics.forEach((el, i) => {
+      const { suffix } = parseTarget(el.textContent.trim());
+      const final = el.textContent;
+      el.textContent = '0' + suffix;
+      setTimeout(() => { el.textContent = final; animateCounter(el); }, 800 + i * 120);
     });
-  }, { threshold: 0.5 });
+    strip.classList.add('in');
+  }, { threshold: 0.4 });
 
-  metrics.forEach(m => counterObserver.observe(m));
+  counterObserver.observe(strip);
 })();
 
 // ------ Contact form validation ------
@@ -944,4 +1002,86 @@ document.querySelectorAll('#mobileMenu a').forEach(a => {
       trigger.setAttribute('aria-expanded', String(!isOpen));
     });
   });
+})();
+
+// ------ Stack: duas faixas com freio suave ------
+// Substitui o @keyframes scrollTrack. offset em % da largura da faixa (que
+// tem a lista duplicada, então 50% = uma volta). No hover a velocidade
+// interpola até 12% em vez de parar seco.
+(function () {
+  const rows   = document.querySelector('.techstack-rows');
+  const tracks = document.querySelectorAll('.techstack-track');
+  if (!rows || !tracks.length) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const BASE = 50 / 28;   // mesmo ritmo dos 28s do keyframe antigo
+  let off = 0, v = 1, alvo = 1, last = 0, rafId = 0, visivel = false;
+
+  rows.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') alvo = 0.12; });
+  rows.addEventListener('pointerleave', () => { alvo = 1; });
+
+  function loop(ts) {
+    rafId = requestAnimationFrame(loop);
+    const dt = last ? Math.min(0.1, (ts - last) / 1000) : 0;
+    last = ts;
+    v += (alvo - v) * Math.min(1, dt * 3.5);
+    off = (off + v * dt * BASE) % 50;
+    tracks[0].style.transform = 'translate3d(' + (-off).toFixed(3) + '%,0,0)';
+    if (tracks[1]) tracks[1].style.transform = 'translate3d(' + (-(50 - off)).toFixed(3) + '%,0,0)';
+  }
+  function start() { if (!rafId) { last = 0; rafId = requestAnimationFrame(loop); } }
+  function stop()  { cancelAnimationFrame(rafId); rafId = 0; }
+
+  new IntersectionObserver(entries => {
+    visivel = entries[0].isIntersecting;
+    if (visivel && !document.hidden) start(); else stop();
+  }).observe(rows);
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden && visivel) start(); else stop();
+  });
+})();
+
+// ------ Processo: cartões empilhados ------
+// Os cartões são sticky (CSS). Aqui só medimos quanto cada cartão já foi
+// coberto pelos de cima e passamos isso como --prof / --escuro.
+(function () {
+  const box   = document.querySelector('.process-steps');
+  const cards = Array.from(document.querySelectorAll('.process-step'));
+  if (!box || cards.length < 2) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const PASSO = 16;   // igual ao var(--i) * 16px do top no CSS
+  let ticking = false, visivel = false;
+
+  function update() {
+    ticking = false;
+    const topo  = parseFloat(getComputedStyle(box).getPropertyValue('--topo')) || 110;
+    const rects = cards.map(c => c.getBoundingClientRect());
+    // cob[j]: 0 com o cartão j uma altura inteira abaixo do ponto onde gruda,
+    // 1 quando já grudou por cima do anterior.
+    const cob = rects.map((r, j) => {
+      if (j === 0) return 0;
+      const parada = topo + j * PASSO;
+      return Math.max(0, Math.min(1, 1 - (r.top - parada) / rects[j - 1].height));
+    });
+    cards.forEach((c, i) => {
+      let prof = 0;
+      for (let j = i + 1; j < cards.length; j++) prof += cob[j];
+      c.style.setProperty('--prof', prof.toFixed(3));
+      c.style.setProperty('--escuro', Math.min(0.6, prof * 0.28).toFixed(3));
+    });
+  }
+
+  function onScroll() {
+    if (!visivel || ticking) return;
+    ticking = true;
+    requestAnimationFrame(update);
+  }
+
+  new IntersectionObserver(entries => {
+    visivel = entries[0].isIntersecting;
+    if (visivel) onScroll();
+  }).observe(box);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll, { passive: true });
 })();

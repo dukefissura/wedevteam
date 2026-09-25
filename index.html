@@ -1,4 +1,4 @@
-﻿                                                                                                                                                                                                                                                                                    <!DOCTYPE html>
+                                                                                                                                                                                                                                                                                    <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
@@ -724,20 +724,49 @@
        METRICS STRIP
     ============================================================ */
     .metrics {
-      border-top: 1px solid var(--border-faint);
-      border-bottom: 1px solid var(--border-faint);
+      position: relative;
       padding: var(--esp-faixa) 0;
     }
+    /* As bordas viraram pseudo-elementos para poderem se desenhar: abrem do
+       centro quando a faixa entra na tela (o main.js põe .in no .metrics). */
+    .metrics::before,
+    .metrics::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0;
+      height: 1px;
+      background: var(--border-faint);
+      transform: scaleX(0);
+      transition: transform 0.9s var(--ease-out);
+    }
+    .metrics::before { top: 0; }
+    .metrics::after  { bottom: 0; }
+    .metrics.in::before,
+    .metrics.in::after { transform: scaleX(1); }
     .metrics-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
     }
     .metric {
+      position: relative;
       padding: 0 40px;
-      border-right: 1px solid var(--border-faint);
     }
+    /* Divisória: desce de cima depois que as bordas abriram, uma por vez. */
+    .metric::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0; right: 0;
+      width: 1px;
+      background: var(--border-faint);
+      transform: scaleY(0);
+      transform-origin: top;
+      transition: transform 0.6s var(--ease-out);
+      transition-delay: calc(0.35s + var(--i, 0) * 0.1s);
+    }
+    .metrics.in .metric::after { transform: scaleY(1); }
     .metric:first-child { padding-left: 0; }
-    .metric:last-child { border-right: none; padding-right: 0; }
+    .metric:last-child { padding-right: 0; }
+    .metric:last-child::after { display: none; }
     .metric-n {
       font-family: var(--font-d);
       font-size: clamp(38px, 4.5vw, 58px);
@@ -746,13 +775,39 @@
       line-height: 1;
       color: var(--text-1);
       margin-bottom: 8px;
+      /* Sai do desfoque enquanto o contador roda. O atraso casa com o
+         setTimeout do contador no main.js (800ms + i·120ms). */
+      opacity: 0;
+      filter: blur(8px);
+      transform: translateY(18px);
+      transition:
+        opacity   0.5s var(--ease-out),
+        filter    0.9s var(--ease-out),
+        transform 0.9s var(--ease-out);
+      transition-delay: calc(0.8s + var(--i, 0) * 0.12s);
     }
-    .metric-l { font-size: 13px; color: var(--text-3); }
+    .metric-l {
+      font-size: 13px;
+      color: var(--text-3);
+      opacity: 0;
+      transition: opacity 0.5s var(--ease-out);
+      transition-delay: calc(1.5s + var(--i, 0) * 0.12s);
+    }
+    .metrics.in .metric-n { opacity: 1; filter: blur(0); transform: none; }
+    .metrics.in .metric-l { opacity: 1; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .metrics::before, .metrics::after, .metric::after, .metric-n, .metric-l {
+        transition: none;
+      }
+    }
 
     @media (max-width: 768px) {
       .metrics-grid { grid-template-columns: 1fr 1fr; gap: 48px 0; }
-      .metric { border-right: none; padding: 0 20px; }
-      .metric:nth-child(odd) { border-right: 1px solid var(--border-faint); }
+      .metric { padding: 0 20px; }
+      /* Grade 2×2: só a coluna da esquerda tem divisória. */
+      .metric::after { display: none; }
+      .metric:nth-child(odd)::after { display: block; }
       .metric:first-child { padding-left: 20px; }
     }
 
@@ -1199,6 +1254,23 @@
     }
     @keyframes twBlink { 0%,100%{opacity:1} 50%{opacity:0} }
 
+    /* Decodificação: .h = ainda não surgiu / já sumiu, .g = glifo aleatório.
+       A letra real continua no fluxo (transparente) para segurar a largura;
+       o glifo é desenhado por cima, centrado na mesma posição. */
+    .dc-ch { position: relative; }
+    .dc-ch.h,
+    .dc-ch.g { color: transparent; text-shadow: none; }
+    .dc-ch.g::after {
+      content: attr(data-g);
+      position: absolute;
+      left: 50%;
+      top: 0;
+      transform: translateX(-50%);
+      color: var(--accent-green);
+      opacity: 0.85;
+      text-shadow: none;
+    }
+
     /* ============================================================
        LIGHTBOX
     ============================================================ */
@@ -1308,9 +1380,8 @@
     ============================================================ */
     /* Process steps — tighter on mobile */
     @media (max-width: 480px) {
-      .process-steps::before { display: none; }
       .step-num-wrap { display: none; }
-      .process-step { grid-template-columns: 1fr; gap: 8px; padding: 28px 0; }
+      .process-step { grid-template-columns: 1fr; gap: 8px; padding: 24px 22px; }
       .step-body { padding-top: 0; }
       .step-tag { margin-bottom: 6px; }
     }
@@ -1390,17 +1461,19 @@
     .techstack-track-wrap::before { left: 0;  background: linear-gradient(to right,  var(--bg), transparent); }
     .techstack-track-wrap::after  { right: 0; background: linear-gradient(to left, var(--bg), transparent); }
 
+    /* Duas faixas em sentidos opostos. O movimento saiu do @keyframes e foi
+       para o main.js: no hover a velocidade cai aos poucos em vez do corte
+       seco do animation-play-state. */
+    .techstack-rows {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
     .techstack-track {
       display: flex;
       gap: 12px;
       width: max-content;
-      animation: scrollTrack 28s linear infinite;
-    }
-    .techstack-track:hover { animation-play-state: paused; }
-
-    @keyframes scrollTrack {
-      from { transform: translateX(0); }
-      to   { transform: translateX(-50%); }
+      will-change: transform;
     }
 
     .tech-chip {
@@ -1430,39 +1503,48 @@
     ============================================================ */
     .process-hd { margin-bottom: var(--esp-cabecalho); }
 
+    /* Cartões empilhados: cada etapa gruda no topo 16px abaixo da anterior e
+       a cobre ao rolar. O main.js mede quanto o próximo cartão já cobriu e
+       grava --prof (recuo) e --escuro (véu) no de baixo. --topo deixa folga
+       para a nav fixa. */
     .process-steps {
+      --topo: 110px;
       display: flex;
       flex-direction: column;
-      gap: 0;
+      gap: 16px;
       position: relative;
-    }
-    /* Vertical connecting line */
-    .process-steps::before {
-      content: '';
-      position: absolute;
-      left: 36px;
-      top: 0; bottom: 0;
-      width: 1px;
-      background: linear-gradient(to bottom, transparent, var(--border-faint) 10%, var(--border-faint) 90%, transparent);
-      pointer-events: none;
-    }
-    @media (max-width: 768px) {
-      .process-steps::before { left: 24px; }
     }
 
     .process-step {
       display: grid;
-      grid-template-columns: 72px 1fr;
-      gap: 32px;
+      grid-template-columns: 44px 1fr;
+      gap: 28px;
       align-items: flex-start;
-      padding: 40px 0;
-      border-bottom: 1px solid var(--border-faint);
-      position: relative;
+      padding: 40px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-faint);
+      border-radius: var(--r-lg);
+      box-shadow: 0 -16px 40px rgba(0,0,0,0.55);
+      position: sticky;
+      top: calc(var(--topo) + var(--i, 0) * 16px);
+      transform-origin: top center;
+      /* scale é propriedade própria, então não briga com o transform que o
+         .r anima na entrada. */
+      scale: calc(1 - var(--prof, 0) * 0.04);
     }
-    .process-step:last-child { border-bottom: none; }
+    .process-step::after {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      background: var(--bg);
+      opacity: var(--escuro, 0);
+      pointer-events: none;
+    }
 
     @media (max-width: 768px) {
-      .process-step { grid-template-columns: 48px 1fr; gap: 20px; padding: 32px 0; }
+      .process-steps { --topo: 84px; }
+      .process-step { grid-template-columns: 36px 1fr; gap: 20px; padding: 28px; border-radius: var(--r-md); }
     }
 
     .step-num-wrap {
@@ -1958,19 +2040,19 @@
   <div class="metrics" aria-label="Números da WeDevteam">
     <div class="wrap">
       <div class="metrics-grid">
-        <div class="metric r">
+        <div class="metric" style="--i:0">
           <div class="metric-n">15+</div>
           <div class="metric-l">Projetos entregues</div>
         </div>
-        <div class="metric r d1">
+        <div class="metric" style="--i:1">
           <div class="metric-n">98%</div>
           <div class="metric-l">Clientes satisfeitos</div>
         </div>
-        <div class="metric r d2">
+        <div class="metric" style="--i:2">
           <div class="metric-n">1</div>
           <div class="metric-l">Ano de mercado</div>
         </div>
-        <div class="metric r d3">
+        <div class="metric" style="--i:3">
           <div class="metric-n">20+</div>
           <div class="metric-l">Tecnologias dominadas</div>
         </div>
@@ -1983,6 +2065,7 @@
   ============================================================ -->
   <div class="techstack" aria-label="Tecnologias que dominamos">
     <div class="techstack-label">Stack tecnológico</div>
+    <div class="techstack-rows">
     <div class="techstack-track-wrap">
       <div class="techstack-track" aria-hidden="true">
         <!-- set 1 -->
@@ -2011,6 +2094,36 @@
         <span class="tech-chip" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>Tailwind CSS</span>
         <span class="tech-chip" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5"/></svg>AWS</span>
         <span class="tech-chip" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="2" width="14" height="20" rx="3"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>React Native</span>
+      </div>
+    </div>
+      <div class="techstack-track-wrap">
+        <div class="techstack-track" aria-hidden="true">
+          <!-- faixa 2: mesma lista invertida, corre no sentido oposto -->
+          <span class="tech-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="2" width="14" height="20" rx="3"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>React Native</span>
+          <span class="tech-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5"/></svg>AWS</span>
+          <span class="tech-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>Tailwind CSS</span>
+          <span class="tech-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2a9 9 0 0 1 9 9c0 4.97-4 9-9 9s-9-4.03-9-9a9 9 0 0 1 9-9z"/><path d="M12 8v4l3 3"/></svg>Redis</span>
+          <span class="tech-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>GraphQL</span>
+          <span class="tech-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Docker</span>
+          <span class="tech-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>Flutter</span>
+          <span class="tech-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>PostgreSQL</span>
+          <span class="tech-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>Node.js</span>
+          <span class="tech-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>TypeScript</span>
+          <span class="tech-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Next.js</span>
+          <span class="tech-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10A15.3 15.3 0 0 1 12 2z"/></svg>React</span>
+          <span class="tech-chip" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="2" width="14" height="20" rx="3"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>React Native</span>
+          <span class="tech-chip" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5"/></svg>AWS</span>
+          <span class="tech-chip" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>Tailwind CSS</span>
+          <span class="tech-chip" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2a9 9 0 0 1 9 9c0 4.97-4 9-9 9s-9-4.03-9-9a9 9 0 0 1 9-9z"/><path d="M12 8v4l3 3"/></svg>Redis</span>
+          <span class="tech-chip" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>GraphQL</span>
+          <span class="tech-chip" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Docker</span>
+          <span class="tech-chip" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>Flutter</span>
+          <span class="tech-chip" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>PostgreSQL</span>
+          <span class="tech-chip" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>Node.js</span>
+          <span class="tech-chip" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>TypeScript</span>
+          <span class="tech-chip" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Next.js</span>
+          <span class="tech-chip" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10A15.3 15.3 0 0 1 12 2z"/></svg>React</span>
+        </div>
       </div>
     </div>
   </div>
@@ -2074,7 +2187,7 @@
 
       <div class="process-steps">
 
-        <div class="process-step r">
+        <div class="process-step r" style="--i:0">
           <div class="step-num-wrap">
             <div class="step-num">01</div>
           </div>
@@ -2085,7 +2198,7 @@
           </div>
         </div>
 
-        <div class="process-step r d1">
+        <div class="process-step r d1" style="--i:1">
           <div class="step-num-wrap">
             <div class="step-num">02</div>
           </div>
@@ -2096,7 +2209,7 @@
           </div>
         </div>
 
-        <div class="process-step r d2">
+        <div class="process-step r d2" style="--i:2">
           <div class="step-num-wrap">
             <div class="step-num">03</div>
           </div>
@@ -2107,7 +2220,7 @@
           </div>
         </div>
 
-        <div class="process-step r d3">
+        <div class="process-step r d3" style="--i:3">
           <div class="step-num-wrap">
             <div class="step-num">04</div>
           </div>
