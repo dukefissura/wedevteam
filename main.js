@@ -687,7 +687,7 @@ document.querySelectorAll('#mobileMenu a').forEach(a => {
   function atrasoDoSufixo(sfx, i, nDigitos) {
     const p = telaPequena.matches;
     const total = p
-      ? 0.3 + i * 0.10 + (nDigitos - 1) * 0.07 + 0.95
+      ? 0.05 + i * 0.06 + (nDigitos - 1) * 0.04 + 0.85
       : 0.8 + i * 0.14 + (nDigitos - 1) * 0.10 + 1.30;
     sfx.style.setProperty('--sfx-delay', total.toFixed(2) + 's');
   }
@@ -739,7 +739,13 @@ document.querySelectorAll('#mobileMenu a').forEach(a => {
     observador.disconnect();
     strip.classList.add('in');
     // Recalcula se a tela mudar de tamanho antes da faixa aparecer.
-  }, { threshold: telaPequena.matches ? 0.15 : 0.4 });
+  }, telaPequena.matches
+       // O hero tem exatamente a altura da janela, então a faixa começa
+       // encostada na borda de baixo: com threshold 0 o navegador já a
+       // considera visível no topo da página e a rolagem acontecia sem
+       // plateia. A margem negativa exige 48px de faixa dentro da tela.
+       ? { threshold: 0, rootMargin: '0px 0px -48px 0px' }
+       : { threshold: 0.4 });
 
   telaPequena.addEventListener('change', () => {
     document.querySelectorAll('.odo-sfx').forEach((sfx, ordem) => {

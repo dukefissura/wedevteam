@@ -825,18 +825,21 @@
     }
     .metrics.in .odo-sfx { opacity: 1; transform: none; }
 
-    /* No celular a faixa entra e sai da tela rápido: a mesma cascata do
-       desktop levava 3,2s do momento em que ela aparece até o último dígito
-       parar, e dava tempo de rolar por cima. Aqui ela toda cabe em ~1,6s. */
+    /* No celular a faixa entra e sai da tela rápido: a cascata do desktop
+       levava 3,2s do momento em que ela aparece até o último dígito parar, e
+       dava tempo de rolar por cima antes do fim. Aqui ela toda cabe em ~1,4s
+       depois que a faixa é marcada. */
     @media (max-width: 768px) {
       .metrics::before,
-      .metrics::after { transition-duration: 0.6s; }
-      .metric::after  { transition-delay: calc(0.2s + var(--i, 0) * 0.07s); }
-      .metric-n       { transition-delay: calc(0.3s + var(--i, 0) * 0.09s); }
-      .metric-l       { transition-delay: calc(0.95s + var(--i, 0) * 0.09s); }
+      .metrics::after { transition-duration: 0.4s; }
+      .metric::after  { transition-delay: calc(0.05s + var(--i, 0) * 0.04s); }
+      /* Sem espera: o número já aparece com a faixa e quem faz a animação é a
+         rolagem dos dígitos. Antes a faixa surgia vazia e só depois enchia. */
+      .metric-n       { transition-duration: 0.3s; transition-delay: 0s; }
+      .metric-l       { transition-delay: calc(0.45s + var(--i, 0) * 0.06s); }
       .odo-col {
-        transition-duration: 1.15s;
-        transition-delay: calc(0.3s + var(--i, 0) * 0.1s + var(--k, 0) * 0.07s);
+        transition-duration: 1s;
+        transition-delay: calc(0.03s + var(--i, 0) * 0.05s + var(--k, 0) * 0.04s);
       }
     }
     .metric-l {
