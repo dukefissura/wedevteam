@@ -42,6 +42,9 @@ window.scrollTo(0, 0);
   // esquerda para a direita; na saída embaralha da direita para a esquerda.
   // Tempos em ms dentro do ciclo de uma palavra.
   const GLIFOS = '!<>-_\\/[]{}=+*^?#01';
+  // No celular o passo do laço cai para 60ms: o glifo só troca a cada 85ms,
+  // então nada muda na tela e sobra processador para a rolagem.
+  const TELA_PEQUENA = window.matchMedia('(max-width: 768px)');
   const SURGE = 700;          // janela em que as letras vão surgindo (glifo)
   const RESOLVE_INI = 500;    // 1ª letra resolve aqui...
   const RESOLVE_DUR = 1500;   // ...e a última, RESOLVE_DUR depois
@@ -161,7 +164,7 @@ window.scrollTo(0, 0);
       if (s.className !== 'dc-ch' + (estado ? ' ' + estado : '')) s.className = 'dc-ch' + (estado ? ' ' + estado : '');
       if (estado === 'g' && (trocar || !s.dataset.g)) s.dataset.g = glifo();
     });
-    setTimeout(tick, 30);
+    setTimeout(tick, TELA_PEQUENA.matches ? 60 : 30);
   }
   montar(words[wi]);
   setTimeout(() => { inicio = performance.now(); tick(); }, 900);
@@ -232,12 +235,16 @@ window.scrollTo(0, 0);
   const canvas = document.getElementById('starfield');
   const ctx = canvas.getContext('2d');
   let stars = [];
-  const COUNT_MAX = 220;
+  // O campo de estrelas é fixo: desenha em toda a página, não só no hero. No
+  // celular ele era o custo constante mais alto da rolagem, então lá vai com
+  // metade da densidade e a 20 fps. A media query é lida a cada uso para
+  // sobreviver à rotação da tela.
+  const TELA_PEQUENA = window.matchMedia('(max-width: 768px)');
   let scrollRaw = 0;
   let scrollSmooth = 0;
   let lastDraw = 0;
   let running = false;
-  const FRAME_MS = 1000 / 30; // cap at 30 fps
+  const quadroMs = () => 1000 / (TELA_PEQUENA.matches ? 20 : 30);
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // Sprite de estrela — gradiente radial pré-renderizado uma vez. Sai muito
@@ -268,8 +275,10 @@ window.scrollTo(0, 0);
     stars = [];
     // Densidade por área, não contagem fixa: um telefone não precisa das mesmas
     // 220 estrelas de um monitor, e desenhá-las custa o mesmo por estrela.
+    const pequena = TELA_PEQUENA.matches;
     const target = Math.round(
-      Math.min(COUNT_MAX, Math.max(70, canvas.width * canvas.height / 6200))
+      Math.min(pequena ? 110 : 220, Math.max(pequena ? 45 : 70,
+        canvas.width * canvas.height / (pequena ? 12000 : 6200)))
     );
     for (let i = 0; i < target; i++) {
       stars.push({
@@ -301,7 +310,7 @@ window.scrollTo(0, 0);
     running = true;
     if (document.hidden) { running = false; return; }
     requestAnimationFrame(draw);
-    if (ts - lastDraw < FRAME_MS) return;
+    if (ts - lastDraw < quadroMs()) return;
     const dt = Math.min(ts - lastDraw, 100); // clamp to avoid jumps after tab restore
     lastDraw = ts;
 
