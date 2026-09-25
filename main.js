@@ -126,9 +126,19 @@ window.scrollTo(0, 0);
     return;
   }
 
+  // O laço roda a cada 30ms para sempre. Fora da tela ou com a aba oculta não
+  // há o que desenhar: dorme e recomeça a palavra quando voltar, como as
+  // outras animações da página fazem.
+  let visivel = true;
+  const heroSec = document.getElementById('home');
+  if (heroSec && 'IntersectionObserver' in window) {
+    new IntersectionObserver(e => { visivel = e[0].isIntersecting; }).observe(heroSec);
+  }
+
   let inicio = 0, ultimoGlifo = 0;
   function tick() {
     const agora = performance.now();
+    if (!visivel || document.hidden) { inicio = agora; setTimeout(tick, 250); return; }
     let t = agora - inicio;
     if (t >= CICLO) {
       // Linha vazia: é a única hora em que trocar a largura não move nada.
@@ -1057,12 +1067,16 @@ document.querySelectorAll('#mobileMenu a').forEach(a => {
     ticking = false;
     const topo  = parseFloat(getComputedStyle(box).getPropertyValue('--topo')) || 110;
     const rects = cards.map(c => c.getBoundingClientRect());
+    // offsetHeight ignora o scale; getBoundingClientRect().height já vem
+    // encolhida por ele, e aí a medida realimentava o próprio recuo: --prof
+    // oscilava sozinho, sem ninguém rolar a página.
+    const alturas = cards.map(c => c.offsetHeight);
     // cob[j]: 0 com o cartão j uma altura inteira abaixo do ponto onde gruda,
     // 1 quando já grudou por cima do anterior.
     const cob = rects.map((r, j) => {
       if (j === 0) return 0;
       const parada = topo + j * PASSO;
-      return Math.max(0, Math.min(1, 1 - (r.top - parada) / rects[j - 1].height));
+      return Math.max(0, Math.min(1, 1 - (r.top - parada) / alturas[j - 1]));
     });
     cards.forEach((c, i) => {
       let prof = 0;
