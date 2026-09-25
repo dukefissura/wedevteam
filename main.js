@@ -680,6 +680,17 @@ document.querySelectorAll('#mobileMenu a').forEach(a => {
   const metrics = document.querySelectorAll('.metric-n');
 
   const reduzido = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const telaPequena = window.matchMedia('(max-width: 768px)');
+
+  // O sufixo aparece quando o último dígito daquela métrica para. Os números
+  // batem com o transition-delay do CSS, que é mais curto no celular.
+  function atrasoDoSufixo(sfx, i, nDigitos) {
+    const p = telaPequena.matches;
+    const total = p
+      ? 0.3 + i * 0.10 + (nDigitos - 1) * 0.07 + 0.95
+      : 0.8 + i * 0.14 + (nDigitos - 1) * 0.10 + 1.30;
+    sfx.style.setProperty('--sfx-delay', total.toFixed(2) + 's');
+  }
 
   if (!reduzido) {
     metrics.forEach((el, i) => {
@@ -717,7 +728,7 @@ document.querySelectorAll('#mobileMenu a').forEach(a => {
         sfx.setAttribute('aria-hidden', 'true');
         sfx.textContent = sufixo;
         // Aparece quando o último dígito daquela métrica para de rolar.
-        sfx.style.setProperty('--sfx-delay', (0.8 + i * 0.14 + (digitos.length - 1) * 0.1 + 1.3).toFixed(2) + 's');
+        atrasoDoSufixo(sfx, i, digitos.length);
         el.appendChild(sfx);
       }
     });
@@ -727,7 +738,16 @@ document.querySelectorAll('#mobileMenu a').forEach(a => {
     if (!entradas[0].isIntersecting) return;
     observador.disconnect();
     strip.classList.add('in');
-  }, { threshold: 0.4 });
+    // Recalcula se a tela mudar de tamanho antes da faixa aparecer.
+  }, { threshold: telaPequena.matches ? 0.15 : 0.4 });
+
+  telaPequena.addEventListener('change', () => {
+    document.querySelectorAll('.odo-sfx').forEach((sfx, ordem) => {
+      const metrica = sfx.closest('.metric-n');
+      const i = [...metrics].indexOf(metrica);
+      atrasoDoSufixo(sfx, i < 0 ? ordem : i, metrica.querySelectorAll('.odo-dig').length);
+    });
+  });
 
   observador.observe(strip);
 })();

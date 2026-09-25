@@ -824,6 +824,21 @@
       transition-delay: var(--sfx-delay, 2.3s);
     }
     .metrics.in .odo-sfx { opacity: 1; transform: none; }
+
+    /* No celular a faixa entra e sai da tela rápido: a mesma cascata do
+       desktop levava 3,2s do momento em que ela aparece até o último dígito
+       parar, e dava tempo de rolar por cima. Aqui ela toda cabe em ~1,6s. */
+    @media (max-width: 768px) {
+      .metrics::before,
+      .metrics::after { transition-duration: 0.6s; }
+      .metric::after  { transition-delay: calc(0.2s + var(--i, 0) * 0.07s); }
+      .metric-n       { transition-delay: calc(0.3s + var(--i, 0) * 0.09s); }
+      .metric-l       { transition-delay: calc(0.95s + var(--i, 0) * 0.09s); }
+      .odo-col {
+        transition-duration: 1.15s;
+        transition-delay: calc(0.3s + var(--i, 0) * 0.1s + var(--k, 0) * 0.07s);
+      }
+    }
     .metric-l {
       font-size: 13px;
       color: var(--text-3);
