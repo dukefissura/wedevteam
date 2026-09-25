@@ -414,7 +414,7 @@ window.aoLargura = function (fn, ms) {
 
   const noise3D = createNoise3D();
   let w = 0, h = 0, rafId = 0, lastDraw = 0, visible = true;
-  let scale = 1, bandY = 0, waves = WAVES, blur = 10, step = 5, pad = 30;
+  let scale = 1, bandY = 0, waves = WAVES, blur = 10, step = 5, pad = 30, escala = 1;
   let frameMs = 1000 / 45;
 
   function configure() {
@@ -442,6 +442,7 @@ window.aoLargura = function (fn, ms) {
     scale = Math.max(mobile ? 0.5 : 0.7, Math.min(1, w / REF_W));
     waves = mobile ? WAVES.slice(1, 4) : WAVES;   // corta a mais escura e a mais clara
     blur  = mobile ? 6 : 10;
+    escala = mobile ? 0.5 : 1;
     step  = mobile ? 8 : 5;
     pad   = blur * 3;
     frameMs = mobile ? 1000 / 30 : 1000 / 45;
@@ -454,11 +455,18 @@ window.aoLargura = function (fn, ms) {
     // que pisca. Mudança só de altura, e pequena, não vale o repaint.
     if (nw === w && Math.abs(nh - h) < 120) return;
 
-    w = canvas.width  = nw;
-    h = canvas.height = nh;
+    w = nw;
+    h = nh;
     configure();
+    // O ctx.filter borra a área inteira a cada quadro e é, de longe, o item
+    // mais caro da primeira rolagem no celular. Lá o bitmap passa a ter metade
+    // da resolução e o CSS o estica de volta: quatro vezes menos pixels para
+    // borrar, e como a faixa já é um borrão ninguém vê diferença.
+    canvas.width  = Math.round(nw * escala);
+    canvas.height = Math.round(nh * escala);
     // Estado do contexto é zerado junto com o tamanho do canvas.
-    ctx.filter = `blur(${blur}px)`;
+    ctx.setTransform(escala, 0, 0, escala, 0, 0);
+    ctx.filter = `blur(${blur * escala}px)`;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
   }
