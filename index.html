@@ -842,12 +842,15 @@
     }
 
     @media (max-width: 768px) {
-      .metrics-grid { grid-template-columns: 1fr 1fr; gap: 48px 0; }
-      .metric { padding: 0 20px; }
-      /* Grade 2×2: só a coluna da esquerda tem divisória. */
+      .metrics-grid { grid-template-columns: 1fr 1fr; gap: 44px 0; }
+      /* Na grade 2×2 quem manda é a coluna, não a ordem: a da esquerda encosta
+         na margem da página e a da direita recua. Com :first-child, só o
+         primeiro número ficava alinhado e o de baixo entrava 14px. */
+      .metric { padding: 0; }
+      .metric:nth-child(odd)  { padding-right: 20px; }
+      .metric:nth-child(even) { padding-left: 20px; }
       .metric::after { display: none; }
       .metric:nth-child(odd)::after { display: block; }
-      .metric:first-child { padding-left: 20px; }
     }
 
     /* ============================================================
@@ -1183,10 +1186,8 @@
 
     /* Metrics — tighter on very small screens */
     @media (max-width: 460px) {
-      .metrics-grid       { gap: 36px 0; }
-      .metric             { padding: 0 14px; }
-      .metric:first-child { padding-left: 0; }
-      .metric-n           { font-size: clamp(32px, 10vw, 46px); }
+      .metrics-grid { gap: 36px 0; }
+      .metric-n     { font-size: clamp(32px, 10vw, 46px); }
     }
 
     /* Gallery — single column on very small screens */
@@ -1499,6 +1500,12 @@
     }
     .techstack-track-wrap::before { left: 0;  background: linear-gradient(to right,  var(--bg), transparent); }
     .techstack-track-wrap::after  { right: 0; background: linear-gradient(to left, var(--bg), transparent); }
+    /* 120px de desbotado de cada lado comem 240px de uma tela de 390: sobrava
+       uma janela estreita no meio e as pílulas das bordas ficavam ilegíveis. */
+    @media (max-width: 768px) {
+      .techstack-track-wrap::before,
+      .techstack-track-wrap::after { width: 48px; }
+    }
 
     /* Duas faixas em sentidos opostos. O movimento saiu do @keyframes e foi
        para o main.js: no hover a velocidade cai aos poucos em vez do corte
