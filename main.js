@@ -2,6 +2,21 @@
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 window.scrollTo(0, 0);
 
+// No Safari do iPhone a barra de URL recolhe e volta durante a rolagem, e cada
+// mudança dessas dispara um resize. Os módulos daqui remedem texto e refazem
+// canvas nesse evento, o que trava a rolagem justamente quando ela acontece.
+// aoLargura() só chama de volta quando a LARGURA muda de verdade.
+window.aoLargura = function (fn, ms) {
+  let larguraAnterior = window.innerWidth;
+  let temporizador;
+  window.addEventListener('resize', () => {
+    if (window.innerWidth === larguraAnterior) return;   // só a barra de URL
+    larguraAnterior = window.innerWidth;
+    clearTimeout(temporizador);
+    temporizador = setTimeout(fn, ms || 150);
+  }, { passive: true });
+};
+
 // ------ Reading progress bar, back-to-top & navbar (single rAF-throttled scroll handler) ------
 (function () {
   const bar      = document.getElementById('progress-bar');
@@ -100,11 +115,7 @@ window.scrollTo(0, 0);
   medirPalavras();
   // A fonte de display chega depois do primeiro layout: remede quando ela cair.
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(medirPalavras);
-  let redimensiona;
-  window.addEventListener('resize', () => {
-    clearTimeout(redimensiona);
-    redimensiona = setTimeout(medirPalavras, 150);
-  }, { passive: true });
+  window.aoLargura(medirPalavras, 150);
   // Cada posição guarda a letra real (invisível, só para ocupar a largura
   // certa) e desenha o glifo por cima via ::after. Assim a linha tem sempre a
   // largura da palavra final e o título não balança enquanto embaralha.
@@ -344,11 +355,11 @@ window.scrollTo(0, 0);
   if (reduced) {
     // Sem cintilação nem parallax: um frame e pronto.
     drawOnce();
-    window.addEventListener('resize', () => { resize(); drawOnce(); }, { passive: true });
+    window.aoLargura(() => { resize(); drawOnce(); });
     return;
   }
 
-  window.addEventListener('resize', resize, { passive: true });
+  window.aoLargura(resize);
   document.addEventListener('visibilitychange', () => {
     // Sem a trava, cada volta para a aba empilhava mais um loop de rAF em cima
     // dos anteriores — o canvas ia ficando mais caro a cada troca de aba.
@@ -503,7 +514,7 @@ window.scrollTo(0, 0);
   }
 
   resize();
-  window.addEventListener('resize', resize, { passive: true });
+  window.aoLargura(resize);
 
   // Um frame estático já basta com movimento reduzido — nada de animação.
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -1147,5 +1158,5 @@ document.querySelectorAll('#mobileMenu a').forEach(a => {
     if (visivel) onScroll();
   }).observe(box);
   window.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('resize', onScroll, { passive: true });
+  window.aoLargura(onScroll, 100);
 })();

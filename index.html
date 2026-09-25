@@ -91,6 +91,13 @@
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
     }
 
+    /* O grão é uma camada fixa cobrindo a tela inteira: no Safari do iPhone ela
+       entra na recomposição de cada quadro da rolagem. A 2,8% de opacidade num
+       telefone ninguém sente falta. */
+    @media (max-width: 768px) {
+      body::after { display: none; }
+    }
+
     /* ============================================================
        LAYOUT UTILITIES
     ============================================================ */
@@ -800,6 +807,9 @@
     .odo-col {
       display: flex;
       flex-direction: column;
+      /* Sem isto o Safari só cria a camada quando a transição começa, e a
+         primeira subida sai engasgada. */
+      will-change: transform;
       transform: translateY(0);
       transition: transform 1.7s cubic-bezier(0.25, 1, 0.5, 1);
       transition-delay: calc(0.8s + var(--i, 0) * 0.14s + var(--k, 0) * 0.1s);
@@ -834,8 +844,15 @@
       .metrics::after { transition-duration: 0.4s; }
       .metric::after  { transition-delay: calc(0.05s + var(--i, 0) * 0.04s); }
       /* Sem espera: o número já aparece com a faixa e quem faz a animação é a
-         rolagem dos dígitos. Antes a faixa surgia vazia e só depois enchia. */
-      .metric-n       { transition-duration: 0.3s; transition-delay: 0s; }
+         rolagem dos dígitos. Antes a faixa surgia vazia e só depois enchia.
+         E sem blur: animar filter no Safari do iPhone engasga a rolagem que
+         acontece no mesmo instante. */
+      .metric-n {
+        filter: none;
+        transition: opacity 0.3s var(--ease-out);
+        transition-delay: 0s;
+      }
+      .metrics.in .metric-n { filter: none; }
       .metric-l       { transition-delay: calc(0.45s + var(--i, 0) * 0.06s); }
       .odo-col {
         transition-duration: 1s;
@@ -2548,6 +2565,6 @@
   <!-- ============================================================
        JAVASCRIPT
   ============================================================ -->
-  <script src="main.js?v=20260925b" defer></script>
+  <script src="main.js?v=20260925c" defer></script>
 </body>
 </html>
