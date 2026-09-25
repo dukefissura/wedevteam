@@ -660,52 +660,67 @@ document.querySelectorAll('#mobileMenu a').forEach(a => {
   sections.forEach(s => sectionObserver.observe(s));
 })();
 
-// ------ Counter animation para métricas ------
+// ------ Métricas: odômetro ------
+// Cada dígito vira uma janela de 1em sobre uma coluna com 0-9 duas vezes. Quem
+// rola é o CSS: aqui só montamos a estrutura e marcamos a faixa com .in quando
+// ela entra na tela. A faixa se desenha primeiro (bordas, divisórias) e só
+// então os dígitos sobem, em cascata entre métricas e dentro de cada número.
 (function () {
-  const metrics = document.querySelectorAll('.metric-n');
-
-  function parseTarget(text) {
-    const num = parseFloat(text.replace(/[^0-9.]/g, ''));
-    const suffix = text.replace(/[0-9.]/g, '').trim();
-    return { num, suffix };
-  }
-
-  function animateCounter(el) {
-    const raw = el.textContent.trim();
-    const { num, suffix } = parseTarget(raw);
-    const duration = 1600;
-    const start = performance.now();
-
-    function step(now) {
-      const elapsed = now - start;
-      const progress = Math.min(elapsed / duration, 1);
-      // ease-out cubic
-      const eased = 1 - Math.pow(1 - progress, 3);
-      const current = eased * num;
-      const display = Number.isInteger(num) ? Math.round(current) : current.toFixed(1);
-      el.textContent = display + suffix;
-      if (progress < 1) requestAnimationFrame(step);
-    }
-    requestAnimationFrame(step);
-  }
-
-  // A faixa se desenha primeiro (bordas, depois divisórias) e só então os
-  // números contam. Os atrasos casam com o transition-delay do .metric-n no CSS.
   const strip = document.querySelector('.metrics');
   if (!strip) return;
-  const counterObserver = new IntersectionObserver((entries) => {
-    if (!entries[0].isIntersecting) return;
-    counterObserver.disconnect();
+  const metrics = document.querySelectorAll('.metric-n');
+
+  const reduzido = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (!reduzido) {
     metrics.forEach((el, i) => {
-      const { suffix } = parseTarget(el.textContent.trim());
-      const final = el.textContent;
-      el.textContent = '0' + suffix;
-      setTimeout(() => { el.textContent = final; animateCounter(el); }, 800 + i * 120);
+      const bruto = el.textContent.trim();
+      const digitos = bruto.replace(/[^0-9]/g, '');
+      const sufixo = bruto.replace(/[0-9]/g, '').trim();
+      if (!digitos) return;
+
+      // O valor final fica no aria-label; as colunas são decoração.
+      el.setAttribute('role', 'img');
+      el.setAttribute('aria-label', bruto);
+      el.textContent = '';
+
+      Array.from(digitos).forEach((d, k) => {
+        const janela = document.createElement('span');
+        janela.className = 'odo-dig';
+        janela.setAttribute('aria-hidden', 'true');
+        const coluna = document.createElement('span');
+        coluna.className = 'odo-col';
+        coluna.style.setProperty('--d', d);
+        coluna.style.setProperty('--k', k);
+        // 0-9 duas vezes: a volta inteira mais o dígito final.
+        for (let n = 0; n < 20; n++) {
+          const linha = document.createElement('span');
+          linha.textContent = n % 10;
+          coluna.appendChild(linha);
+        }
+        janela.appendChild(coluna);
+        el.appendChild(janela);
+      });
+
+      if (sufixo) {
+        const sfx = document.createElement('span');
+        sfx.className = 'odo-sfx';
+        sfx.setAttribute('aria-hidden', 'true');
+        sfx.textContent = sufixo;
+        // Aparece quando o último dígito daquela métrica para de rolar.
+        sfx.style.setProperty('--sfx-delay', (0.8 + i * 0.14 + (digitos.length - 1) * 0.1 + 1.3).toFixed(2) + 's');
+        el.appendChild(sfx);
+      }
     });
+  }
+
+  const observador = new IntersectionObserver((entradas) => {
+    if (!entradas[0].isIntersecting) return;
+    observador.disconnect();
     strip.classList.add('in');
   }, { threshold: 0.4 });
 
-  counterObserver.observe(strip);
+  observador.observe(strip);
 })();
 
 // ------ Contact form validation ------

@@ -768,6 +768,8 @@
     .metric:last-child { padding-right: 0; }
     .metric:last-child::after { display: none; }
     .metric-n {
+      display: flex;
+      align-items: flex-start;
       font-family: var(--font-d);
       font-size: clamp(38px, 4.5vw, 58px);
       font-weight: 900;
@@ -775,17 +777,53 @@
       line-height: 1;
       color: var(--text-1);
       margin-bottom: 8px;
-      /* Sai do desfoque enquanto o contador roda. O atraso casa com o
-         setTimeout do contador no main.js (800ms + i·120ms). */
+      /* Sai do desfoque enquanto os dígitos rolam. Sem translateY: a própria
+         rolagem do odômetro já faz esse papel. */
       opacity: 0;
       filter: blur(8px);
-      transform: translateY(18px);
       transition:
-        opacity   0.5s var(--ease-out),
-        filter    0.9s var(--ease-out),
-        transform 0.9s var(--ease-out);
+        opacity 0.5s var(--ease-out),
+        filter  0.9s var(--ease-out);
       transition-delay: calc(0.8s + var(--i, 0) * 0.12s);
     }
+
+    /* Odômetro: cada dígito é uma janela de 1em sobre uma coluna com 0-9 duas
+       vezes. A coluna sobe uma volta inteira mais o dígito final, então até o
+       "1" rola bastante em vez de subir uma linha só. */
+    .odo-dig {
+      display: inline-block;
+      height: 1em;
+      overflow: hidden;
+      letter-spacing: 0;
+      margin-right: -0.05em;   /* devolve o letter-spacing do .metric-n */
+    }
+    .odo-col {
+      display: flex;
+      flex-direction: column;
+      transform: translateY(0);
+      transition: transform 1.7s cubic-bezier(0.25, 1, 0.5, 1);
+      transition-delay: calc(0.8s + var(--i, 0) * 0.14s + var(--k, 0) * 0.1s);
+    }
+    .odo-col > span {
+      display: block;
+      height: 1em;
+      line-height: 1em;
+      text-align: center;
+    }
+    .metrics.in .odo-col { transform: translateY(calc((var(--d) + 10) * -1em)); }
+
+    .odo-sfx {
+      display: inline-block;
+      opacity: 0;
+      transform: scale(0.5);
+      transform-origin: left bottom;
+      transition:
+        opacity   0.45s var(--ease-out),
+        transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+      /* o JS calcula o atraso: o sufixo aparece quando o último dígito para */
+      transition-delay: var(--sfx-delay, 2.3s);
+    }
+    .metrics.in .odo-sfx { opacity: 1; transform: none; }
     .metric-l {
       font-size: 13px;
       color: var(--text-3);
@@ -797,7 +835,8 @@
     .metrics.in .metric-l { opacity: 1; }
 
     @media (prefers-reduced-motion: reduce) {
-      .metrics::before, .metrics::after, .metric::after, .metric-n, .metric-l {
+      .metrics::before, .metrics::after, .metric::after, .metric-n, .metric-l,
+      .odo-col, .odo-sfx {
         transition: none;
       }
     }
@@ -2484,6 +2523,6 @@
   <!-- ============================================================
        JAVASCRIPT
   ============================================================ -->
-  <script src="main.js?v=20260925" defer></script>
+  <script src="main.js?v=20260925b" defer></script>
 </body>
 </html>
