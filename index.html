@@ -1008,6 +1008,13 @@
       gap: 20px;
       align-items: start;
     }
+    /* Card que sobra sozinho na última linha: fica no centro, com a mesma
+       largura dos outros, em vez de colado à esquerda. */
+    .gallery-grid > .gi:last-child:nth-child(odd) {
+      grid-column: 1 / -1;
+      justify-self: center;
+      width: calc(50% - 10px);
+    }
 
     .gi {
       border-radius: var(--r-md);
@@ -1077,6 +1084,7 @@
 
     @media (max-width: 768px) {
       .gallery-grid { grid-template-columns: 1fr; gap: 12px; }
+      .gallery-grid > .gi:last-child:nth-child(odd) { width: auto; justify-self: stretch; }
     }
     @media (max-width: 480px) {
       .gallery-grid { grid-template-columns: 1fr; gap: 8px; }
@@ -1987,6 +1995,7 @@
         <div>
           <a href="#proj-schneider">Ferragem Schneider</a>
           <a href="#proj-tramanobre">Trama Nobre</a>
+          <a href="#proj-auren">Auren</a>
           <a href="#gallery">Ver todos os projetos</a>
         </div>
       </div>
@@ -2080,6 +2089,10 @@
             <li><a class="nm-card" href="#proj-tramanobre">
               <h3>Trama Nobre</h3>
               <p>Catálogo de camisetas por linha de malha, com pedido pelo WhatsApp.</p>
+            </a></li>
+            <li><a class="nm-card" href="#proj-auren">
+              <h3>Auren</h3>
+              <p>Espaço de atendimento em Jurerê, com agenda e reserva online.</p>
             </a></li>
             <li><a class="nm-card" href="#gallery">
               <h3>Ver todos os projetos</h3>
@@ -2360,6 +2373,20 @@
           </div>
         </div>
 
+        <!-- Auren -->
+        <div class="gi gi--tela r d2" id="proj-auren">
+          <div class="gi-media">
+            <video src="auren.mp4?v=20261006c" autoplay muted loop playsinline preload="metadata"></video>
+          </div>
+          <div class="gi-cap">
+            <div class="gi-cap-top">
+              <span class="gi-cap-title">Auren</span>
+              <span class="gi-cap-tag">Coworking</span>
+            </div>
+            <span class="gi-cap-desc">Espaço de atendimento em Jurerê, com a agenda de horários, reserva e pagamento online.</span>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
@@ -2402,7 +2429,7 @@
             </div>
             <div>
               <div class="tc-name">Thiago Cavalcante</div>
-              <div class="tc-role">CTO · Praxis Fintech</div>
+              <div class="tc-role">CTO</div>
             </div>
           </div>
         </article>
